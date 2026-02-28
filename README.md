@@ -24,10 +24,52 @@ You can start from any point. Pick the use case and run a prompt.
 
 ## Quick Start
 
-1. Open Epismo and go to `Settings > MCP Server`.
-2. Create a secret key.
-3. Add the MCP server to your client.
-4. Set the Skills in your environment.
+1. Create a Secret Key (choose one)
+
+> Note: `secretKey` is shown only once. Store it securely.
+
+**Option A: via UI**
+
+- A-1. Open Epismo and go to `Settings > MCP Servers`.
+- A-2. Click **Create Secret Key**.
+- A-3. Copy the key
+
+**Option B: via API**
+
+- B-1. Request an OTP (sent to your email)
+
+```bash
+curl -sX POST https://api.epismo.ai/v1/otp-tokens \
+  -H "Content-Type: application/json" \
+  -d '{"email":"you@example.com"}'
+
+# => {"otpId":"..."}
+```
+
+- B-2. Create (or fetch) a user and get an access token
+
+```bash
+curl -sX POST https://api.epismo.ai/v1/users \
+  -H "Content-Type: application/json" \
+  -d '{"email":"you@example.com","otpId":"...","pin":"YOUR_PIN"}'
+
+# => {"userId":"...","accessToken":"..."}
+```
+
+`accessToken` is a short-lived access token used only for issuing `secretKey` via API.
+
+- B-3. Issue a Secret Key (use accessToken in header, userId in body)
+
+```bash
+curl -sX POST https://api.epismo.ai/v1/secret-keys \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -d '{"userId":"..."}'
+
+# => {"secretKey":"..."}
+```
+
+2. Add the MCP server to your client
 
 MCP endpoint:
 
@@ -46,6 +88,8 @@ Example client config:
   }
 }
 ```
+
+3. Set the Skills in your environment
 
 ## Source of Truth
 
