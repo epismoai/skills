@@ -4,7 +4,7 @@ Epismo Skills help makes human-AI project operations portable, visible, and repe
 
 ## Why This Exists
 
-Teams using AI repeatedly hit the same problems:
+People using AI repeatedly hit the same problems:
 
 - workflows stay personal and fragile
 - know-how is scattered across chats
@@ -24,19 +24,21 @@ You can start from any point. Pick the use case and run a prompt.
 
 ## Quick Start
 
-1. Create a Secret Key (choose one)
-
 > Note: `secretKey` is shown only once. Store it securely.
 
-**Option A: via UI**
+### Step 1: Create a Secret Key
 
-- A-1. Open Epismo and go to `Settings > MCP Servers`.
-- A-2. Click **Create Secret Key**.
-- A-3. Copy the key
+Choose one option.
 
-**Option B: via API**
+**Option A: Create via UI**
 
-- B-1. Request an OTP (sent to your email)
+1. Go to `Settings > MCP Servers`.
+2. Click **Create Secret Key**.
+3. Copy the key.
+
+**Option B: Create via API**
+
+1. Request an OTP (sent to your email)
 
 ```bash
 curl -sX POST https://api.epismo.ai/v1/otp-tokens \
@@ -46,7 +48,7 @@ curl -sX POST https://api.epismo.ai/v1/otp-tokens \
 # => {"otpId":"..."}
 ```
 
-- B-2. Create (or fetch) a user and get an access token
+2. Create (or fetch) a user and get an access token
 
 ```bash
 curl -sX POST https://api.epismo.ai/v1/users \
@@ -56,9 +58,12 @@ curl -sX POST https://api.epismo.ai/v1/users \
 # => {"userId":"...","accessToken":"..."}
 ```
 
-`accessToken` is a short-lived access token used only for issuing `secretKey` via API.
+- `accessToken` is short-lived.
+- It is only used to issue a `secretKey` via API.
 
-- B-3. Issue a Secret Key (use accessToken in header, userId in body)
+3. Issue a Secret Key
+
+Use `accessToken` in the header and `userId` in the body.
 
 ```bash
 curl -sX POST https://api.epismo.ai/v1/secret-keys \
@@ -69,7 +74,7 @@ curl -sX POST https://api.epismo.ai/v1/secret-keys \
 # => {"secretKey":"..."}
 ```
 
-2. Add the MCP server to your client
+### Step 2: Add the MCP server to your client
 
 MCP endpoint:
 
@@ -89,10 +94,12 @@ Example client config:
 }
 ```
 
-3. Set the Skills in your environment
+### Step 3: Set the Skills in your environment
 
-## Source of Truth
+Set up Epismo Skills in the environment your client runs in (for example, agent config, workspace settings, or CI).
 
-- Source repository: [github.com/epismoai/skills](https://github.com/epismoai/skills)
+## Source of truth
+
+Repository: `https://github.com/epismoai/skills`
 
 If you customize locally, review upstream diffs and merge selectively.
