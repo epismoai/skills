@@ -18,12 +18,12 @@ Use it when a user needs candidate options and a concrete adaptation plan for a 
 ### Discovery Search Plan
 
 - Filter-first scope:
-    - Project entities (tasks/goals/notes): <projects/status/date filters>
-    - Workflow entities: <visibility/like/category filters>
+  - Project entities (tasks/goals/notes): <projects/status/date filters>
+  - Workflow entities: <visibility/like/category filters>
 - Optional keyword query set (only when needed):
-    - Outcome keywords: <2-6 words or N/A>
-    - Method keywords: <2-6 words or N/A>
-    - Risk/blocker keywords: <2-6 words or N/A>
+  - Outcome keywords: <2-6 words or N/A>
+  - Method keywords: <2-6 words or N/A>
+  - Risk/blocker keywords: <2-6 words or N/A>
 
 ### Candidate Shortlist
 
@@ -46,11 +46,11 @@ Use it when a user needs candidate options and a concrete adaptation plan for a 
 ### Adaptation Plan
 
 - Keep as-is:
-    - <steps>
+  - <steps>
 - Modify:
-    - <steps and changes>
+  - <steps and changes>
 - Add project-specific steps:
-    - <steps>
+  - <steps>
 
 ### Materialization
 
@@ -58,11 +58,11 @@ Use it when a user needs candidate options and a concrete adaptation plan for a 
 - Apply write safety/approval gate from [Project Operations Runbook](../references/project-operations-runbook.md) before materialization.
 - If the action includes workflow release/update/deprecate, apply approval boundary from [Workflow Release](../references/workflow-release.md).
 - Ownership plan:
-    - AI-owned: <steps>
-    - Human-owned: <approval/sensitive/external steps>
+  - AI-owned: <steps>
+  - Human-owned: <approval/sensitive/external steps>
 
 ### User Report
 
 - Candidate summary: <short>
-- Then use `Standard User Report Block` from `templates/operating-templates.md`.
+- Then use `Standard User Report Block` from [Operating Templates](./operating-templates.md).
 ```

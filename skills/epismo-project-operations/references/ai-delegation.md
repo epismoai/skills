@@ -2,7 +2,7 @@
 
 This document defines how to design and assign high-quality AI-owned tasks.
 Use it when you create or update delegated work and need clear outputs, acceptance criteria, and review gates.
-For overload and rebalance analysis, use `references/project-operations-runbook.md` (`Mode Playbooks > Recovery`).
+For overload and rebalance analysis, use [Project Operations Runbook](./project-operations-runbook.md) (`Mode Playbooks > Recovery`).
 
 ## Delegation Fit Check
 
@@ -19,15 +19,15 @@ Keep human owners for final approval, external communication, and sensitive deci
 Before assigning AI-owned work, check:
 
 1. Objective clarity
-    - Is the task outcome specific and testable?
+   - Is the task outcome specific and testable?
 2. Output specificity
-    - Is output shape/path/format clear enough to verify completion?
+   - Is output shape/path/format clear enough to verify completion?
 3. Acceptance criteria
-    - Is there an objective done condition beyond "looks good"?
+   - Is there an objective done condition beyond "looks good"?
 4. Input and boundary definition
-    - Are source-of-truth inputs and non-goals explicit?
+   - Are source-of-truth inputs and non-goals explicit?
 5. Dependency and timing clarity
-    - Are required prerequisites and review timing clear?
+   - Are required prerequisites and review timing clear?
 
 ## Delegation Workflow
 
