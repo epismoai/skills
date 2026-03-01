@@ -9,8 +9,8 @@ Use it when deciding or executing release actions, including release, update, ke
 2. Target workflow is explicit (ID/title confirmed).
 3. Release target is explicit (`private` or `public`).
 4. Quality gate handling by action:
-    - `release` / `update`: quality gate passed in [Workflow Quality](./workflow-quality.md).
-    - `deprecate`: quality gate pass is not required; include deprecate rationale and risk note.
+   - `release` / `update`: quality gate passed in [Workflow Quality](./workflow-quality.md).
+   - `deprecate`: quality gate pass is not required; include deprecate rationale and risk note.
 5. Duplication risk checked (no clearly superior equivalent exists).
 6. Write scope is explicit (`private` uses confirmed `projects`; `public` omits `projects`).
 

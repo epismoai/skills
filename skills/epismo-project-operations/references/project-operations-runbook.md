@@ -2,9 +2,9 @@
 
 This runbook governs day-to-day operational writes primarily on tasks/goals/notes.
 Use it when you need to choose an execution mode, plan changes, and decide write/approval boundaries.
-For workflow release/update/deprecate approval boundaries, use `references/workflow-release.md`.
-For query/filter semantics, use `references/search-filter.md`.
-Status handling must follow entity-specific definitions from `search-filter.md` (`task` and `goal` statuses differ; `blocked` is queue state, not a status).
+For workflow release/update/deprecate approval boundaries, use [Workflow Release](./workflow-release.md).
+For query/filter semantics, use [Search Filter](./search-filter.md).
+Status handling must follow entity-specific definitions from [Search Filter](./search-filter.md) (`task` and `goal` statuses differ; `blocked` is queue state, not a status).
 
 ## When to Use
 
@@ -18,35 +18,35 @@ Use this runbook when you are executing operational work, especially before writ
 ## Operation Modes
 
 1. Partial update mode
-    - Trigger: existing entities need localized changes (assignee/status/due date/priority).
-    - Action: update existing items only; avoid structural redesign.
+   - Trigger: existing entities need localized changes (assignee/status/due date/priority).
+   - Action: update existing items only; avoid structural redesign.
 2. New item creation mode
-    - Trigger: user needs one new task/note/goal and existing structure remains valid.
-    - Action: create the single item with minimal linked changes.
+   - Trigger: user needs one new task/note/goal and existing structure remains valid.
+   - Action: create the single item with minimal linked changes.
 3. Large-scale planning mode
-    - Trigger: user requests bulk tasks or a new multi-step execution structure.
-    - Action: design ownership and dependency contract before writes.
+   - Trigger: user requests bulk tasks or a new multi-step execution structure.
+   - Action: design ownership and dependency contract before writes.
 4. Recovery mode
-    - Trigger: overload, stalled queue, dependency hotspots, or backlog drift.
-    - Action: rebalance ownership, clean backlog noise, and resolve top blockers first.
+   - Trigger: overload, stalled queue, dependency hotspots, or backlog drift.
+   - Action: rebalance ownership, clean backlog noise, and resolve top blockers first.
 
 ## Planning Checks
 
 Use this before structural changes:
 
 1. Situation diagnosis
-    - Pull current goals/tasks/notes/workflows first.
-    - Distinguish already planned vs actively moving items.
+   - Pull current goals/tasks/notes/workflows first.
+   - Distinguish already planned vs actively moving items.
 2. Path selection
-    - Choose one: partial update / new item creation / large-scale planning / recovery.
-    - State why alternatives were not chosen.
+   - Choose one: partial update / new item creation / large-scale planning / recovery.
+   - State why alternatives were not chosen.
 3. Contract design
-    - For each changed step, define owner, output, and true prerequisites.
-    - Keep independent work parallel.
+   - For each changed step, define owner, output, and true prerequisites.
+   - Keep independent work parallel.
 4. Materialization decision
-    - Choose destination: tasks/goals/notes first; add private workflow when reusable structure is required.
+   - Choose destination: tasks/goals/notes first; add private workflow when reusable structure is required.
 5. Checkpoint design
-    - Define the smallest useful next review point.
+   - Define the smallest useful next review point.
 
 ## Mode Playbooks
 
@@ -105,7 +105,7 @@ If destination is ambiguous and the user has not answered the clarification ques
 Continue read-only analysis and report the pending decision.
 
 Do not block on approval for small, explicit, reversible partial updates and single-item creation.
-For workflow release/update/deprecate, apply approval boundary from `workflow-release.md`.
+For workflow release/update/deprecate, apply approval boundary from [Workflow Release](./workflow-release.md).
 
 ## Operation Output Fields
 
@@ -122,10 +122,10 @@ Prefer names/titles in user-facing output. Share raw IDs only when requested.
 ## Error Handling
 
 1. `Payment Required: Insufficient credits`
-    - Stop expansion and request billing confirmation.
+   - Stop expansion and navigate the user to [Credit Purchase](./credit-purchase.md) for billing confirmation and credit purchase instructions.
 2. `Permission denied`
-    - Re-check accessible projects and ownership scope.
+   - Re-check accessible projects and ownership scope.
 3. `Unauthorized` or `403`
-    - Verify key/subscription context.
+   - Verify key/subscription context.
 4. Invalid workflow graph
-    - Normalize IDs and rebuild as an acyclic dependency graph.
+   - Normalize IDs and rebuild as an acyclic dependency graph.

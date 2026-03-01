@@ -53,7 +53,7 @@ curl -sX POST https://api.epismo.ai/v1/otp-tokens \
 ```bash
 curl -sX POST https://api.epismo.ai/v1/users \
   -H "Content-Type: application/json" \
-  -d '{"email":"you@example.com","otpId":"...","pin":"YOUR_PIN"}'
+  -d '{"otpId":"...","pin":"YOUR_PIN"}'
 
 # => {"userId":"...","accessToken":"..."}
 ```
@@ -63,13 +63,15 @@ curl -sX POST https://api.epismo.ai/v1/users \
 
 3. Issue a Secret Key
 
-Use `accessToken` in the header and `userId` in the body.
+Use `accessToken` in the header and `workspaceId` (optional) in the body.
+If `workspaceId` is omitted, the key will be scoped to your personal workspace.
+You can get your workspace IDs by calling `GET https://api.epismo.ai/v1/workspaces` with the `accessToken`.
 
 ```bash
 curl -sX POST https://api.epismo.ai/v1/secret-keys \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-  -d '{"userId":"..."}'
+  -d '{"workspaceId":"..."}'
 
 # => {"secretKey":"..."}
 ```

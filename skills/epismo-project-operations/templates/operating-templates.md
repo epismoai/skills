@@ -12,13 +12,13 @@ Guardrails:
 ## Quick Router (Pick One Mode First)
 
 1. Partial Update
-    - Existing item(s) need localized field changes only.
+   - Existing item(s) need localized field changes only.
 2. New Item Creation
-    - One new task/goal/note should be added without structural redesign.
+   - One new task/goal/note should be added without structural redesign.
 3. Large-Scale Planning
-    - Multiple tasks/goals must be designed, sequenced, and assigned.
+   - Multiple tasks/goals must be designed, sequenced, and assigned.
 4. Recovery and Backlog Hygiene
-    - Throughput is stalled or backlog quality is degraded.
+   - Throughput is stalled or backlog quality is degraded.
 
 Escalate to workflow:
 
@@ -181,16 +181,16 @@ Use when delivery is slowed by overload, dependency blocking, or noisy backlog.
 ### Snapshot
 
 - Active queue:
-    - `backlog`: <count>
-    - `todo`: <count>
-    - `in_progress`: <count>
-    - `blocked_by_dependency`: <count>
+  - `backlog`: <count>
+  - `todo`: <count>
+  - `in_progress`: <count>
+  - `blocked_by_dependency`: <count>
 - Assignee load: <top overloaded owners>
 - Dependency hotspots: <tasks with many dependents>
 - Backlog hygiene:
-    - stale todo (>30d): <count>
-    - possible duplicates: <count>
-    - low-signal items: <count>
+  - stale todo (>30d): <count>
+  - possible duplicates: <count>
+  - low-signal items: <count>
 
 ### Recovery Decision
 
