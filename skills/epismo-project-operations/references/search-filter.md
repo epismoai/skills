@@ -1,86 +1,107 @@
-# Search Filter
+# Search & Filter
 
-This document defines query patterns, filter semantics, and entity relationship traversal.
-Use it when you need to quickly find the right goals/tasks/notes/workflows and build filtered queues.
+Query patterns, filter semantics, and entity relationship traversal for Epismo MCP.
+Use when building filtered queues, finding goals/tasks/notes/workflows, or reasoning about dependencies.
 
-## When to Use
+## Quick Reference
 
-Use this guide when you need to:
-
-1. Find the right entities quickly (search patterns).
-2. Apply correct filter keys and date semantics.
-3. Reason about goal/task/dependency relationships.
+| What you need            | How to query                                                                        |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| Tasks ready to work on   | `status=["todo"]` → verify each `dependsOn[]` item is `done`                        |
+| Tasks in progress        | `status=["in_progress"]`                                                            |
+| Tasks due soon           | `status=["backlog","todo","in_progress"]` + `dueDateTo={date}`                      |
+| Blocked tasks            | `status=["backlog","todo","in_progress"]` → check each `dependsOn[]` for non-`done` |
+| Recently completed tasks | `status=["done"]` + `doneAtFrom={now-7d}`                                           |
+| Reusable workflows       | Search `visibility=["private"]` first → `like="liked"` → `visibility=["public"]`    |
+| Tasks under a goal       | `goalId=["{goal-id}"]`                                                              |
+| Downstream dependents    | `dependsOn=["{task-id}"]` — finds what unblocks when this task completes            |
 
 ## Scope Semantics
 
-1. Project item (task/note/goal) search accepts top-level `projects[]`.
+1. Project item search (`epismo_search_project_items`) accepts top-level `projects[]` to limit scope.
 2. Omitting `projects[]` searches all accessible projects.
-3. `epismo_search_workflows.filter.visibility[]` supports `private` and `public`.
+3. Workflow search (`epismo_search_workflows`) uses `filter.visibility[]`: `private` or `public`.
 4. In `epismo_upsert_workflow`, `projects[]` is valid only when `visibility="private"`.
 5. If `visibility` is omitted on workflow upsert, default is `private`.
-6. If you use `query`, keep it compact with domain keywords (for example, 2-6 words).
+6. Keep `query` compact: 2-6 domain keywords.
 
 ## Date/Time Semantics
 
-1. `dueDateFrom/To` is date-only and normalized to UTC midnight.
-2. All other datetime filters (`updatedAtFrom/To`) keep provided ISO-8601 precision.
+1. `dueDateFrom` / `dueDateTo` — date-only, normalized to UTC midnight.
+2. All other datetime filters (`updatedAtFrom/To`, `doneAtFrom/To`) — keep provided ISO-8601 precision.
 3. `task.doneAt` is read-only (system-managed) but searchable via `doneAtFrom/To`.
 
 ## Supported Filter Keys
 
-1. `epismo_search_project_items` (type="task") `.filter`
-   - `status[]`, `assignee[]`, `goalId[]`, `parentId[]`, `dependsOn[]`
-   - `dueDateFrom`, `dueDateTo`, `updatedAtFrom`, `updatedAtTo`, `doneAtFrom`, `doneAtTo`
-2. `epismo_search_project_items` (type="goal") `.filter`
-   - `status[]`, `progressMin`, `progressMax`
-   - `dueDateFrom`, `dueDateTo`, `updatedAtFrom`, `updatedAtTo`
-3. `epismo_search_project_items` (type="note") `.filter`
-   - `updatedAtFrom`, `updatedAtTo`
-4. `epismo_search_workflows.filter`
-   - `category[]`, `visibility[]`, `like`, `ownerId[]`
-   - `minLikeCount`, `minDownloadCount`, `updatedAtFrom`, `updatedAtTo`
+### Tasks (`epismo_search_project_items`, type="task")
 
-## Relationship Map
+`status[]`, `assignee[]`, `goalId[]`, `parentId[]`, `dependsOn[]`,
+`dueDateFrom`, `dueDateTo`, `updatedAtFrom`, `updatedAtTo`, `doneAtFrom`, `doneAtTo`
 
-1. Goal -> tasks
-   - Link: `task.goalId`
-2. Parent task -> children
-   - Link: `task.parentId`
-3. Task -> upstream prerequisites
-   - Link: `task.dependsOn[]`
-4. Task -> downstream dependents
-   - Query dependents with `filter.dependsOn=[task-id]`
+### Goals (`epismo_search_project_items`, type="goal")
 
-Operational queues:
+`status[]`, `progressMin`, `progressMax`,
+`dueDateFrom`, `dueDateTo`, `updatedAtFrom`, `updatedAtTo`
 
-1. `ready_now`: dependencies complete
-2. `in_progress`: active and not blocked
-3. `blocked_by_dependency`: at least one prerequisite incomplete
+### Notes (`epismo_search_project_items`, type="note")
+
+`updatedAtFrom`, `updatedAtTo`
+
+### Workflows (`epismo_search_workflows`)
+
+`category[]`, `visibility[]`, `like`, `ownerId[]`,
+`minLikeCount`, `minDownloadCount`, `updatedAtFrom`, `updatedAtTo`
+
+## Entity Relationships
+
+| Relationship                  | Link field                             | Use case                                    |
+| ----------------------------- | -------------------------------------- | ------------------------------------------- |
+| Goal → tasks                  | `task.goalId`                          | Find all tasks contributing to a goal       |
+| Parent → child tasks          | `task.parentId`                        | Navigate task hierarchy                     |
+| Task → upstream prerequisites | `task.dependsOn[]`                     | Check what must finish first                |
+| Task → downstream dependents  | query `filter.dependsOn=["{task-id}"]` | Find what unblocks when this task completes |
+
+## Derived Queue States
+
+These are computed from entity data, not stored as status field values. Use them for queue analysis and recovery decisions.
+
+| State                   | Definition                                              | How to compute                                                              |
+| ----------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `ready_now`             | All `dependsOn` are `done`; task is `backlog` or `todo` | Filter `status=["backlog","todo"]`, then verify each prerequisite is `done` |
+| `active`                | Currently being worked on                               | Tasks: `status=["in_progress"]`; Goals: `status=["on_track","at_risk"]`     |
+| `blocked_by_dependency` | At least one prerequisite is not `done`                 | No direct filter — fetch `dependsOn[]` and check each status                |
 
 ## Filter Recipes
 
-1. Active queue
-   - tasks: `status=["todo","in_progress"]`
-   - goals: `status=["on_track","at_risk"]`
-2. Urgent queue
-   - tasks: `status=["backlog","todo","in_progress"]` + `dueDateTo=<date>`
-   - goals: `status=["not_started","on_track","at_risk"]` + `dueDateTo=<date>`
-3. Goal execution queue
-   - tasks: `status=["todo","in_progress"]` + `goalId=["<goal-id>"]`
-4. Dependency-risk queue
-   - tasks: `dependsOn=["<task-id>"]`
-5. Liked workflow reuse
-   - workflows: `like="liked"`
-6. Private-only workflow scan
-   - workflows: `visibility=["private"]`
-7. Release evidence quick scan
-   - tasks: `status=["done"]` + `doneAtFrom=<iso8601>` + optional `projects=["<project-id>"]`
-   - goals: `status=["completed"]` + `updatedAtFrom=<iso8601>` + optional `projects=["<project-id>"]`
-   - notes: `updatedAtFrom=<iso8601>` + optional `projects=["<project-id>"]`
-8. Throughput (`done_last_7d`) quick scan
-   - tasks: `status=["done"]` + `doneAtFrom=<now-7d>` + `doneAtTo=<now>`
+### Urgent — deadline-driven
+
+- Tasks: `status=["backlog","todo","in_progress"]` + `dueDateTo={date}`
+- Goals: `status=["not_started","on_track","at_risk"]` + `dueDateTo={date}`
+
+### Goal execution — tasks under a goal
+
+- `status=["todo","in_progress"]` + `goalId=["{goal-id}"]`
+
+### Downstream dependents — what unblocks next
+
+- `dependsOn=["{task-id}"]`
+
+### Throughput — completed in last 7 days
+
+- `status=["done"]` + `doneAtFrom={now-7d}` + `doneAtTo={now}`
+
+### Release evidence — completed work in a period
+
+- Tasks: `status=["done"]` + `doneAtFrom={iso8601}` + optional `projects=["{project-id}"]`
+- Goals: `status=["completed"]` + `updatedAtFrom={iso8601}` + optional `projects=["{project-id}"]`
+- Notes: `updatedAtFrom={iso8601}` + optional `projects=["{project-id}"]`
+
+### Workflow reuse scan
+
+- Liked workflows: `like="liked"`
+- Private only: `visibility=["private"]`
+- By category: `category=["{category}"]`
 
 ## Pagination
 
-All search tools use page size `20`.
-Iterate `page=1,2,3...` and merge results when sets are large.
+All search tools use page size `20`. Iterate `page=1, 2, 3...` and merge results for large sets.

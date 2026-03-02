@@ -1,248 +1,263 @@
 # Operating Templates
 
-This document provides execution-first templates for project operations.
-Default day-to-day writes target tasks/goals/notes. Use workflow materialization when reusable structure is required.
+Structured output templates for project operation writes. Each template maps to an execution mode from the [Runbook](../references/runbook.md).
+
+Replace all `{...}` placeholders before executing. Default write destinations are tasks/goals/notes — escalate to workflow only when the structure needs reuse across projects or teams.
 
 Guardrails:
 
-- Approval/scope rules follow [Project Operations Runbook](../references/project-operations-runbook.md) (`Write Safety and Approval Gate`).
-- Release decisions follow [Workflow Release](../references/workflow-release.md).
-- Release quality checks follow [Workflow Quality](../references/workflow-quality.md).
+- Write safety: [Runbook — Write Safety](../references/runbook.md#write-safety-and-approval-gate)
+- Release decisions: [Workflow Release](../references/workflow-release.md)
+- Quality gate: [Workflow Quality](../references/workflow-quality.md)
 
-## Quick Router (Pick One Mode First)
+## Pre-Write Contract
 
-1. Partial Update
-   - Existing item(s) need localized field changes only.
-2. New Item Creation
-   - One new task/goal/note should be added without structural redesign.
-3. Large-Scale Planning
-   - Multiple tasks/goals must be designed, sequenced, and assigned.
-4. Recovery and Backlog Hygiene
-   - Throughput is stalled or backlog quality is degraded.
+Confirm before any write. Applies to all modes.
 
-Escalate to workflow:
+- **Project scope**: confirmed project name or ID
+- **Outcome**: what success looks like
+- **Constraints**: deadline, owner, risk, or sensitivity
+- **Write destination**: tasks / goals / notes (add workflow if reusable)
 
-- When the planned structure is expected to be reused across projects/teams.
+## Status Reference
 
-## Minimal Input Contract (Ask/Confirm Before Writes)
+| Entity | Valid statuses                                    |
+| ------ | ------------------------------------------------- |
+| Task   | `backlog`, `todo`, `in_progress`, `done`          |
+| Goal   | `not_started`, `on_track`, `at_risk`, `completed` |
 
-Use this short block for all modes:
+`blocked_by_dependency` is a derived queue state, not a status field. See [Search & Filter](../references/search-filter.md#derived-queue-states).
 
-```markdown
-### Required Inputs
-
-- Project scope: <project name or confirmed project IDs>
-- Outcome: <what success looks like>
-- Constraint: <deadline/owner/risk/sensitivity>
-- Write destination: <tasks/goals/notes; add workflow if reusable pattern is intended>
-```
-
-## Standard User Report Block
-
-Use this in every mode output:
-
-```markdown
-### User Report
-
-- Situation: <what is active now>
-- Delta: <what changed or why no write>
-- Evidence used: <project goals/tasks/notes/workflow/external sources>
-- Risks/decisions: <what needs confirmation>
-- Next action: <smallest useful step>
-```
-
-## Status Reminder (Use Entity-Specific Statuses)
-
-- Task statuses: `backlog`, `todo`, `in_progress`, `done`
-- Goal statuses: `not_started`, `on_track`, `at_risk`, `completed`
-- For exact filter usage, follow [Search Filter](../references/search-filter.md).
+---
 
 ## 1) Partial Update
 
-Use when existing work is valid and only localized edits are needed.
+Use when: existing entities need localized field edits only (status, assignee, date, priority, content).
 
-```markdown
-### Request
+### Assess
 
-- Target project: <project>
-- Target entities: <task|goal|note titles>
-- Requested fields: <status|assignee|due date|priority|content>
-- If status update: <use valid status set for that entity type>
+- [ ] Target entities identified (names and current values read)
+- [ ] Change is real — not a no-op
+- [ ] Project scope confirmed
 
-### Validation
+### Execute
 
-- Current values read: <value list>
-- Change is real (no-op check): <yes/no>
-- Scope confirmed: <yes/no>
+- Writes: `{entity.field → new value}` for each change
+- Structural changes: none
 
-### Update Plan
+### Report
 
-- Localized changes only: <entity.field -> new value>
-- Structural changes included: <none>
+- **Situation**: {what is active now}
+- **Delta**: {fields changed on which entities}
+- **Evidence**: {source that informed the change}
+- **Risks**: {none expected / any concern}
+- **Next action**: {smallest useful step}
 
-### Execution
-
-- Write actions: <upsert task|upsert goal|upsert note>
-- `projects` set to: <confirmed project ID(s)>
-
-### User Report
-
-Use Standard User Report Block.
-```
+---
 
 ## 2) New Item Creation
 
-Use when exactly one new item should be added.
+Use when: exactly one new task, goal, or note must be added; existing structure is valid.
 
-```markdown
-### Request
+### Assess
 
-- Target project: <project>
-- Item type: <task|goal|note>
-- Intent: <what this item enables now>
+- [ ] Destination project and item type confirmed (`task` / `goal` / `note`)
+- [ ] Duplicate check done — no matching active item found
+- [ ] Project scope confirmed
 
-### Validation
+### Plan
 
-- Duplicate check in active queue/backlog: <none|matches>
-- If matches found: <reuse existing|create anyway + reason>
+- Title: {item title}
+- Owner: {assignee or unassigned}
+- Due date: {date or none}
+- Context: {1-2 line description}
+- Links: {goalId / parentId / dependsOn or none}
 
-### Creation Plan
+### Execute
 
-- New item: <title>
-- Owner: <assignee or none>
-- Due date: <date or none>
-- Minimal context: <1-2 lines>
-- Linked refs: <goal/task/note IDs or none>
+- Write: one `upsert {task|goal|note}`
+- Projects: `{confirmed project ID}`
 
-### Execution
+### Report
 
-- Write action: <upsert task|upsert goal|upsert note>
-- `projects` set to: <confirmed project ID(s)>
+- **Situation**: {what is active now}
+- **Delta**: {created item with key fields}
+- **Evidence**: {why this item was needed}
+- **Risks**: {none expected / any concern}
+- **Next action**: {smallest useful step}
 
-### User Report
-
-Use Standard User Report Block.
-```
+---
 
 ## 3) Large-Scale Planning
 
-Use when multiple items must be created/updated as one coordinated plan.
+Use when: multiple items, a new goal structure, or a coordinated multi-step plan is needed.
 
-```markdown
-### Request
+### Assess
 
-- Outcome: <desired result>
-- Constraints: <time/quality/ownership>
-- Target scope: <project>
+- [ ] Current goals, tasks, and notes reviewed
+- [ ] Reuse check done — existing workflows scanned (`private` → `liked` → `public`)
+- [ ] Why reuse is insufficient: {reason}
+- [ ] Project scope confirmed
 
-### Reuse Check (Required)
+### Plan
 
-- Existing goals/tasks reviewed: <list>
-- Existing workflows reviewed (`private`/`liked`/`public`): <list>
-- Why reuse is insufficient: <reason>
+For each item in the plan:
 
-### Plan Design
+| Step | Title   | Owner      | Output        | Depends on         |
+| ---- | ------- | ---------- | ------------- | ------------------ |
+| A    | {title} | {AI/human} | {deliverable} | {step IDs or none} |
+| B    | {title} | {AI/human} | {deliverable} | {step IDs or none} |
+| C    | {title} | {AI/human} | {deliverable} | {step IDs or none} |
 
-- Step A: <title> | owner: <AI/human> | output: <deliverable> | dependsOn: <ids/none>
-- Step B: <title> | owner: <AI/human> | output: <deliverable> | dependsOn: <ids/none>
-- Step C: <title> | owner: <AI/human> | output: <deliverable> | dependsOn: <ids/none>
+- Materialization: {goals/tasks/notes} + workflow if reusable: {yes → private now or after first run / no}
 
-### Materialization Decision
+### Approve
 
-- Day-to-day destination (default): <goals/tasks/notes>
-- Workflow needed for reuse: <yes/no>
-- If yes: <private workflow now|after first successful run>
+- [ ] Explicit approval obtained (required for large-scale structures)
+- Reason: {large-scale / ambiguous destination / critical assumption / destructive}
 
-### Approval Check
+### Execute
 
-- Explicit approval required: <yes/no>
-- Reason: <large-scale structure|ambiguous destination|critical assumption|destructive risk>
+- Writes: {list of upsert operations}
+- Optional workflow: {upsert workflow or none}
 
-### Execution
+### Report
 
-- Planned writes: <upsert goal/task/note list>
-- Optional workflow action: <upsert workflow|none>
+- **Situation**: {what is active now}
+- **Delta**: {items created/updated with structure summary}
+- **Evidence**: {project items, workflows, or sources that informed the plan}
+- **Risks**: {open questions or dependency concerns}
+- **Next action**: {smallest useful step}
 
-### User Report
-
-Use Standard User Report Block.
-```
+---
 
 ## 4) Recovery and Backlog Hygiene
 
-Use when delivery is slowed by overload, dependency blocking, or noisy backlog.
+Use when: delivery is slowed by overload, stall, dependency blocking, or backlog noise.
 
-```markdown
-### Trigger
+### Assess
 
-- Recovery reason: <stall|overload|deadline risk|backlog cleanup request>
-- Target scope: <project>
+- [ ] Recovery trigger identified: {stall / overload / deadline risk / backlog cleanup}
+- [ ] Project scope confirmed
+- Active queue snapshot:
+  - `backlog`: {count} | `todo`: {count} | `in_progress`: {count} | `blocked`: {count}
+- Assignee load: {top overloaded owners}
+- Dependency hotspots: {tasks with many dependents}
+- Backlog hygiene: stale (>30d): {count} | duplicates: {count} | low-signal: {count}
 
-### Snapshot
+### Plan
 
-- Active queue:
-  - `backlog`: <count>
-  - `todo`: <count>
-  - `in_progress`: <count>
-  - `blocked_by_dependency`: <count>
-- Assignee load: <top overloaded owners>
-- Dependency hotspots: <tasks with many dependents>
-- Backlog hygiene:
-  - stale todo (>30d): <count>
-  - possible duplicates: <count>
-  - low-signal items: <count>
+- Keep unchanged: {list}
+- Throughput fixes: {reassign / resequence / dependency rewiring}
+- Backlog cleanup: {merge / archive / close}
+- Smallest high-impact set: {specific entities and actions}
 
-### Recovery Decision
+### Approve
 
-- Keep unchanged: <list>
-- Throughput fixes: <reassign|resequence|dependency rewiring>
-- Backlog cleanup: <merge|archive|close stale items>
-- Smallest high-impact set: <specific entities>
+- [ ] Explicit approval obtained (required for multi-entity restructuring)
 
-### Approval Check
+### Execute
 
-- Explicit approval required: <yes/no>
-- Reason: <multi-entity restructuring|destructive/hard-to-reverse changes>
+- Writes: {entity → change for each affected item}
+- Projects: `{confirmed project ID}`
 
-### Execution
+### Report
 
-- Updates applied: <task/goal/note -> change>
-- `projects` set to: <confirmed project ID(s)>
+- **Situation**: {queue state after changes}
+- **Delta**: {what was reassigned, resequenced, archived, or closed}
+- **Evidence**: {metrics and signals that drove the decision}
+- **Risks**: {remaining bottlenecks or concerns}
+- **Next action**: {smallest useful step}
 
-### User Report
-
-Use Standard User Report Block.
-```
+---
 
 ## 5) Pattern Capture and Workflow Release
 
-Use after successful execution when converting proven work into reusable workflow assets.
+Use when: a successful execution pattern is a candidate for reuse across projects or teams.
 
-```markdown
-### Success Evidence
+### Assess
 
-- What worked: <outcome + why>
-- Reuse boundary: <where this pattern fits / does not fit>
+- [ ] Execution evidence exists (project records with identifiable outcomes)
+- [ ] Reuse boundary defined: {where this pattern fits / does not fit}
+- [ ] Quality gate result: {pass / needs work} — per [Workflow Quality](../references/workflow-quality.md)
 
-### Pattern Extraction
+### Plan
 
-- Generalizable structure: <steps/owners/dependencies>
-- Remove project-specific residue: <names/IDs/URLs/context>
+- Generalizable structure: {steps, owners, dependencies — project-specific residue removed}
+- Release target: {private / public}
+- Decision: {release / update / keep private / deprecate}
 
-### Release Readiness
+### Approve
 
-- Quality gate result: <pass|needs work>
-- Release target: <private|public>
-- Decision: <release|update|keep private|deprecate>
-- Approval status: <approved|pending|rejected>
+- [ ] Approval status: {approved / pending / rejected}
+- Private staging writes do not require approval; public release and deprecation do.
 
-### Release Execution
+### Execute
 
-- `release/update` + `private`: set confirmed `projects`
-- `release/update` + `public`: omit `projects`
+- `release` or `update` + `private`: set confirmed `projects`
+- `release` or `update` + `public`: omit `projects`
 - `deprecate`: explicit approval required
 
-### User Report
+### Report
 
-Use Standard User Report Block.
-```
+- **Situation**: {workflow state after action}
+- **Delta**: {release action taken with target visibility}
+- **Evidence**: {execution records and quality gate results}
+- **Risks**: {duplication risk, scope limitations, or open concerns}
+- **Next action**: {next review timing or follow-up}
+
+---
+
+## 6) Workflow Discovery
+
+Use when: comparing candidate workflows and committing to a concrete adaptation plan before materialization.
+
+### Assess
+
+- [ ] Desired outcome defined: {what the user wants to achieve}
+- [ ] Project context noted: {team and project constraints}
+- [ ] Evidence sources checked:
+  - Project items (goals/tasks/notes): {what was checked}
+  - Workflows (`private` / `liked` / `public`): {what was checked}
+  - External sources: {what was checked or N/A}
+
+### Discover
+
+Search plan:
+
+- Project entities: {projects / status / date filters used}
+- Workflow entities: {visibility / like / category filters used}
+- Keyword queries (if needed): {2-6 domain keywords}
+
+Candidate shortlist:
+
+| #   | Pattern | Source        | Relevance      | Reuse cost     | Gaps            |
+| --- | ------- | ------------- | -------------- | -------------- | --------------- |
+| 1   | {title} | {source type} | {why relevant} | {low/med/high} | {what to adapt} |
+| 2   | {title} | {source type} | {why relevant} | {low/med/high} | {what to adapt} |
+
+### Recommend
+
+- Selected: {title + source}
+- Why: {brief comparison rationale}
+
+### Adapt
+
+- Keep as-is: {steps}
+- Modify: {steps and changes}
+- Add project-specific: {steps}
+- Ownership: AI-owned {steps} / Human-owned {steps}
+
+### Materialize
+
+- Destination: {project tasks / private workflow / both}
+- [ ] Write safety confirmed per [Runbook](../references/runbook.md#write-safety-and-approval-gate)
+- [ ] If workflow release involved, approval boundary confirmed per [Workflow Release](../references/workflow-release.md#approval-boundary)
+
+### Report
+
+- **Situation**: {candidates found and recommendation}
+- **Delta**: {adaptation plan or materialized items}
+- **Evidence**: {discovery sources and comparison rationale}
+- **Risks**: {gaps in adaptation, missing context}
+- **Next action**: {smallest useful step}

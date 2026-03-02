@@ -1,75 +1,78 @@
 ---
 name: epismo-project-operations
-description: "Cover end-to-end day-to-day project operations in Epismo MCP. Use for intake, prioritization, planning, coordination, risk handling, handoff, and workflow release based on current project and workflow state."
+description: "Run day-to-day project operations through Epismo MCP: route user intent, read current state, and apply the smallest useful change. Covers intake, planning, coordination, risk, workflow discovery, and release."
 ---
 
 # Project Operations
 
-Use this skill for end-to-end Epismo MCP operations, including day-to-day coordination and reusable workflow release.
+Operate on projects through Epismo MCP — from a quick status update to full goal restructuring and workflow release.
 
-Operating principle: **check current state -> gather evidence -> apply the smallest useful change; for release, pass quality gate first and keep review trace outside published content**
+**Core principle: read current state → gather evidence → apply the smallest useful change.**
 
-## Use This Skill When
+## Intent Router
 
-Use this skill when the request includes:
+Match the user's intent to the right steps. Run only what the situation requires. When multiple intents overlap, start from the earliest unresolved step.
 
-1. Ongoing coordination, triage, or re-planning.
-2. Converting ideas/docs/articles into actionable tasks/workflows.
-3. Reusing existing workflows (`private`/`liked`/`public`) in active project work.
-4. Defining AI/human ownership with tracked progress and accountability.
-5. Release-target decisions (`private`/`public`) and workflow publish/update/deprecate operations.
-6. Quality-gate review and release handoff decisions.
+| Intent                                  | When to choose                                                                              | Steps                                            | Key reference                                                                                               |
+| --------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| Update existing work                    | A field change on something that already exists (status, assignee, date, priority, content) | 4 Coordinate — Partial Update                    | [Runbook](./references/runbook.md#1-partial-update)                                                         |
+| Add one new item                        | Exactly one task, goal, or note; existing structure is valid                                | 4 Coordinate — New Item                          | [Runbook](./references/runbook.md#2-new-item-creation)                                                      |
+| Plan multiple items or a new goal       | New goal structure, multi-step plan, or batch creation                                      | 2 Plan → 3 Discover → 4 Coordinate — Large-Scale | [Runbook](./references/runbook.md#3-large-scale-planning)                                                   |
+| Unblock or rebalance                    | Stalled queue, overloaded assignee, dependency bottleneck, noisy backlog                    | 5 Risk → 4 Coordinate — Recovery                 | [Runbook](./references/runbook.md#4-recovery-and-backlog-hygiene)                                           |
+| Find or reuse a workflow                | Need to discover, compare, or adapt an existing workflow                                    | 3 Discover                                       | [Search & Filter](./references/search-filter.md)                                                            |
+| Design an AI-owned task                 | Delegating work to an AI agent with clear acceptance criteria                               | 4 Coordinate + AI Delegation                     | [AI Delegation](./references/ai-delegation.md)                                                              |
+| Release / update / deprecate a workflow | Workflow is ready for publication, needs structural update, or should be retired            | 5 Risk (Quality Gate) → 6 Handoff                | [Workflow Quality](./references/workflow-quality.md) → [Workflow Release](./references/workflow-release.md) |
+| Not enough credits                      | MCP returns `Payment Required`                                                              | Stop — purchase credits                          | [Credit Purchase](./references/credit-purchase.md)                                                          |
+| Unclear intent                          | Cannot confidently match to any row above                                                   | 1 Intake — ask once                              | —                                                                                                           |
 
-## Routing Rule
+## 6-Step Flow
 
-1. Identify the user's current phase from request + current state.
-2. Run only the required step(s) for that phase and adjacent blockers.
-3. Do not force all six steps when one focused update is sufficient.
-4. If multiple steps apply, start from the earliest blocked step.
+### 1 Intake
 
-## 6-Step Operations Flow
+Confirm the user's desired outcome, constraints, timeline, and target project scope.
+Ask one clarifying question if intent is ambiguous. If the user does not answer, default to read-only discovery and report findings.
 
-1. Intake
-   - Confirm desired outcome, constraints, timeline, and target project/workflow scope.
-2. Plan
-   - Use [Project Operations Runbook](./references/project-operations-runbook.md) planning checks.
-   - Choose the smallest mode that satisfies the request.
-3. Discovery
-   - Reuse workflows before create: scan `private` -> `liked` -> `public`.
-   - Use [Search and Filter](./references/search-filter.md) for fast retrieval/filtering (queues, status/date/dependency views).
-   - Use [Workflow Discovery](./templates/workflow-discovery.md) only when you must compare candidates and define keep/modify/add adaptation.
-4. Coordination
-   - Operate by mode (partial update / new item creation / large-scale planning / recovery) using [Project Operations Runbook](./references/project-operations-runbook.md) for day-to-day project item (task/note/goal) changes.
-   - Design assignment and task contracts using [AI Delegation](./references/ai-delegation.md).
-   - Use [Operating Templates](./templates/operating-templates.md) for write-ready structure.
-5. Risk
-   - Evaluate bottlenecks and dependency risk using [Project Operations Runbook](./references/project-operations-runbook.md).
-   - Include backlog hygiene checks (stale items, duplicate intents, low-signal queue noise) during recovery decisions.
-   - Apply [Workflow Quality](./references/workflow-quality.md) when reusable workflow intent exists.
-6. Handoff
-   - For normal operations, record lifecycle delta with [Operating Templates](./templates/operating-templates.md).
-   - For release intent, run [Workflow Release](./references/workflow-release.md) and report decision traceability in the response.
+### 2 Plan
 
-## Simple Mode Names
+Run before structural changes (new goals, multi-item plans, dependency rewiring).
+Follow [Runbook — Planning Checks](./references/runbook.md#planning-checks): diagnose current state → select mode → design ownership contracts → confirm write destination → set next checkpoint.
+Always choose the smallest mode that satisfies the request.
 
-1. Partial update
-   - Update existing items only (e.g., assignee/status/due date) without structural redesign.
-2. New item creation
-   - Create a single new project item (specifying type="task"|"note"|"goal") with minimal side effects.
-3. Large-scale planning
-   - Design and materialize a multi-step or bulk structure with ownership and dependencies.
-4. Recovery
-   - Existing plan needs major correction due to stall/overload/backlog drift.
+### 3 Discover
 
-## Write Safety and Approval
+Reuse before creating. Search in this order: `private` → `liked` → `public`.
+Use [Search & Filter](./references/search-filter.md) for filtered queues, status views, date ranges, and dependency traversal.
+Use [Workflow Discovery template](./templates/operating-templates.md#6-workflow-discovery) only when comparing candidates and committing to a concrete adaptation plan.
 
-1. Project item writes (type="task"|"note"|"goal") must use confirmed project scope.
-2. If destination is unclear, ask one focused question before writing.
-3. If the question is unanswered, do not write. Continue read-only analysis and report what is pending.
-4. Never guess entity IDs or assignee IDs.
-5. Workflow writes:
-   - `visibility="private"`: set confirmed `projects`.
-   - `visibility="public"`: omit `projects`.
-6. Approval boundaries:
-   - General/non-release writes: [Project Operations Runbook](./references/project-operations-runbook.md)
-   - Workflow release/update/deprecate: [Workflow Release](./references/workflow-release.md)
+### 4 Coordinate
+
+Pick one execution mode from the [Runbook — Mode Selector](./references/runbook.md#mode-selector) and follow its playbook:
+
+- **Partial Update** — localized field edits on existing entities.
+- **New Item Creation** — exactly one new task / goal / note.
+- **Large-Scale Planning** — multiple coordinated items with ownership contracts.
+- **Recovery** — address overload, stall, or noisy backlog.
+
+Design AI-owned tasks with [AI Delegation](./references/ai-delegation.md).
+Use [Operating Templates](./templates/operating-templates.md) for structured write output.
+
+### 5 Risk
+
+Evaluate bottlenecks and dependency risk per [Runbook](./references/runbook.md).
+Run backlog hygiene (stale, duplicate, low-signal) during recovery.
+Apply [Workflow Quality](./references/workflow-quality.md) gate before any workflow release or update.
+
+### 6 Handoff
+
+- **Normal ops**: report lifecycle delta using [Operating Templates](./templates/operating-templates.md).
+- **Workflow release**: execute [Workflow Release](./references/workflow-release.md) and report decision traceability.
+
+## Write Safety
+
+Three rules govern every write:
+
+1. **Scope first** — confirm the target project before any write. If unclear, ask once.
+2. **No silent writes** — if the user has not answered a clarification question, continue read-only analysis and report the pending decision.
+3. **Approval for risk** — require explicit approval for large-scale plans, multi-entity recovery, ambiguous destinations, and destructive changes. Small, explicit, reversible updates do not need approval.
+
+Full rules: [Runbook — Write Safety](./references/runbook.md#write-safety-and-approval-gate) | [Workflow Release — Approval Boundary](./references/workflow-release.md#approval-boundary)
