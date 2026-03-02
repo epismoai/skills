@@ -1,46 +1,63 @@
 # AI Delegation
 
-This document defines how to design and assign high-quality AI-owned tasks.
-Use it when you create or update delegated work and need clear outputs, acceptance criteria, and review gates.
-For overload and rebalance analysis, use [Project Operations Runbook](./project-operations-runbook.md) (`Mode Playbooks > Recovery`).
+Design and assignment standards for AI-owned tasks.
+Use when creating or updating delegated work that requires clear outputs, acceptance criteria, and review gates.
+For overload and rebalance analysis, use [Runbook — Recovery](./runbook.md#4-recovery-and-backlog-hygiene).
 
-## Delegation Fit Check
+## When to Delegate
 
-Delegate when work is:
+**Delegate when work is:**
 
-1. Repetitive or template-driven.
-2. Analysis/synthesis heavy.
-3. Draft-oriented and reviewable.
+- Repetitive or template-driven (data extraction, formatting, reporting)
+- Analysis, synthesis, or research-heavy (comparison tables, summaries, audits)
+- Draft-oriented and reviewable by a human afterward (first drafts, proposals, outlines)
 
-Keep human owners for final approval, external communication, and sensitive decisions.
+**Keep human owners for:**
 
-## Delegation Quality Checks
+- Final approval and sign-off
+- External communication (client-facing, public-facing)
+- Sensitive or high-stakes decisions (budget, hiring, legal)
+- Work requiring real-time judgment or negotiation
 
-Before assigning AI-owned work, check:
+**When not to delegate:**
+If the task cannot be verified by inspecting its output alone, it should not be AI-owned. A human reviewer who cannot tell whether the output is correct without redoing the work means the task is a poor delegation candidate.
 
-1. Objective clarity
-   - Is the task outcome specific and testable?
-2. Output specificity
-   - Is output shape/path/format clear enough to verify completion?
-3. Acceptance criteria
-   - Is there an objective done condition beyond "looks good"?
-4. Input and boundary definition
-   - Are source-of-truth inputs and non-goals explicit?
-5. Dependency and timing clarity
-   - Are required prerequisites and review timing clear?
+## Pre-Assignment Checklist
+
+All six must pass before assigning AI-owned work. If any item fails, fix the gap or assign to a human.
+
+- [ ] **Objective** — outcome is specific and testable
+- [ ] **Output shape** — format, path, or structure is clear enough to verify completion
+- [ ] **Done condition** — acceptance criteria are objective, not "looks good"
+- [ ] **Inputs and boundaries** — source-of-truth inputs and non-goals are explicit
+- [ ] **Dependencies and timing** — prerequisites and review timing are unambiguous
+- [ ] **Reviewer** — a human reviewer is assigned for sensitive or external-facing output
+
+## Good vs. Bad Delegation
+
+| Dimension      | Good                                                                                    | Bad                      |
+| -------------- | --------------------------------------------------------------------------------------- | ------------------------ |
+| Objective      | "Generate competitor pricing analysis for products A, B, C using their public websites" | "Research competitors"   |
+| Output shape   | "Markdown table saved to notes/competitor-pricing.md"                                   | "A summary"              |
+| Done condition | "Table covers all 3 products: price, tier name, and key features"                       | "When it looks complete" |
+| Non-goals      | "Exclude integrations and enterprise plans"                                             | (not stated)             |
+| Review timing  | "Review before sharing with sales team on Friday"                                       | (not stated)             |
+| Inputs         | "Use public pricing pages listed in notes/competitor-urls.md"                           | "Find the information"   |
 
 ## Delegation Workflow
 
-1. Resolve assignee from `references.assignees`.
-2. Create or update task with explicit quality checks satisfied.
-3. If no AI assignee exists, assign human fallback and state reason.
-4. Report assignment with title, assignee, expected output, and review timing.
+1. **Resolve assignee** — look up AI assignee from `references.assignees`. If no AI assignee exists, assign a human fallback and state the reason.
+2. **Validate checklist** — confirm all six items pass. Document any gaps filled during validation.
+3. **Create or update task** — write the task with all six checklist items satisfied. Include the expected output description in the task content.
+4. **Report** — confirm: title, assignee, expected output, done condition, and review timing.
 
-## Typical Failure Modes
+## Failure Modes
 
-1. Objective unclear -> output drifts and rework increases.
-2. Output shape missing -> reviewers cannot quickly validate completion.
-3. Acceptance criteria missing -> premature "done" status.
-4. Source inputs/non-goals missing -> hallucinated assumptions or scope creep.
-5. Dependency timing unclear -> blocked tasks or idle waiting.
-6. Reviewer missing -> sensitive decisions bypass human gate.
+| Failure                           | Effect                                  | Prevention                                         |
+| --------------------------------- | --------------------------------------- | -------------------------------------------------- |
+| Unclear objective                 | Output drifts; rework increases         | Write a testable outcome statement                 |
+| Output shape missing              | Reviewers cannot validate completion    | Specify format, path, or structure                 |
+| Acceptance criteria missing       | Premature "done" status                 | Define objective done conditions                   |
+| Source inputs / non-goals missing | Hallucinated assumptions or scope creep | List inputs explicitly; state what is out of scope |
+| Dependency timing unclear         | Blocked tasks or idle waiting           | Set prerequisites and review dates                 |
+| Reviewer missing                  | Sensitive decisions bypass human gate   | Always name a reviewer for external-facing work    |

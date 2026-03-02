@@ -4,12 +4,6 @@ When the MCP server returns an error indicating depleted credits, you will need 
 
 **Pricing: 1 credit = $0.01**
 
-## Overview
-
-1. **Acquire Access Token**: Use the email OTP flow to get an `accessToken`.
-2. **Create Checkout Session**: Call `POST /v1/credits` to generate a Stripe Checkout URL.
-3. **Complete Purchase**: Open the URL, finalize the payment, and retry your MCP request.
-
 ## 1. Acquire an Access Token (Email OTP)
 
 To purchase credits, you need a valid `accessToken`. If you don't have an active one, follow these steps to obtain it.
@@ -69,8 +63,4 @@ curl -sX POST https://api.epismo.ai/v1/credits \
 
 ## 3. Complete the Purchase
 
-Open the returned Stripe Checkout `url` in your browser to process the payment. Once completed:
-
-1. Credits will be immediately added to the specified balance.
-2. You can verify your updated balance in the dashboard if desired.
-3. You can now retry the MCP request that previously failed due to insufficient credits.
+Open the `url` in a browser. Credits are added immediately. Retry the failed MCP request.

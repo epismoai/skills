@@ -1,107 +1,146 @@
 # Epismo Skills
 
-Epismo Skills help makes human-AI project operations portable, visible, and repeatable.
+Reusable skill packages that give AI agents structured project-operation capabilities through Epismo MCP.
 
-## Why This Exists
+## Why Skills
 
-People using AI repeatedly hit the same problems:
+AI agents hit the same problems across teams and projects:
 
-- workflows stay personal and fragile
-- know-how is scattered across chats
-- prompts are easy to copy, but processes are hard to reuse
+- Operational know-how stays trapped in chat histories.
+- Prompts copy easily, but multi-step processes don't.
+- Every new project restarts from scratch.
+
+Skills solve this by packaging proven operational patterns — intake, planning, coordination, risk handling, workflow release — into portable instruction sets that any MCP-connected agent can follow.
 
 ## What You Can Do
 
-You can start from any point. Pick the use case and run a prompt.
+Pick a use case and run a prompt. Skills handle the rest.
 
-| Use case                              | Prompt example                                                   |
+| Use case                              | Example prompt                                                   |
 | ------------------------------------- | ---------------------------------------------------------------- |
-| Start from current project state      | "Analyze this project and suggest the best workflow to start."   |
-| Find and reuse best practices         | "Import a community workflow and adapt it to this project."      |
+| Start from current project state      | "Analyze this project and suggest the best next action."         |
+| Find and reuse best practices         | "Find a community workflow that fits this project and adapt it." |
 | Turn context into executable work     | "Convert this blog post into a reusable workflow for my team."   |
 | Split AI execution and human control  | "Run automatable steps with AI and keep final approval with me." |
-| Capture successful patterns for reuse | "This worked well. Save it as a reusable workflow template."     |
+| Capture successful patterns for reuse | "This worked well. Save it as a reusable workflow."              |
 
 ## Quick Start
 
-> Note: `secretKey` is shown only once. Store it securely.
+If you're working with an AI agent, simply say:
+
+```
+Set up MCP and Skills from github.com/epismoai/skills
+```
+
+The agent will read this page and complete the steps below. Otherwise, follow the steps manually.
+
+---
+
+Complete these three steps in order. Each step depends on output from the previous one.
 
 ### Step 1: Create a Secret Key
 
-Choose one option.
+> You can also create one from the UI: `Settings > MCP Servers > Create Secret Key`. If you do, skip to Step 2.
 
-**Option A: Create via UI**
+**1-1. Request an OTP**
 
-1. Go to `Settings > MCP Servers`.
-2. Click **Create Secret Key**.
-3. Copy the key.
-
-**Option B: Create via API**
-
-1. Request an OTP (sent to your email)
+Send your email address. A one-time PIN will be sent to that address, and the response returns an `otpId`.
 
 ```bash
 curl -sX POST https://api.epismo.ai/v1/otp-tokens \
   -H "Content-Type: application/json" \
   -d '{"email":"you@example.com"}'
 
-# => {"otpId":"..."}
+# => {"otpId":"<OTP_ID>"}
 ```
 
-2. Create (or fetch) a user and get an access token
+Save: `OTP_ID` from the response.
+
+**1-2. Verify the OTP and get an access token**
+
+Use the `otpId` from step 1-1 and the PIN delivered to your email.
 
 ```bash
 curl -sX POST https://api.epismo.ai/v1/users \
   -H "Content-Type: application/json" \
-  -d '{"otpId":"...","pin":"YOUR_PIN"}'
+  -d '{"otpId":"<OTP_ID>","pin":"<PIN_FROM_EMAIL>"}'
 
-# => {"userId":"...","accessToken":"..."}
+# => {"userId":"<USER_ID>","accessToken":"<ACCESS_TOKEN>"}
 ```
 
-- `accessToken` is short-lived.
-- It is only used to issue a `secretKey` via API.
+Save: `ACCESS_TOKEN` from the response. It is short-lived and used only to issue a Secret Key in the next step.
 
-3. Issue a Secret Key
+**1-3. Issue a Secret Key**
 
-Use `accessToken` in the header and `workspaceId` (optional) in the body.
-If `workspaceId` is omitted, the key will be scoped to your personal workspace.
-You can get your workspace IDs by calling `GET https://api.epismo.ai/v1/workspaces` with the `accessToken`.
+Use the `ACCESS_TOKEN` from step 1-2. The key will be scoped to a workspace.
+
+- **Personal workspace (default):** omit `workspaceId` from the request body.
+- **Specific workspace:** first fetch your workspace IDs, then include the target `workspaceId`.
+
+```bash
+# Optional: fetch workspace IDs
+curl -sX GET https://api.epismo.ai/v1/workspaces \
+  -H "Authorization: Bearer <ACCESS_TOKEN>"
+
+# => [{"workspaceId":"<WORKSPACE_ID>","name":"..."},...]
+```
 
 ```bash
 curl -sX POST https://api.epismo.ai/v1/secret-keys \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-  -d '{"workspaceId":"..."}'
+  -H "Authorization: Bearer <ACCESS_TOKEN>" \
+  -d '{"workspaceId":"<WORKSPACE_ID>"}'   # omit workspaceId to use personal workspace
 
-# => {"secretKey":"..."}
+# => {"secretKey":"<SECRET_KEY>"}
 ```
 
-### Step 2: Add the MCP server to your client
+Save: `SECRET_KEY` from the response. **It is shown only once. Store it in a secure location (e.g., a secrets manager or environment variable) before continuing.**
+
+---
+
+### Step 2: Add the MCP Server to Your Client
+
+Use the `SECRET_KEY` from Step 1 to configure your MCP client.
 
 MCP endpoint:
 
 - URL: `https://mcp.epismo.ai/`
 - Protocol: Streamable HTTP (`POST /`, JSON-RPC 2.0)
-- Auth header: `Authorization: Bearer YOUR_SECRET_KEY`
+- Auth header: `Authorization: Bearer <SECRET_KEY>`
 
-Example client config:
+Add the following to your client configuration:
 
 ```json
 {
   "name": "epismo-mcp",
   "url": "https://mcp.epismo.ai/",
   "headers": {
-    "Authorization": "Bearer YOUR_SECRET_KEY"
+    "Authorization": "Bearer <SECRET_KEY>"
   }
 }
 ```
 
-### Step 3: Set the Skills in your environment
+Verify the connection by calling any MCP tool. If the server responds, the setup is complete.
 
-Set up Epismo Skills in the environment your client runs in (for example, agent config, workspace settings, or CI).
+---
 
-## Source of truth
+### Step 3: Load Skills into Your Agent
+
+Get the skill files from this repository (clone, download, or copy — use whatever fits your environment) and load them into your agent's context.
+
+Each skill follows this structure:
+
+```
+<skill-name>/
+  SKILL.md          <- primary instruction file; load this into your agent's context
+  references/       <- supplementary references (loaded on demand by SKILL.md)
+  templates/        <- structured output templates
+```
+
+The setup is complete when your agent can read `SKILL.md` for the skills it needs.
+
+---
+
+## Source of Truth
 
 Repository: `https://github.com/epismoai/skills`
-
-If you customize locally, review upstream diffs and merge selectively.
