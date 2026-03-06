@@ -94,13 +94,19 @@ curl -sX POST https://api.epismo.ai/v1/secret-keys \
 # => {"secretKey":"<SECRET_KEY>"}
 ```
 
-Save: `SECRET_KEY` from the response. **It is shown only once. Store it in a secure location (e.g., a secrets manager or environment variable) before continuing.**
+Save: `SECRET_KEY` from the response. **It is shown only once.** Export it as an environment variable before continuing:
+
+```bash
+export EPISMO_SECRET_KEY=<SECRET_KEY>
+```
+
+> `EPISMO_SECRET_KEY` authenticates most Epismo API endpoints (`Authorization: Bearer $EPISMO_SECRET_KEY`). Only the endpoints used in this step, require the short-lived `ACCESS_TOKEN`.
 
 ---
 
 ### Step 2: Add the MCP Server to Your Client
 
-Use the `SECRET_KEY` from Step 1 to configure your MCP client.
+Use `EPISMO_SECRET_KEY` from Step 1 to configure your MCP client.
 
 MCP endpoint:
 
