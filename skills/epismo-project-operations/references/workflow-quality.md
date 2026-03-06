@@ -32,6 +32,26 @@ All criteria must pass. A single fail means: fix the issue or keep the workflow 
 8. **Review traceability** — release decision rationale is explicit and reviewable; ownership and dependency changes are justified.
    Fail: decision trail absent or vague.
 
+## Step Authoring Rules
+
+Apply these rules when designing workflow steps. They balance reproducibility with cognitive load.
+
+1. Write detailed step content
+   - Each step's `content` must include enough procedural detail for someone unfamiliar with the project to execute it.
+   - Include: concrete actions, expected inputs/outputs, tool or command examples (commands, prompts, or configuration snippets), decision criteria, and links to references when relevant.
+   - Avoid vague instructions like "handle X" or "set up Y" without explaining how.
+2. Assign an owner to every step
+   - Every step must have a concrete `assignee`. Leaving `assignee` empty is not acceptable.
+   - Resolve assignee from `references.assignees`. Match by role or tool:
+     - Human-driven steps (decisions, reviews, commits, coordination): use `human`.
+     - AI-driven steps (generation, research, summarization, transformation): use the most appropriate AI agent by name (e.g., Claude Code for coding tasks, Perplexity for research, Gemini for analysis).
+   - If the exact tool is not listed, assign the closest equivalent and note the assumption in the step content.
+   - When a step is shared between human and AI, assign the party who owns the deliverable.
+3. Right-size step granularity
+   - Avoid splitting work into too many fine-grained steps; excessive steps increase cognitive load and tracking overhead.
+   - Use assignee boundaries as the primary split heuristic: create a new step when the responsible person changes.
+   - A workflow with 3-8 top-level steps is typical; exceed this only when assignee changes or hard dependencies require it.
+
 ## Release Decision
 
 - All criteria pass → hand off to [Workflow Release](./workflow-release.md).

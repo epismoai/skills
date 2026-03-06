@@ -1,54 +1,46 @@
 # Credit Purchase
 
-When the MCP server returns an error indicating depleted credits, you will need to purchase additional credits via the API to continue.
+When API operations return `Payment Required: Insufficient credits`, purchase credits and retry the same API request.
 
 **Pricing: 1 credit = $0.01**
 
-## 1. Acquire an Access Token (Email OTP)
+## Overview
 
-To purchase credits, you need a valid `accessToken`. If you don't have an active one, follow these steps to obtain it.
+1. Ensure you have `EPISMO_SECRET_KEY`.
+2. Call `POST /v1/credits` to generate a Stripe Checkout URL.
+3. Complete checkout and retry the failed API request.
 
-### Step 1: Request an OTP ID
+## Secret Key Prerequisite
 
-Provide your email to receive a PIN.
+This document assumes `EPISMO_SECRET_KEY` is already available.
+For secret-key issuance, the best source of truth is the `epismoai/skills` README.
 
-```bash
-curl -sX POST https://api.epismo.ai/v1/otp-tokens \
-  -H "Content-Type: application/json" \
-  -d '{"email":"user@example.com"}'
+How to read it:
 
-# Response:
-# {"otpId":"..."}
-```
+1. Browser
+   - Open: `https://github.com/epismoai/skills/blob/main/README.md`
+2. CLI
+   - `curl -fsSL https://raw.githubusercontent.com/epismoai/skills/main/README.md`
 
-### Step 2: Exchange PIN for an Access Token
+In that README, follow **Step 1: Create a Secret Key**, which covers:
 
-Use the `otpId` from Step 1 and the PIN you received via email.
+1. Request an OTP (`POST /v1/otp-tokens`)
+2. Verify the OTP and get an access token (`POST /v1/users`)
+3. Issue a Secret Key (`POST /v1/secret-keys`)
 
-```bash
-curl -sX POST https://api.epismo.ai/v1/users \
-  -H "Content-Type: application/json" \
-  -d '{"otpId":"...","pin":"YOUR_PIN"}'
+## 1. Purchase Credits (Create Stripe Checkout)
 
-# Response:
-# {"userId":"...","accessToken":"..."}
-```
+Call `POST /v1/credits` with `Authorization: Bearer $EPISMO_SECRET_KEY`.
 
-## 2. Purchase Credits (Create Stripe Checkout)
-
-With your `accessToken` ready, call the `POST /v1/credits` endpoint to generate a Stripe Checkout URL.
-
-- `workspaceId` (Optional): Target workspace for the credits. If omitted, credits apply to your personal workspace. (Use the MCP resource `context:current_user` to find your `workspace.id`).
-- `allocations` (Required): An array specifying who receives the credits.
-  - `userId`: The recipient's user ID. (Use the MCP resource `context:users` to find this).
-  - `quantity`: Number of credits to purchase (integer).
+- `allocations`: recipients and quantities.
+  - `userId`: recipient user ID.
+  - `quantity`: number of credits (integer).
 
 ```bash
 curl -sX POST https://api.epismo.ai/v1/credits \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Authorization: Bearer $EPISMO_SECRET_KEY" \
   -d '{
-    "workspaceId": "...",
     "allocations": [
       {
         "userId": "...",
@@ -61,6 +53,10 @@ curl -sX POST https://api.epismo.ai/v1/credits \
 # {"url":"https://checkout.stripe.com/..."}
 ```
 
-## 3. Complete the Purchase
+## 2. Complete the Purchase
 
-Open the `url` in a browser. Credits are added immediately. Retry the failed MCP request.
+Open the returned Stripe Checkout `url` in your browser and complete payment.
+
+1. Credits are added to the specified balance.
+2. Optionally verify balance in the dashboard.
+3. Retry the API call that failed with insufficient credits.
