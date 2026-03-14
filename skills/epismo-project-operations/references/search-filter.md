@@ -5,16 +5,17 @@ Use when building filtered queues, finding goals/tasks/notes/workflows, or reaso
 
 ## Quick Reference
 
-| What you need            | How to query                                                                        |
-| ------------------------ | ----------------------------------------------------------------------------------- |
-| Tasks ready to work on   | `status=["todo"]` → verify each `dependsOn[]` item is `done`                        |
-| Tasks in progress        | `status=["in_progress"]`                                                            |
-| Tasks due soon           | `status=["backlog","todo","in_progress"]` + `dueDateTo={date}`                      |
-| Blocked tasks            | `status=["backlog","todo","in_progress"]` → check each `dependsOn[]` for non-`done` |
-| Recently completed tasks | `status=["done"]` + `doneAtFrom={now-7d}`                                           |
-| Reusable workflows       | Search `visibility=["private"]` first → `like="liked"` → `visibility=["public"]`    |
-| Tasks under a goal       | `goalId=["{goal-id}"]`                                                              |
-| Downstream dependents    | `dependsOn=["{task-id}"]` — finds what unblocks when this task completes            |
+| What you need                 | How to query                                                                            |
+| ----------------------------- | --------------------------------------------------------------------------------------- |
+| Tasks ready to work on        | `status=["todo"]` → verify each `dependsOn[]` item is `done`                            |
+| Tasks in progress             | `status=["in_progress"]`                                                                |
+| Tasks due soon                | `status=["backlog","todo","in_progress"]` + `dueDateTo={date}`                          |
+| Blocked tasks                 | `status=["backlog","todo","in_progress"]` → check each `dependsOn[]` for non-`done`     |
+| Recently completed tasks      | `status=["done"]` + `doneAtFrom={now-7d}`                                               |
+| Reusable workflows            | Search `visibility=["private"]` first → `like="liked"` → `visibility=["public"]`        |
+| Tasks under a goal            | `goalId=["{goal-id}"]`                                                                  |
+| Downstream dependents         | `dependsOn=["{task-id}"]` — finds what unblocks when this task completes                |
+| Post-completion unblock check | Set task to `done` → query `dependsOn=["{task-id}"]` → re-check remaining prerequisites |
 
 ## Scope Semantics
 
@@ -85,6 +86,13 @@ These are computed from entity data, not stored as status field values. Use them
 ### Downstream dependents — what unblocks next
 
 - `dependsOn=["{task-id}"]`
+
+### Post-completion unblock check
+
+- `dependsOn=["{task-id}"]`
+- Re-check every prerequisite in each returned task's `dependsOn[]`
+- Separate `ready_now` from `blocked_by_dependency`
+- Report both the newly unblocked tasks and the tasks that remain blocked
 
 ### Throughput — completed in last 7 days
 

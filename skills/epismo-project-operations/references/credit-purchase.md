@@ -6,32 +6,35 @@ When API operations return `Payment Required: Insufficient credits`, purchase cr
 
 ## Overview
 
-1. Ensure you have `EPISMO_SECRET_KEY`.
+1. If needed, get a valid API session token.
 2. Call `POST /v1/credits` to generate a Stripe Checkout URL.
 3. Complete checkout and retry the failed API request.
 
-## Secret Key Prerequisite
+## 1. Get a Session Token (If Needed)
 
-This document assumes `EPISMO_SECRET_KEY` is already available.
-For secret-key issuance, the best source of truth is the `epismoai/skills` README.
+If you do not already have a `sessionToken`, request an OTP and exchange it with the PIN sent to your email.
 
-How to read it:
+```bash
+curl -sX POST https://api.epismo.ai/v1/otp-tokens \
+  -H "Content-Type: application/json" \
+  -d '{"email":"you@example.com"}'
 
-1. Browser
-   - Open: `https://github.com/epismoai/skills/blob/main/README.md`
-2. CLI
-   - `curl -fsSL https://raw.githubusercontent.com/epismoai/skills/main/README.md`
+# => {"otpId":"<OTP_ID>"}
+```
 
-In that README, follow **Step 1: Create a Secret Key**, which covers:
+```bash
+curl -sX POST https://api.epismo.ai/v1/users \
+  -H "Content-Type: application/json" \
+  -d '{"otpId":"<OTP_ID>","pin":"<PIN_FROM_EMAIL>"}'
 
-1. Request an OTP (`POST /v1/otp-tokens`)
-2. Verify the OTP and get an access token (`POST /v1/users`)
-3. Issue a Secret Key (`POST /v1/secret-keys`)
+# => {"sessionToken":"<SESSION_TOKEN>", ...}
+```
 
-## 1. Purchase Credits (Create Stripe Checkout)
+## 2. Purchase Credits (Create Stripe Checkout)
 
-Call `POST /v1/credits` with `Authorization: Bearer $EPISMO_SECRET_KEY`.
+Call `POST /v1/credits` with `Authorization: Bearer <SESSION_TOKEN>`.
 
+- `workspaceId` (optional): target workspace. If provided, the caller must belong to that workspace.
 - `allocations`: recipients and quantities.
   - `userId`: recipient user ID.
   - `quantity`: number of credits (integer).
@@ -39,8 +42,9 @@ Call `POST /v1/credits` with `Authorization: Bearer $EPISMO_SECRET_KEY`.
 ```bash
 curl -sX POST https://api.epismo.ai/v1/credits \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $EPISMO_SECRET_KEY" \
+  -H "Authorization: Bearer <SESSION_TOKEN>" \
   -d '{
+    "workspaceId": "<WORKSPACE_ID>",
     "allocations": [
       {
         "userId": "...",
@@ -53,10 +57,11 @@ curl -sX POST https://api.epismo.ai/v1/credits \
 # {"url":"https://checkout.stripe.com/..."}
 ```
 
-## 2. Complete the Purchase
+## 3. Complete the Purchase
 
 Open the returned Stripe Checkout `url` in your browser and complete payment.
 
 1. Credits are added to the specified balance.
 2. Optionally verify balance in the dashboard.
 3. Retry the API call that failed with insufficient credits.
+4. If the session expired while you were purchasing, rerun the OTP flow and retry.
