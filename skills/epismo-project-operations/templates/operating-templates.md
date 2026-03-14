@@ -39,16 +39,18 @@ Use when: existing entities need localized field edits only (status, assignee, d
 - [ ] Target entities identified (names and current values read)
 - [ ] Change is real — not a no-op
 - [ ] Project scope confirmed
+- [ ] If task status -> `done`, downstream dependents check queued
 
 ### Execute
 
 - Writes: `{entity.field → new value}` for each change
+- Follow-up check when task moved to `done`: `{ready_now / blocked_by_dependency / none}`
 - Structural changes: none
 
 ### Report
 
 - **Situation**: {what is active now}
-- **Delta**: {fields changed on which entities}
+- **Delta**: {fields changed on which entities; newly unblocked tasks / still blocked tasks / no downstream dependents}
 - **Evidence**: {source that informed the change}
 - **Risks**: {none expected / any concern}
 - **Next action**: {smallest useful step}

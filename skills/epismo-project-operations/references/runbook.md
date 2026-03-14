@@ -43,8 +43,10 @@ Exit: delta reported, no structural changes introduced.
 
 1. Read current entity values.
 2. Verify requested fields differ from current state — skip if no real change (no-op check).
-3. Update only the affected fields in the affected scope.
-4. Report exact delta and confirm unchanged structure.
+3. If a task status is changing to `done`, queue a downstream dependents check with `dependsOn=["{task-id}"]`.
+4. Update only the affected fields in the affected scope.
+5. If step 3 applies, read downstream dependents and separate `ready_now`, `blocked_by_dependency`, and `none`.
+6. Report exact delta, downstream result, and confirm unchanged structure.
 
 Typical writes: `upsert task`, `upsert goal`, `upsert note` with field-level changes only.
 
@@ -126,7 +128,7 @@ After every operation, return this structure. Prefer names and titles in user-fa
 1. **Situation** — what is active now.
 2. **Delta** — what changed (created, updated, deleted) or why no write occurred.
 3. **Evidence** — which project items, workflows, or external sources informed the decision.
-4. **Risks / decisions** — open questions or items needing confirmation.
+4. **Risks / decisions** — open questions or items needing confirmation. If a task was marked `done`, note whether downstream tasks are now ready or still blocked.
 5. **Next action** — the single smallest useful next step.
 
 ## Error Handling

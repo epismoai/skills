@@ -9,6 +9,15 @@ Operate on projects through Epismo MCP — from a quick status update to full go
 
 **Core principle: read current state → gather evidence → apply the smallest useful change.**
 
+## Connection Prerequisite
+
+This skill assumes Epismo access is already connected.
+
+- Use the bearer token accepted by the target surface or endpoint.
+- MCP calls require an OAuth access token with `scope=mcp` and the correct `resource`.
+- Some API `/v1/*` setup flows still require a session token.
+- If MCP or API access is not ready yet, follow the auth/setup steps in the `github.com/epismoai/skills` README before continuing.
+
 ## Intent Router
 
 Match the user's intent to the right steps. Run only what the situation requires. When multiple intents overlap, start from the earliest unresolved step.
@@ -52,6 +61,8 @@ Pick one execution mode from the [Runbook — Mode Selector](./references/runboo
 - **New Item Creation** — exactly one new task / goal / note.
 - **Large-Scale Planning** — multiple coordinated items with ownership contracts.
 - **Recovery** — address overload, stall, or noisy backlog.
+
+When a task status changes to `done`, run a downstream dependents check in the same Partial Update: query `dependsOn=["{task-id}"]` and report what is now unblocked.
 
 Design AI-owned tasks with [AI Delegation](./references/ai-delegation.md).
 Use [Operating Templates](./templates/operating-templates.md) for structured write output.
