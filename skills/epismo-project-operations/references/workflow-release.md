@@ -2,6 +2,7 @@
 
 Release, update, and deprecate decisions for reusable workflows.
 Quality gate must pass before any `release` or `update` — run [Workflow Quality](./workflow-quality.md) first.
+Use canonical operation labels from [Project Operations](../SKILL.md#surface-conventions) when describing the execution surface.
 
 ## Pre-Decision Checks
 

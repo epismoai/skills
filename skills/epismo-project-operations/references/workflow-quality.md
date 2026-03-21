@@ -8,7 +8,7 @@ For final action choice and approval handling, use [Workflow Release](./workflow
 
 All criteria must pass. A single fail means: fix the issue or keep the workflow private.
 
-1. **Proven execution** — at least one real execution path with observable outcome (project records with identifiers or links), OR seed-source evidence (blog/docs/design rationale) with explicit assumptions and limits.
+1. **Proven execution** — at least one real execution path with observable outcome (tracks or linked records with identifiers), OR seed-source evidence (blog/docs/design rationale) with explicit assumptions and limits.
    Fail: outcome claimed but no records, links, or rationale provided.
 
 2. **Reusability** — steps avoid project-specific names, IDs, and one-off constraints.
