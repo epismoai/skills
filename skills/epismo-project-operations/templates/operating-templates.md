@@ -2,7 +2,8 @@
 
 Structured output templates for project operation writes. Each template maps to an execution mode from the [Runbook](../references/runbook.md).
 
-Replace all `{...}` placeholders before executing. Default write destinations are tasks/goals/notes — escalate to workflow only when the structure needs reuse across projects or teams.
+Replace all `{...}` placeholders before executing. Default write destinations are tracks (`task` / `goal` / `note`) — escalate to a workflow asset only when the structure needs reuse across projects or teams.
+Execution labels below use the canonical surface conventions from [Project Operations](../SKILL.md#surface-conventions).
 
 Guardrails:
 
@@ -17,14 +18,14 @@ Confirm before any write. Applies to all modes.
 - **Project scope**: confirmed project name or ID
 - **Outcome**: what success looks like
 - **Constraints**: deadline, owner, risk, or sensitivity
-- **Write destination**: tasks / goals / notes (add workflow if reusable)
+- **Write destination**: tracks (`task` / `goal` / `note`) or assets (`workflow` when reusable)
 
 ## Status Reference
 
-| Entity | Valid statuses                                    |
-| ------ | ------------------------------------------------- |
-| Task   | `backlog`, `todo`, `in_progress`, `done`          |
-| Goal   | `not_started`, `on_track`, `at_risk`, `completed` |
+| Entity | Valid statuses                                                 |
+| ------ | -------------------------------------------------------------- |
+| Task   | `backlog`, `todo`, `in_progress`, `done`                       |
+| Goal   | `not_started`, `on_track`, `at_risk`, `postponed`, `completed` |
 
 `blocked_by_dependency` is a derived queue state, not a status field. See [Search & Filter](../references/search-filter.md#derived-queue-states).
 
@@ -77,7 +78,7 @@ Use when: exactly one new task, goal, or note must be added; existing structure 
 
 ### Execute
 
-- Write: one `upsert {task|goal|note}`
+- Write: one `upsert track` for `{task|goal|note}`
 - Projects: `{confirmed project ID}`
 
 ### Report
@@ -97,7 +98,7 @@ Use when: multiple items, a new goal structure, or a coordinated multi-step plan
 ### Assess
 
 - [ ] Current goals, tasks, and notes reviewed
-- [ ] Reuse check done — existing workflows scanned (`private` → `liked` → `public`)
+- [ ] Reuse check done — existing workflow assets scanned (`private` → `liked` → `public`)
 - [ ] Why reuse is insufficient: {reason}
 - [ ] Project scope confirmed
 
@@ -111,7 +112,7 @@ For each item in the plan:
 | B    | {title} | {AI/human} | {deliverable} | {step IDs or none} |
 | C    | {title} | {AI/human} | {deliverable} | {step IDs or none} |
 
-- Materialization: {goals/tasks/notes} + workflow if reusable: {yes → private now or after first run / no}
+- Materialization: {tracks only / tracks + workflow asset}
 
 ### Approve
 
@@ -120,14 +121,14 @@ For each item in the plan:
 
 ### Execute
 
-- Writes: {list of upsert operations}
-- Optional workflow: {upsert workflow or none}
+- Writes: {list of `upsert track` operations}
+- Optional workflow asset: {`upsert asset` or none}
 
 ### Report
 
 - **Situation**: {what is active now}
 - **Delta**: {items created/updated with structure summary}
-- **Evidence**: {project items, workflows, or sources that informed the plan}
+- **Evidence**: {tracks, assets, or sources that informed the plan}
 - **Risks**: {open questions or dependency concerns}
 - **Next action**: {smallest useful step}
 
@@ -202,7 +203,7 @@ Use when: a successful execution pattern is a candidate for reuse across project
 
 ### Report
 
-- **Situation**: {workflow state after action}
+- **Situation**: {workflow asset state after action}
 - **Delta**: {release action taken with target visibility}
 - **Evidence**: {execution records and quality gate results}
 - **Risks**: {duplication risk, scope limitations, or open concerns}
@@ -219,16 +220,16 @@ Use when: comparing candidate workflows and committing to a concrete adaptation 
 - [ ] Desired outcome defined: {what the user wants to achieve}
 - [ ] Project context noted: {team and project constraints}
 - [ ] Evidence sources checked:
-  - Project items (goals/tasks/notes): {what was checked}
-  - Workflows (`private` / `liked` / `public`): {what was checked}
+  - Tracks (goals/tasks/notes): {what was checked}
+  - Workflow assets (`private` / `liked` / `public`): {what was checked}
   - External sources: {what was checked or N/A}
 
 ### Discover
 
 Search plan:
 
-- Project entities: {projects / status / date filters used}
-- Workflow entities: {visibility / like / category filters used}
+- Tracks: {projects / status / date filters used}
+- Workflow assets: {visibility / like / category filters used}
 - Keyword queries (if needed): {2-6 domain keywords}
 
 Candidate shortlist:
@@ -252,7 +253,7 @@ Candidate shortlist:
 
 ### Materialize
 
-- Destination: {project tasks / private workflow / both}
+- Destination: {project tracks / private workflow asset / both}
 - [ ] Write safety confirmed per [Runbook](../references/runbook.md#write-safety-and-approval-gate)
 - [ ] If workflow release involved, approval boundary confirmed per [Workflow Release](../references/workflow-release.md#approval-boundary)
 

@@ -3,8 +3,10 @@
 Governs day-to-day operational writes on tasks, goals, and notes.
 For workflow release/update/deprecate, use [Workflow Release](./workflow-release.md).
 For query/filter semantics, use [Search & Filter](./search-filter.md).
+Operation labels below use the canonical surface conventions from [Project Operations](../SKILL.md#surface-conventions).
+Tracks hold project execution state; assets hold reusable stock content such as workflows.
 
-Status values must match entity-specific definitions. `blocked_by_dependency` is a derived queue state, not a status field — see [Search & Filter — Derived Queue States](./search-filter.md#derived-queue-states).
+Status values must match entity-specific definitions. `blocked_by_dependency` is a derived queue state, not a status field. Scope semantics and status definitions live in [Search & Filter](./search-filter.md).
 
 ## Mode Selector
 
@@ -23,16 +25,68 @@ When in doubt between New Item Creation and Large-Scale Planning, prefer New Ite
 
 Run before structural changes. Skip for simple partial updates and single-item creation.
 
-1. **Diagnose** — pull current goals, tasks, notes, and workflows. Separate planned items from actively-moving items.
+1. **Diagnose** — run `search track` and `search asset` to pull current goals, tasks, notes, and reusable workflow assets. Separate planned items from actively-moving items.
    → Output: current state summary.
 2. **Select mode** — choose one mode from the selector above. State why alternatives were rejected.
    → Output: chosen mode + one-line rationale.
 3. **Design contracts** — for each planned change, define owner, expected output, and true prerequisites. Keep independent work parallel.
    → Output: ownership and dependency map.
-4. **Confirm destination** — write to tasks/goals/notes first. Add a private workflow only when reusable structure is clearly needed.
+4. **Confirm destination** — write to tracks first. Add a private workflow asset only when reusable structure is clearly needed.
    → Output: write destination confirmed.
 5. **Set checkpoint** — define the smallest useful next review point (date, event, or deliverable).
    → Output: next review trigger.
+
+## Minimal Upsert Payloads
+
+Use these as the smallest safe starting shapes for CLI `--input` payloads. Add optional fields only when needed.
+
+### Task
+
+```json
+{
+  "title": "Investigate update task error",
+  "projects": ["pj_123"],
+  "task": {
+    "status": "todo"
+  }
+}
+```
+
+### Goal
+
+```json
+{
+  "title": "Release agent task assignment",
+  "projects": ["pj_123", "pj_456"],
+  "goal": {
+    "status": "not_started",
+    "progress": 0
+  }
+}
+```
+
+### Workflow Asset
+
+```json
+{
+  "title": "Daily operating rhythm",
+  "content": "Reusable daily workflow.",
+  "category": "productivity",
+  "visibility": "private",
+  "projects": ["pj_123"],
+  "workflow": [
+    {
+      "id": "t001",
+      "title": "Morning briefing",
+      "content": "Review priorities and produce a short plan.",
+      "dueDate": "",
+      "dependsOn": [],
+      "parentId": "",
+      "assignee": "human"
+    }
+  ]
+}
+```
 
 ## Mode Playbooks
 
@@ -48,32 +102,32 @@ Exit: delta reported, no structural changes introduced.
 5. If step 3 applies, read downstream dependents and separate `ready_now`, `blocked_by_dependency`, and `none`.
 6. Report exact delta, downstream result, and confirm unchanged structure.
 
-Typical writes: `upsert task`, `upsert goal`, `upsert note` with field-level changes only.
+Typical writes: `upsert track` with entity type `task`, `goal`, or `note`, and field-level changes only.
 
 ### 2) New Item Creation
 
 Entry: exactly one new task, note, or goal is needed; existing structure remains valid.
 Exit: one item created, linked references reported.
 
-1. Confirm destination project and item type (`task` / `note` / `goal`).
+1. Confirm active workspace, destination project, and item type (`task` / `note` / `goal`).
 2. Check for duplicate intent in active queue and backlog.
 3. Create one item with owner, due date, and minimal context.
 4. Report created item and any linked references (goal, parent task, dependencies).
 
-Typical writes: one `upsert task`, `upsert goal`, or `upsert note`.
+Typical writes: one `upsert track` for a `task`, `goal`, or `note`.
 
 ### 3) Large-Scale Planning
 
 Entry: multiple new items, a new goal structure, or a multi-step execution plan.
 Exit: coordinated items created with ownership contracts and dependency links.
 
-1. Run reuse check — scan project assets and workflows (`private` → `liked` → `public`).
+1. Run reuse check — scan workflow assets (`private` → `liked` → `public`).
 2. Document why existing options do not fit.
 3. Propose minimal viable multi-step structure with owners and dependencies.
 4. Obtain approval if required (see [Write Safety](#write-safety-and-approval-gate)).
 5. Materialize only after confirmation.
 
-Typical writes: multiple `upsert goal` / `upsert task` / `upsert note`, optional `upsert workflow`.
+Typical writes: multiple `upsert track` operations, optional `upsert asset`.
 
 ### 4) Recovery and Backlog Hygiene
 
@@ -100,9 +154,9 @@ Recovery thresholds (calibrate per project):
 
 Before any write:
 
-1. Confirm target project scope.
-2. Resolve entity and assignee IDs from MCP references.
-3. Classify change type: `partial update` / `new item creation` / `large-scale planning` / `recovery structural` / `destructive or visibility expansion`.
+1. Confirm active workspace and target project scope.
+2. Resolve entity and assignee IDs from current Epismo results (MCP references or CLI JSON output).
+3. Classify change type: `partial update` / `new item creation` / `large-scale planning` / `recovery structural` / `destructive or visibility change`.
 
 **Require explicit approval for:**
 
@@ -127,7 +181,7 @@ After every operation, return this structure. Prefer names and titles in user-fa
 
 1. **Situation** — what is active now.
 2. **Delta** — what changed (created, updated, deleted) or why no write occurred.
-3. **Evidence** — which project items, workflows, or external sources informed the decision.
+3. **Evidence** — which tracks, assets, or external sources informed the decision.
 4. **Risks / decisions** — open questions or items needing confirmation. If a task was marked `done`, note whether downstream tasks are now ready or still blocked.
 5. **Next action** — the single smallest useful next step.
 
@@ -137,7 +191,7 @@ After every operation, return this structure. Prefer names and titles in user-fa
 | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `Payment Required: Insufficient credits` | Stop. Navigate user to [Credit Purchase](./credit-purchase.md).                                             |
 | `Permission denied`                      | Re-check accessible projects and ownership scope.                                                           |
-| `Unauthorized` / `403`                   | Verify API key and subscription context.                                                                    |
+| `Unauthorized` / `403`                   | Verify MCP token or `EPISMO_ACCESS_TOKEN`, active workspace, and subscription context.                      |
 | `Not Found` / `404`                      | Confirm entity ID exists. It may have been deleted or moved.                                                |
 | Invalid workflow graph                   | Normalize IDs and rebuild as an acyclic dependency graph. Remove self-dependencies and circular references. |
 | Rate limit / `429`                       | Wait and retry with backoff. Inform user if persistent.                                                     |
