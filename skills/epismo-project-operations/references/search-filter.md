@@ -21,10 +21,10 @@ Workspace selection is CLI-only — in MCP, workspace scope is implicit in the O
 | `upsert asset`          | `epismo asset upsert`       | `--type workflow` `--input @asset.json`      |
 | `delete asset`          | `epismo asset delete`       | `--id {id}`                                  |
 | `import asset`          | `epismo asset import`       | `--asset-ids {ids}` `--project-id {id}`      |
-| `like asset`            | `epismo asset like`         | `--id {id}` `--liked true\|false`            |
-| `select workspace`      | `epismo workspace use <id>` | — (CLI only; MCP uses token scope)           |
-| `check credit balance`  | `epismo credits balance`    | `--workspace-id <id>`                        |
-| `start credit checkout` | `epismo credits checkout`   | `--allocations '[...]'` `--input @file.json` |
+| `like asset`            | `epismo asset like`         | `--id {id}` `--liked` / `--no-liked`         |
+| `select workspace`      | `epismo workspace use --workspace-id <id>` | — (CLI only; MCP uses token scope) |
+| `check credit balance`  | `epismo credit balance`     | `--workspace-id <id>` (CLI or API — no MCP tool) |
+| `start credit checkout` | `epismo credit checkout`    | `--allocations '[...]'` `--input @file.json` (CLI or API — no MCP tool) |
 
 ## Quick Reference
 
@@ -35,7 +35,7 @@ Workspace selection is CLI-only — in MCP, workspace scope is implicit in the O
 | Tasks due soon                | `status=["backlog","todo","in_progress"]` + `dueDateTo={date}`                          |
 | Blocked tasks                 | `status=["backlog","todo","in_progress"]` → check each `dependsOn[]` for non-`done`     |
 | Recently completed tasks      | `status=["done"]` + `doneAtFrom={now-7d}`                                               |
-| Reusable workflow assets      | Search `visibility=["private"]` first → `like="liked"` → `visibility=["public"]`        |
+| Reusable workflows      | Search `visibility=["private"]` first → `like="liked"` → `visibility=["public"]`        |
 | Tasks under a goal            | `goalId=["{goal-id}"]`                                                                  |
 | Downstream dependents         | `dependsOn=["{task-id}"]` — finds what unblocks when this task completes                |
 | Post-completion unblock check | Set task to `done` → query `dependsOn=["{task-id}"]` → re-check remaining prerequisites |
@@ -83,7 +83,7 @@ Workspace selection is CLI-only — in MCP, workspace scope is implicit in the O
 
 `updatedAtFrom`, `updatedAtTo`
 
-### Workflow Assets (`search asset`, type `workflow`)
+### Workflows (`search asset`, type `workflow`)
 
 `category[]`, `visibility[]`, `like`, `ownerId[]`,
 `minLikeCount`, `minDownloadCount`, `updatedAtFrom`, `updatedAtTo`

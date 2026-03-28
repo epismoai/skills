@@ -25,13 +25,13 @@ When in doubt between New Item Creation and Large-Scale Planning, prefer New Ite
 
 Run before structural changes. Skip for simple partial updates and single-item creation.
 
-1. **Diagnose** — run `search track` and `search asset` to pull current goals, tasks, notes, and reusable workflow assets. Separate planned items from actively-moving items.
+1. **Diagnose** — run `search track` and `search asset` to pull current goals, tasks, notes, and reusable workflows. Separate planned items from actively-moving items.
    → Output: current state summary.
 2. **Select mode** — choose one mode from the selector above. State why alternatives were rejected.
    → Output: chosen mode + one-line rationale.
 3. **Design contracts** — for each planned change, define owner, expected output, and true prerequisites. Keep independent work parallel.
    → Output: ownership and dependency map.
-4. **Confirm destination** — write to tracks first. Add a private workflow asset only when reusable structure is clearly needed.
+4. **Confirm destination** — write to tracks first. Add a private workflow only when reusable structure is clearly needed.
    → Output: write destination confirmed.
 5. **Set checkpoint** — define the smallest useful next review point (date, event, or deliverable).
    → Output: next review trigger.
@@ -121,7 +121,7 @@ Typical writes: one `upsert track` for a `task`, `goal`, or `note`.
 Entry: multiple new items, a new goal structure, or a multi-step execution plan.
 Exit: coordinated items created with ownership contracts and dependency links.
 
-1. Run reuse check — scan workflow assets (`private` → `liked` → `public`).
+1. Run reuse check — scan workflows (`private` → `liked` → `public`).
 2. Document why existing options do not fit.
 3. Propose minimal viable multi-step structure with owners and dependencies.
 4. Obtain approval if required (see [Write Safety](#write-safety-and-approval-gate)).
@@ -191,7 +191,7 @@ After every operation, return this structure. Prefer names and titles in user-fa
 | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `Payment Required: Insufficient credits` | Stop. Navigate user to [Credit Purchase](./credit-purchase.md).                                             |
 | `Permission denied`                      | Re-check accessible projects and ownership scope.                                                           |
-| `Unauthorized` / `403`                   | Verify MCP token or `EPISMO_ACCESS_TOKEN`, active workspace, and subscription context.                      |
+| `Unauthorized` / `403`                   | Verify MCP token or `EPISMO_TOKEN` (CLI), active workspace, and subscription context.                       |
 | `Not Found` / `404`                      | Confirm entity ID exists. It may have been deleted or moved.                                                |
 | Invalid workflow graph                   | Normalize IDs and rebuild as an acyclic dependency graph. Remove self-dependencies and circular references. |
 | Rate limit / `429`                       | Wait and retry with backoff. Inform user if persistent.                                                     |

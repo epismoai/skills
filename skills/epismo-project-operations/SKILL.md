@@ -16,7 +16,7 @@ This skill assumes Epismo access is already connected.
 - Prefer the surface already available in the environment: MCP for tool-based agents, CLI for shell-driven agents.
 - Use the bearer token accepted by the target surface or endpoint.
 - MCP calls require an OAuth access token with `scope=mcp` and the correct `resource`.
-- CLI can use `epismo login` or `EPISMO_ACCESS_TOKEN` for direct command execution. `--browser` is optional if needed.
+- CLI can use `epismo login` or the `EPISMO_TOKEN` environment variable for direct command execution. `--browser` is optional if needed.
 - Protected API `/v1/*` endpoints use OAuth Bearer tokens.
 - If MCP or CLI access is not ready yet, follow the auth/setup steps in the `github.com/epismoai/skills` README before continuing.
 
@@ -37,7 +37,7 @@ Workspace selection is CLI-only — in MCP, workspace scope is implicit in the O
 - track: `search track` · `get track` · `upsert track` · `delete track`
 - asset: `search asset` · `get asset` · `upsert asset` · `delete asset` · `import asset` · `like asset`
 - workspace: `select workspace` (CLI only)
-- credits: `check credit balance` · `start credit checkout`
+- credits: `check credit balance` · `start credit checkout` (CLI or API — no MCP tool; see [Credit Purchase](./references/credit-purchase.md))
 
 For flag details, filter semantics, and `api` patterns (auth/setup only), see [Search & Filter](./references/search-filter.md).
 
@@ -88,7 +88,7 @@ Always choose the smallest mode that satisfies the request.
 
 ### 3 Discover
 
-Reuse before creating. Search workflow assets in this order: `private` → `liked` → `public`.
+Reuse before creating. Search workflows in this order: `private` → `liked` → `public`.
 Use [Search & Filter](./references/search-filter.md) for filtered queues, status views, date ranges, and dependency traversal.
 Use [Workflow Discovery template](./templates/operating-templates.md#6-workflow-discovery) only when comparing candidates and committing to a concrete adaptation plan.
 
@@ -103,7 +103,7 @@ Pick one execution mode from the [Runbook — Mode Selector](./references/runboo
 
 When a task status changes to `done`, run a downstream dependents check in the same Partial Update: query `dependsOn=["{task-id}"]` and report what is now unblocked.
 
-Default destination rule: operational state lives in tracks; reusable patterns live in assets. Use workflow assets only when the structure should be stocked for reuse beyond the current execution context.
+Default destination rule: operational state lives in tracks; reusable patterns live in assets. Use workflows only when the structure should be stocked for reuse beyond the current execution context.
 
 Design AI-owned tasks with [AI Delegation](./references/ai-delegation.md).
 Use [Operating Templates](./templates/operating-templates.md) for structured write output.
