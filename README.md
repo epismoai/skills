@@ -143,11 +143,13 @@ Interactive login and manual API usage now follow the same OAuth flow end to end
 
 ```bash
 epismo workspace list
-epismo workspace use ws_123
+epismo workspace use --workspace-id ws_123
+epismo workspace current
 ```
 
-- `epismo workspace use <workspace-id>` saves the default workspace locally.
-- `--workspace-id <id>` overrides the saved default for a single command.
+- `epismo workspace use --workspace-id <id>` saves the default workspace locally.
+- `--workspace-id <id>` overrides the saved default for any single command.
+- `epismo workspace current` returns the saved default from local config — no network call.
 - If neither is set, the CLI uses personal context.
 
 #### Workspace and Project Scope

@@ -98,7 +98,7 @@ Use when: multiple items, a new goal structure, or a coordinated multi-step plan
 ### Assess
 
 - [ ] Current goals, tasks, and notes reviewed
-- [ ] Reuse check done — existing workflow assets scanned (`private` → `liked` → `public`)
+- [ ] Reuse check done — existing workflows scanned (`private` → `liked` → `public`)
 - [ ] Why reuse is insufficient: {reason}
 - [ ] Project scope confirmed
 
@@ -221,7 +221,7 @@ Use when: comparing candidate workflows and committing to a concrete adaptation 
 - [ ] Project context noted: {team and project constraints}
 - [ ] Evidence sources checked:
   - Tracks (goals/tasks/notes): {what was checked}
-  - Workflow assets (`private` / `liked` / `public`): {what was checked}
+  - Workflows (`private` / `liked` / `public`): {what was checked}
   - External sources: {what was checked or N/A}
 
 ### Discover
@@ -229,7 +229,7 @@ Use when: comparing candidate workflows and committing to a concrete adaptation 
 Search plan:
 
 - Tracks: {projects / status / date filters used}
-- Workflow assets: {visibility / like / category filters used}
+- Workflows: {visibility / like / category filters used}
 - Keyword queries (if needed): {2-6 domain keywords}
 
 Candidate shortlist:

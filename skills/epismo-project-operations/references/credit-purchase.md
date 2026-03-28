@@ -7,7 +7,7 @@ When an operation returns `Payment Required: Insufficient credits`, check the cu
 ## Choose a Surface
 
 - `API` if having an `access_token` or building an integration
-- `MCP` if operating interactively in a terminal
+- `CLI` if operating interactively in a terminal
 
 ### Option A: API
 
@@ -95,17 +95,17 @@ epismo login --browser
 #### Step 2. Check Credit Status
 
 ```bash
-epismo credits balance
-epismo credits balance --workspace-id <WORKSPACE_ID>
+epismo credit balance
+epismo credit balance --workspace-id <WORKSPACE_ID>
 ```
 
 #### Step 3. Purchase Credits (Create Stripe Checkout)
 
 ```bash
-epismo credits checkout --allocations '[{"userId":"<USER_ID>","quantity":10}]'
-epismo credits checkout --workspace-id <WORKSPACE_ID> \
+epismo credit checkout --allocations '[{"userId":"<USER_ID>","quantity":10}]'
+epismo credit checkout --workspace-id <WORKSPACE_ID> \
   --allocations '[{"userId":"<USER_ID>","quantity":10}]'
-epismo credits checkout --input @checkout.json
+epismo credit checkout --input @checkout.json
 ```
 
 #### Step 4. Complete the Purchase
