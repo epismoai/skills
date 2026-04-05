@@ -39,7 +39,7 @@ Call `GET /v1/credits` with `Authorization: Bearer <ACCESS_TOKEN>`.
 - Response: `{ "balance": <NUMBER>, "shortfall": <NUMBER> }`
 
 ```bash
-curl -sX GET "https://api.epismo.ai/v1/credits?workspaceId=<WORKSPACE_ID>" \
+curl -sX GET "https://api.epismo.ai/v1/credits?workspaceId=<workspace-id>" \
   -H "Authorization: Bearer <ACCESS_TOKEN>"
 
 # => {"balance":100,"shortfall":0}
@@ -61,7 +61,7 @@ curl -sX POST https://api.epismo.ai/v1/credits \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <ACCESS_TOKEN>" \
   -d '{
-    "workspaceId": "<WORKSPACE_ID>",
+    "workspaceId": "<workspace-id>",
     "allocations": [
       {
         "userId": "...",
@@ -96,14 +96,14 @@ epismo login --browser
 
 ```bash
 epismo credit balance
-epismo credit balance --workspace-id <WORKSPACE_ID>
+epismo credit balance --workspace-id <workspace-id>
 ```
 
 #### Step 3. Purchase Credits (Create Stripe Checkout)
 
 ```bash
 epismo credit checkout --allocations '[{"userId":"<USER_ID>","quantity":10}]'
-epismo credit checkout --workspace-id <WORKSPACE_ID> \
+epismo credit checkout --workspace-id <workspace-id> \
   --allocations '[{"userId":"<USER_ID>","quantity":10}]'
 epismo credit checkout --input @checkout.json
 ```
@@ -113,6 +113,6 @@ epismo credit checkout --input @checkout.json
 Open the returned Stripe Checkout URL in your browser and complete payment.
 
 1. Credits are added to the specified balance.
-2. Verify the updated balance with `epismo credits balance`.
+2. Verify the updated balance with `epismo credit balance`.
 3. Retry the CLI call that failed with insufficient credits.
 4. If your session expired while purchasing, run `epismo login` again and retry.

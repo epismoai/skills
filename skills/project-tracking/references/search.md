@@ -1,30 +1,23 @@
 # Search & Filter
 
-Query patterns, filter semantics, and entity relationship traversal for Epismo MCP or CLI.
-Use when building filtered queues, finding goals/tasks/notes in tracks, finding reusable assets, or reasoning about dependencies.
+Query patterns, filter semantics, and entity relationship traversal for tracks and workflow assets.
 
-This reference is the primary place to resolve canonical operation labels into concrete CLI commands and MCP tools. For the surface rule, see [Project Operations](../SKILL.md#surface-conventions).
+For surface conventions, selective fetch pattern, pagination, and asset reuse scan order, see [Epismo Basics](../../epismo-basics/SKILL.md).
 
-## Surface Resolution
+## Operations (tracks and workflow assets)
 
-MCP tool name = CLI command with spaces and hyphens replaced by underscores. The table below shows CLI form; derive MCP name mechanically.
-Workspace selection is CLI-only — in MCP, workspace scope is implicit in the OAuth token.
-
-| Operation               | CLI command                 | Key flags                                    |
-| ----------------------- | --------------------------- | -------------------------------------------- |
-| `search track`          | `epismo track search`       | `--type task\|goal\|note` `--filter '{...}'` |
-| `get track`             | `epismo track get`          | `--type task\|goal\|note` `--id {id}`        |
-| `upsert track`          | `epismo track upsert`       | `--input @item.json`                         |
-| `delete track`          | `epismo track delete`       | `--type task\|goal\|note` `--id {id}`        |
-| `search asset`          | `epismo asset search`       | `--type workflow` `--filter '{...}'`         |
-| `get asset`             | `epismo asset get`          | `--id {id}`                                  |
-| `upsert asset`          | `epismo asset upsert`       | `--type workflow` `--input @asset.json`      |
-| `delete asset`          | `epismo asset delete`       | `--id {id}`                                  |
-| `import asset`          | `epismo asset import`       | `--asset-ids {ids}` `--project-id {id}`      |
-| `like asset`            | `epismo asset like`         | `--id {id}` `--liked` / `--no-liked`         |
-| `select workspace`      | `epismo workspace use --workspace-id <id>` | — (CLI only; MCP uses token scope) |
-| `check credit balance`  | `epismo credit balance`     | `--workspace-id <id>` (CLI or API — no MCP tool) |
-| `start credit checkout` | `epismo credit checkout`    | `--allocations '[...]'` `--input @file.json` (CLI or API — no MCP tool) |
+| Operation | CLI command | Key flags |
+| --------- | ----------- | --------- |
+| `search track` | `epismo track search` | `--type task\|goal` `--filter '{...}'` |
+| `get track` | `epismo track get` | `--id <id>` |
+| `upsert track` | `epismo track upsert` | `--input @item.json` |
+| `delete track` | `epismo track delete` | `--id <id>` |
+| `search asset` | `epismo asset search` | `--type workflow` `--filter '{...}'` |
+| `get asset` | `epismo asset get` | `--id <id>` `[--full]` `[--block-id <id>]` `[--step-id <ids>]` |
+| `upsert asset` | `epismo asset upsert` | `--type workflow` `--input @asset.json` |
+| `delete asset` | `epismo asset delete` | `--id <id>` |
+| `import asset` | `epismo asset import` | `--id <id>` `--project-id <project-id>` `[--item-ids <item-ids>]` |
+| `like asset` | `epismo asset like` | `--id <id>` `--liked` / `--no-liked` |
 
 ## Quick Reference
 
@@ -32,13 +25,13 @@ Workspace selection is CLI-only — in MCP, workspace scope is implicit in the O
 | ----------------------------- | --------------------------------------------------------------------------------------- |
 | Tasks ready to work on        | `status=["todo"]` → verify each `dependsOn[]` item is `done`                            |
 | Tasks in progress             | `status=["in_progress"]`                                                                |
-| Tasks due soon                | `status=["backlog","todo","in_progress"]` + `dueDateTo={date}`                          |
+| Tasks due soon                | `status=["backlog","todo","in_progress"]` + `dueDateTo=<date>`                          |
 | Blocked tasks                 | `status=["backlog","todo","in_progress"]` → check each `dependsOn[]` for non-`done`     |
-| Recently completed tasks      | `status=["done"]` + `doneAtFrom={now-7d}`                                               |
+| Recently completed tasks      | `status=["done"]` + `doneAtFrom=<now-7d>`                                               |
 | Reusable workflows      | Search `visibility=["private"]` first → `like="liked"` → `visibility=["public"]`        |
-| Tasks under a goal            | `goalId=["{goal-id}"]`                                                                  |
-| Downstream dependents         | `dependsOn=["{task-id}"]` — finds what unblocks when this task completes                |
-| Post-completion unblock check | Set task to `done` → query `dependsOn=["{task-id}"]` → re-check remaining prerequisites |
+| Tasks under a goal            | `goalId=["<goal-id>"]`                                                                  |
+| Downstream dependents         | `dependsOn=["<task-id>"]` — finds what unblocks when this task completes                |
+| Post-completion unblock check | Set task to `done` → query `dependsOn=["<task-id>"]` → re-check remaining prerequisites |
 
 ## Scope Semantics
 
@@ -46,13 +39,15 @@ Workspace selection is CLI-only — in MCP, workspace scope is implicit in the O
 2. Each workspace can contain multiple projects.
 3. `search track` accepts top-level `projects[]` to limit scope inside the active workspace.
 4. Omitting `projects[]` searches all accessible projects in the active workspace.
-5. `search track` requires `type`: `task`, `goal`, or `note`.
+5. `search track` requires `type`: `task` or `goal`.
 6. `search asset` uses `--type workflow`; filter with `filter.visibility[]`: `private` or `public`.
 7. In `upsert asset`, `projects[]` is valid only when `visibility="private"`.
 8. If `visibility` is omitted on asset upsert, default is `private`.
 9. Keep `query` compact: 2-6 domain keywords.
 
-## Status Reference
+## Entity Reference
+
+### Task and Goal statuses
 
 | Entity | Valid statuses                                                 |
 | ------ | -------------------------------------------------------------- |
@@ -79,10 +74,6 @@ Workspace selection is CLI-only — in MCP, workspace scope is implicit in the O
 `status[]`, `progressMin`, `progressMax`,
 `dueDateFrom`, `dueDateTo`, `updatedAtFrom`, `updatedAtTo`
 
-### Notes (`search track`, type `note`)
-
-`updatedAtFrom`, `updatedAtTo`
-
 ### Workflows (`search asset`, type `workflow`)
 
 `category[]`, `visibility[]`, `like`, `ownerId[]`,
@@ -95,7 +86,7 @@ Workspace selection is CLI-only — in MCP, workspace scope is implicit in the O
 | Goal → tasks                  | `task.goalId`                          | Find all tasks contributing to a goal       |
 | Parent → child tasks          | `task.parentId`                        | Navigate task hierarchy                     |
 | Task → upstream prerequisites | `task.dependsOn[]`                     | Check what must finish first                |
-| Task → downstream dependents  | query `filter.dependsOn=["{task-id}"]` | Find what unblocks when this task completes |
+| Task → downstream dependents  | query `filter.dependsOn=["<task-id>"]` | Find what unblocks when this task completes |
 
 ## Derived Queue States
 
@@ -111,40 +102,38 @@ These are computed from entity data, not stored as status field values. Use them
 
 ### Urgent — deadline-driven
 
-- Tasks: `status=["backlog","todo","in_progress"]` + `dueDateTo={date}`
-- Goals: `status=["not_started","on_track","at_risk"]` + `dueDateTo={date}`
+- Tasks: `status=["backlog","todo","in_progress"]` + `dueDateTo=<date>`
+- Goals: `status=["not_started","on_track","at_risk"]` + `dueDateTo=<date>`
 
 ### Goal execution — tasks under a goal
 
-- `status=["todo","in_progress"]` + `goalId=["{goal-id}"]`
+- `status=["todo","in_progress"]` + `goalId=["<goal-id>"]`
 
 ### Downstream dependents — what unblocks next
 
-- `dependsOn=["{task-id}"]`
+- `dependsOn=["<task-id>"]`
 
 ### Post-completion unblock check
 
-- `dependsOn=["{task-id}"]`
+- `dependsOn=["<task-id>"]`
 - Re-check every prerequisite in each returned task's `dependsOn[]`
 - Separate `ready_now` from `blocked_by_dependency`
 - Report both the newly unblocked tasks and the tasks that remain blocked
 
 ### Throughput — completed in last 7 days
 
-- `status=["done"]` + `doneAtFrom={now-7d}` + `doneAtTo={now}`
+- `status=["done"]` + `doneAtFrom=<now-7d>` + `doneAtTo=<now>`
 
 ### Release evidence — completed work in a period
 
-- Tasks: `status=["done"]` + `doneAtFrom={iso8601}` + optional `projects=["{project-id}"]`
-- Goals: `status=["completed"]` + `updatedAtFrom={iso8601}` + optional `projects=["{project-id}"]`
-- Notes: `updatedAtFrom={iso8601}` + optional `projects=["{project-id}"]`
+- Tasks: `status=["done"]` + `doneAtFrom=<iso8601>` + optional `projects=["<project-id>"]`
+- Goals: `status=["completed"]` + `updatedAtFrom=<iso8601>` + optional `projects=["<project-id>"]`
 
 ### Workflow asset reuse scan
 
+Search in this order — see [Epismo — Asset Reuse Scan Order](../../epismo-basics/SKILL.md#asset-reuse-scan-order) for the full pattern.
+
 - Liked workflows: `like="liked"`
+- Liked + specific category: `like="liked"` + `category=["<category>"]`
 - Private only: `visibility=["private"]`
-- By category: `category=["{category}"]`
-
-## Pagination
-
-All `search track` and `search asset` calls use page size `20`. Iterate `page=1, 2, 3...` and merge results for large sets.
+- By category: `category=["<category>"]`

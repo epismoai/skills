@@ -1,12 +1,12 @@
-# Project Operations Runbook
+# Runbook
 
-Governs day-to-day operational writes on tasks, goals, and notes.
-For workflow release/update/deprecate, use [Workflow Release](./workflow-release.md).
-For query/filter semantics, use [Search & Filter](./search-filter.md).
-Operation labels below use the canonical surface conventions from [Project Operations](../SKILL.md#surface-conventions).
-Tracks hold project execution state; assets hold reusable stock content such as workflows.
+Governs day-to-day operational writes on tasks and goals.
+For workflow release/update/deprecate, use [Workflow Release](../../workflow-hub/references/release.md).
+For query/filter semantics, use [Search & Filter](./search.md).
+Surface conventions from [Epismo Basics](../../epismo-basics/SKILL.md).
+Tracks hold project execution state; assets hold reusable stock content such as workflows — see [Workflow Hub](../../workflow-hub/SKILL.md).
 
-Status values must match entity-specific definitions. `blocked_by_dependency` is a derived queue state, not a status field. Scope semantics and status definitions live in [Search & Filter](./search-filter.md).
+Status values must match entity-specific definitions. `blocked_by_dependency` is a derived queue state, not a status field. Scope semantics and status definitions live in [Search & Filter](./search.md).
 
 ## Mode Selector
 
@@ -25,7 +25,7 @@ When in doubt between New Item Creation and Large-Scale Planning, prefer New Ite
 
 Run before structural changes. Skip for simple partial updates and single-item creation.
 
-1. **Diagnose** — run `search track` and `search asset` to pull current goals, tasks, notes, and reusable workflows. Separate planned items from actively-moving items.
+1. **Diagnose** — run `search track` and `search asset` to pull current goals, tasks, and reusable workflows. Separate planned items from actively-moving items.
    → Output: current state summary.
 2. **Select mode** — choose one mode from the selector above. State why alternatives were rejected.
    → Output: chosen mode + one-line rationale.
@@ -97,24 +97,24 @@ Exit: delta reported, no structural changes introduced.
 
 1. Read current entity values.
 2. Verify requested fields differ from current state — skip if no real change (no-op check).
-3. If a task status is changing to `done`, queue a downstream dependents check with `dependsOn=["{task-id}"]`.
+3. If a task status is changing to `done`, queue a downstream dependents check with `dependsOn=["<task-id>"]`.
 4. Update only the affected fields in the affected scope.
 5. If step 3 applies, read downstream dependents and separate `ready_now`, `blocked_by_dependency`, and `none`.
 6. Report exact delta, downstream result, and confirm unchanged structure.
 
-Typical writes: `upsert track` with entity type `task`, `goal`, or `note`, and field-level changes only.
+Typical writes: `upsert track` with entity type `task` or `goal`, and field-level changes only.
 
 ### 2) New Item Creation
 
-Entry: exactly one new task, note, or goal is needed; existing structure remains valid.
+Entry: exactly one new task or goal is needed; existing structure remains valid.
 Exit: one item created, linked references reported.
 
-1. Confirm active workspace, destination project, and item type (`task` / `note` / `goal`).
+1. Confirm active workspace, destination project, and item type (`task` / `goal`).
 2. Check for duplicate intent in active queue and backlog.
 3. Create one item with owner, due date, and minimal context.
 4. Report created item and any linked references (goal, parent task, dependencies).
 
-Typical writes: one `upsert track` for a `task`, `goal`, or `note`.
+Typical writes: one `upsert track` for a `task` or `goal`.
 
 ### 3) Large-Scale Planning
 
@@ -173,7 +173,7 @@ Before any write:
 
 If the user has not answered a clarification question, do not write. Continue read-only analysis and report the pending decision.
 
-For workflow release/update/deprecate, apply [Workflow Release — Approval Boundary](./workflow-release.md#approval-boundary).
+For workflow release/update/deprecate, apply [Workflow Release — Approval Boundary](../../workflow-hub/references/release.md#approval-boundary).
 
 ## Operation Output
 
@@ -187,12 +187,9 @@ After every operation, return this structure. Prefer names and titles in user-fa
 
 ## Error Handling
 
-| Error                                    | Action                                                                                                      |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `Payment Required: Insufficient credits` | Stop. Navigate user to [Credit Purchase](./credit-purchase.md).                                             |
-| `Permission denied`                      | Re-check accessible projects and ownership scope.                                                           |
-| `Unauthorized` / `403`                   | Verify MCP token or `EPISMO_TOKEN` (CLI), active workspace, and subscription context.                       |
-| `Not Found` / `404`                      | Confirm entity ID exists. It may have been deleted or moved.                                                |
-| Invalid workflow graph                   | Normalize IDs and rebuild as an acyclic dependency graph. Remove self-dependencies and circular references. |
-| Rate limit / `429`                       | Wait and retry with backoff. Inform user if persistent.                                                     |
-| Timeout                                  | Retry once. If persistent, reduce batch size or switch to sequential writes.                                |
+For common errors (auth, credits, rate limits, timeouts), see [Epismo — Error Handling](../../epismo-basics/SKILL.md#error-handling).
+
+| Error | Action |
+| ----- | ------ |
+| `Payment Required: Insufficient credits` | Stop. See [Credit Purchase](../../epismo-basics/references/credit-purchase.md). |
+| Invalid workflow graph | Normalize IDs and rebuild as an acyclic dependency graph. Remove self-dependencies and circular references. |

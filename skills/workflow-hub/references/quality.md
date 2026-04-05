@@ -1,8 +1,9 @@
-# Workflow Quality
+# Quality Gate
 
 Quality gate for reusable workflows.
 Run whenever release, update, or deprecate intent exists — before deciding which action to take.
-For final action choice and approval handling, use [Workflow Release](./workflow-release.md).
+For final action choice and approval handling, use [Release](./release.md).
+For visibility and approval rules, see [Visibility & Sharing](./visibility.md).
 
 ## Go/No-Go Criteria
 
@@ -54,7 +55,7 @@ Apply these rules when designing workflow steps. They balance reproducibility wi
 
 ## Release Decision
 
-- All criteria pass → hand off to [Workflow Release](./workflow-release.md).
+- All criteria pass → hand off to [Workflow Release](./release.md).
 - Evidence limited or seed-only → prefer private scope with explicit risk notes.
 
 ## Content Review Guide
