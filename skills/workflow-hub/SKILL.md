@@ -145,9 +145,9 @@ epismo asset upsert --input '{
   "type": "workflow",
   "visibility": "private",
   "projects": ["pj_123"],
-  "workflow": [
+  "steps": [
     {
-      "id": "t001",
+      "id": "s001",
       "title": "Morning briefing",
       "content": "Review priorities and produce a short plan.",
       "dueDate": "",
@@ -168,7 +168,7 @@ epismo asset upsert --input '{
   "type": "workflow",
   "visibility": "public",
   "category": "programming",
-  "workflow": [...]
+  "steps": [...]
 }'
 ```
 
