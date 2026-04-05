@@ -135,7 +135,7 @@ const contextMatch  = location.match(/\/hub\/contexts\/([^/?#]+)/);
 | `/hub/workflows/{id}` | `workflow` asset |
 | `/hub/contexts/{id}` | `context` asset |
 
-Use the resolved `id` with `get asset` or `import asset` on any surface.
+Use the resolved `id` with `get asset` on any surface.
 
 ---
 
@@ -162,9 +162,6 @@ epismo asset get --id <id> --block-id <block-id>
 
 # workflow asset — fetch specific steps
 epismo asset get --id <id> --step-id <step-id-1>,<step-id-2>
-
-# import specific steps
-epismo asset import --id <id> --project-id <pj_xxx> --step-id <step-id-1>
 ```
 
 ## Asset Reuse Scan Order
@@ -175,7 +172,7 @@ Before creating any new asset, scan in this order to avoid duplicating something
 2. `like="liked"` + `query=<topic>` — assets you bookmarked
 3. `visibility=["public"]` + `query=<topic>` — community assets
 
-If a close match is found, prefer `import asset` or `get asset` over creating new.
+If a close match is found, prefer `get asset` over creating new.
 
 ## Pagination
 

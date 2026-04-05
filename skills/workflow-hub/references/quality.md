@@ -77,5 +77,5 @@ Use as a flexible review guide when preparing workflow content for publication. 
 
 1. `visibility`: `public` or `private`.
 2. `category`: `""` (empty), `productivity`, `learning`, `programming`, `design`, `marketing`, `operations`, `life`.
-3. `content` / `workflow[].content`: Markdown text.
-4. `workflow[].dueDate`: day-offset numeric string (digits only, e.g. `"3"` means 3 days after start) or empty string.
+3. `content` / `steps[].content`: Markdown text.
+4. `steps[].dueDate`: day-offset numeric string (digits only, e.g. `"3"` means 3 days after start) or empty string.
