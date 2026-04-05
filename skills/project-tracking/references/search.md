@@ -1,10 +1,11 @@
 # Search & Filter
 
-Query patterns, filter semantics, and entity relationship traversal for tracks and workflow assets.
+Query patterns, filter semantics, and entity relationship traversal for tracks.
 
 For surface conventions, selective fetch pattern, pagination, and asset reuse scan order, see [Epismo Basics](../../epismo-basics/SKILL.md).
+For reusable workflow discovery, see [Workflow Hub — Search & Discovery](../../workflow-hub/references/search.md).
 
-## Operations (tracks and workflow assets)
+## Operations (tracks)
 
 | Operation | CLI command | Key flags |
 | --------- | ----------- | --------- |
@@ -12,12 +13,6 @@ For surface conventions, selective fetch pattern, pagination, and asset reuse sc
 | `get track` | `epismo track get` | `--id <id>` |
 | `upsert track` | `epismo track upsert` | `--input @item.json` |
 | `delete track` | `epismo track delete` | `--id <id>` |
-| `search asset` | `epismo asset search` | `--type workflow` `--filter '{...}'` |
-| `get asset` | `epismo asset get` | `--id <id>` `[--full]` `[--block-id <id>]` `[--step-id <ids>]` |
-| `upsert asset` | `epismo asset upsert` | `--type workflow` `--input @asset.json` |
-| `delete asset` | `epismo asset delete` | `--id <id>` |
-| `import asset` | `epismo asset import` | `--id <id>` `--project-id <project-id>` `[--item-ids <item-ids>]` |
-| `like asset` | `epismo asset like` | `--id <id>` `--liked` / `--no-liked` |
 
 ## Quick Reference
 
@@ -28,7 +23,6 @@ For surface conventions, selective fetch pattern, pagination, and asset reuse sc
 | Tasks due soon                | `status=["backlog","todo","in_progress"]` + `dueDateTo=<date>`                          |
 | Blocked tasks                 | `status=["backlog","todo","in_progress"]` → check each `dependsOn[]` for non-`done`     |
 | Recently completed tasks      | `status=["done"]` + `doneAtFrom=<now-7d>`                                               |
-| Reusable workflows      | Search `visibility=["private"]` first → `like="liked"` → `visibility=["public"]`        |
 | Tasks under a goal            | `goalId=["<goal-id>"]`                                                                  |
 | Downstream dependents         | `dependsOn=["<task-id>"]` — finds what unblocks when this task completes                |
 | Post-completion unblock check | Set task to `done` → query `dependsOn=["<task-id>"]` → re-check remaining prerequisites |
@@ -40,10 +34,7 @@ For surface conventions, selective fetch pattern, pagination, and asset reuse sc
 3. `search track` accepts top-level `projects[]` to limit scope inside the active workspace.
 4. Omitting `projects[]` searches all accessible projects in the active workspace.
 5. `search track` requires `type`: `task` or `goal`.
-6. `search asset` uses `--type workflow`; filter with `filter.visibility[]`: `private` or `public`.
-7. In `upsert asset`, `projects[]` is valid only when `visibility="private"`.
-8. If `visibility` is omitted on asset upsert, default is `private`.
-9. Keep `query` compact: 2-6 domain keywords.
+6. Keep `query` compact when searching related workflow assets through Workflow Hub: 2-6 domain keywords.
 
 ## Entity Reference
 
@@ -73,11 +64,6 @@ For surface conventions, selective fetch pattern, pagination, and asset reuse sc
 
 `status[]`, `progressMin`, `progressMax`,
 `dueDateFrom`, `dueDateTo`, `updatedAtFrom`, `updatedAtTo`
-
-### Workflows (`search asset`, type `workflow`)
-
-`category[]`, `visibility[]`, `like`, `ownerId[]`,
-`minLikeCount`, `minDownloadCount`, `updatedAtFrom`, `updatedAtTo`
 
 ## Entity Relationships
 
@@ -128,12 +114,3 @@ These are computed from entity data, not stored as status field values. Use them
 
 - Tasks: `status=["done"]` + `doneAtFrom=<iso8601>` + optional `projects=["<project-id>"]`
 - Goals: `status=["completed"]` + `updatedAtFrom=<iso8601>` + optional `projects=["<project-id>"]`
-
-### Workflow asset reuse scan
-
-Search in this order — see [Epismo — Asset Reuse Scan Order](../../epismo-basics/SKILL.md#asset-reuse-scan-order) for the full pattern.
-
-- Liked workflows: `like="liked"`
-- Liked + specific category: `like="liked"` + `category=["<category>"]`
-- Private only: `visibility=["private"]`
-- By category: `category=["<category>"]`

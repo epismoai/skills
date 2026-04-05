@@ -11,6 +11,7 @@ Discover, adapt, and release reusable workflow assets in Epismo — from finding
 
 > For connection setup, surface conventions, scope model, share URL resolution, and error handling, see [Epismo Basics](../epismo-basics/SKILL.md).
 > For task/goal tracking, see [Project Tracking](../project-tracking/SKILL.md).
+> For workflow query patterns and loading, see [Search & Discovery](./references/search.md).
 
 ## Operations
 
@@ -31,8 +32,8 @@ Discover, adapt, and release reusable workflow assets in Epismo — from finding
 | Intent | Steps | Key reference |
 | ------ | ----- | ------------- |
 | Find a workflow to reuse | [DISCOVER](#discover-workflow) | — |
-| Adapt and materialize a workflow | [DISCOVER](#discover-workflow) → [ADAPT](#adapt-and-materialize) | [Workflow Templates — Discovery](./templates/workflow-templates.md#2-workflow-discovery) |
-| Capture a proven pattern | [CAPTURE](#capture-and-release) | [Workflow Templates — Pattern Capture](./templates/workflow-templates.md#1-pattern-capture-and-workflow-release) |
+| Adapt and materialize a workflow | [DISCOVER](#discover-workflow) → [ADAPT](#adapt-and-materialize) | [Workflow Patterns — Discovery](./templates/patterns.md#2-workflow-discovery) |
+| Capture a proven pattern | [CAPTURE](#capture-and-release) | [Workflow Patterns — Pattern Capture](./templates/patterns.md#1-pattern-capture-and-workflow-release) |
 | Release / update / deprecate | [CAPTURE](#capture-and-release) → quality gate → release | [Quality Gate](./references/quality.md) → [Release](./references/release.md) |
 | Unclear | Ask once | — |
 
@@ -76,7 +77,7 @@ epismo asset search --type workflow --query "<topic>" \
   --filter '{"visibility":["public"]}'
 ```
 
-For filter keys (`category`, `minLikeCount`, `updatedAtFrom`, etc.), see [Search](../project-tracking/references/search.md#workflows-search-asset-type-workflow).
+For filter keys (`category`, `minLikeCount`, `updatedAtFrom`, etc.), see [Search & Discovery](./references/search.md#supported-filter-keys).
 
 ### Step 2 — Select: identify candidates
 
@@ -106,7 +107,9 @@ After finding a candidate:
 3. Assign owners — `human` for decisions/reviews, AI agent name for generation/research.
 4. Choose destination: project tracks (immediate execution) or private workflow asset (reuse).
 
-Use [Workflow Discovery template](./templates/workflow-templates.md#2-workflow-discovery) when comparing multiple candidates.
+Before materializing anything, confirm the desired outcome, project context, evidence sources checked, and destination. If the destination includes released workflow content, also apply the approval boundary from [Release](./references/release.md#approval-boundary).
+
+Use [Workflow Discovery template](./templates/patterns.md#2-workflow-discovery) for structured recommendations and adaptation reports.
 
 ---
 
@@ -126,6 +129,8 @@ Run [Quality Gate](./references/quality.md) before any release decision. All 8 c
 | `update` | Improves an existing released pattern without breaking consumers |
 | `keep private` | Evidence incomplete or quality gate has open items |
 | `deprecate` | Obsolete, unsafe, or superseded |
+
+Run the pre-decision checks in [Release](./references/release.md) before choosing one of these paths. That includes confirming action type, target workflow, release target, duplication risk, and write scope.
 
 See [Release](./references/release.md) for the approval boundary and required output.
 
@@ -174,6 +179,8 @@ epismo asset upsert --input '{
 1. **Scope first** — confirm workspace and project scope before any write. If unclear, ask once.
 2. **No silent writes** — if a clarification question is unanswered, continue read-only.
 3. **Approval for risk** — public publication, deprecation, and overwriting another owner's asset require explicit approval. See [Visibility & Sharing — Approval Boundary](./references/visibility.md#approval-boundary).
+
+Use [Workflow Patterns](./templates/patterns.md) for report structure only. Do not treat those templates as a substitute for [Quality Gate](./references/quality.md) or [Release](./references/release.md).
 
 ## Source of Truth
 

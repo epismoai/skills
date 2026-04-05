@@ -1,11 +1,11 @@
 # Search & Discovery
 
 Discovery and loading patterns for context assets.
-For content templates, see [Templates](../templates/context-templates.md).
+For content templates, see [Content Templates](../templates/content.md).
 For visibility and sharing, see [Visibility & Sharing](./visibility.md).
 
 This reference shows CLI forms. Derive MCP tool names mechanically: spaces → underscores.
-Surface conventions are defined in [Context Pack](../SKILL.md#surface-conventions).
+Surface conventions are defined in [Context Pack](../SKILL.md#operations-context-assets).
 
 ## Surface Resolution
 
@@ -93,8 +93,8 @@ When resuming work in a new tool or session:
 1. Search for the context asset by topic or date: `search asset --query "<topic>"`.
 2. Identify the matching asset by title.
 3. Fetch its full content: `get asset --id <id>`.
-4. Read the **Situation** and **Next Steps** sections to restore working context.
-5. Proceed from the **Next Steps** without re-reading the original conversation.
+4. Read the opening block that explains what the pack is, then the block most relevant to the current task, such as `Next Steps`, `Summary`, or `Key Takeaways`.
+5. Proceed from that block instead of re-reading the original conversation or source.
 
 ## Search Recipes
 

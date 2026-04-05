@@ -2,6 +2,7 @@
 
 Visibility settings, sharing, and approval rules for workflow assets.
 For the same concepts applied to context assets, see [Context Pack — Visibility & Sharing](../../context-pack/references/visibility.md).
+For workflow search and loading patterns, see [Search & Discovery](./search.md).
 
 ## Private vs. Public
 

@@ -1,6 +1,6 @@
 ---
 name: epismo-basics
-description: "Epismo platform fundamentals: connection setup, CLI/MCP surface conventions, workspace scope, share URL resolution, and error handling. Load this alongside any Epismo skill. Trigger on: 'connect to Epismo', 'set up Epismo', 'how do I use Epismo', or when another skill references this file."
+description: "Shared Epismo operating model: CLI/MCP surface conventions, workspace and project scope, share URL resolution, selective fetch and asset reuse patterns, asset aliases, credits/payment handling, and common auth or permission errors. Load this alongside any Epismo skill, or trigger on Epismo usage questions, alias/credit issues, share URLs, workspace scope, or setup/auth problems blocking another Epismo task."
 ---
 
 # Epismo Basics

@@ -61,7 +61,7 @@ When a task status changes to `done`, run a downstream dependents check: query `
 Operational state lives in tracks. Use workflow assets only when the structure should be reused beyond the current execution context — see [Workflow Hub](../workflow-hub/SKILL.md).
 
 Design AI-owned tasks with [AI Delegation](./references/ai-delegation.md).
-Use [Operating Templates](./templates/operating-templates.md) for structured write output.
+Use [Track Operations](./templates/operations.md) for structured write output after the [Runbook](./references/runbook.md) checks are complete.
 
 ### 4 Risk
 

@@ -91,24 +91,27 @@ block    <block-id>    <block-title>
 
 Before writing, decide how the content divides into blocks. Each block should be focused enough to update independently and broad enough to stay relevant over time.
 
-**Design for selective fetch.** Because blocks can be loaded individually with `--block-id`, a well-split pack lets future sessions load only what they need (e.g., just "Next Steps") without pulling the whole asset. Aim for blocks where any one block answers a distinct question on its own.
+**Design for selective fetch.** Because blocks can be loaded individually with `--block-id`, a well-split pack lets future sessions load only what they need without pulling the whole asset. Aim for blocks where any one block answers a distinct question on its own.
 
 | Use case | Starting blocks |
 | -------- | --------------- |
-| Session / tool handoff | Situation, Decisions, Next Steps |
+| Session / tool handoff | Context, Decisions, Next Steps |
+| Source summary (YouTube, blog, paper) | Source, Summary, Key Takeaways, Reuse Notes |
+| Project memory / working context | Purpose, Constraints, Decisions, References |
+| Prompt or instruction pack | When To Use This, Inputs, Instructions, Output Expectations |
 | Project status | Summary, Progress, Blockers |
 | Team rules or plan | Purpose, Rules, Plan |
 | Task handoff | Current State, What Remains, Context for Recipient |
 
 Good block boundaries: topic changes, audience changes, or update frequency changes (e.g., "Decisions" is stable; "Next Steps" changes every session — keep them separate).
 
-For templates, see [Content Templates](./templates/context-templates.md).
+For templates, see [Content Templates](./templates/content.md).
 
 ### Step 2 — Write
 
 Content rules:
 - Each block is self-contained — no "see above" references
-- Prefer bullets over prose
+- Prefer scannable structure: bullets, short paragraphs, and small tables only when they help
 - Include IDs, URLs, and precise names so the reader can act without searching
 - **Title:** infer from session topic. Do not ask unless genuinely ambiguous.
 
@@ -152,7 +155,7 @@ Two paths:
 
 ### Promote: private → public
 
-1. `get asset` — fetch the pack. Check for internal IDs, credentials, or workspace-specific content that would confuse external readers. Flag issues before proceeding.
+1. `get asset` — fetch the pack. Run the [Public Review Gate](./references/visibility.md#public-review-gate). Flag issues before proceeding.
 2. Confirm with user: **"Publish '{title}' (`{id}`) as public under category `{category}`?"**
 3. `upsert asset`:
 
@@ -166,7 +169,7 @@ Two paths:
 
 ### Create new public
 
-Write for an external reader using the [Best-Practice Guide](./templates/context-templates.md#5-best-practice-guide) template. Content must be self-contained.
+Write for an external reader using the public guide template in [Content Templates](./templates/content.md). Content must be self-contained and pass the [Public Review Gate](./references/visibility.md#public-review-gate).
 
 Choose category carefully — it determines how people find this pack:
 

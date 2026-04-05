@@ -2,7 +2,7 @@
 
 Visibility settings, sharing, and approval rules for context assets.
 For the same concepts applied to workflow assets, see [Workflow Hub — Visibility & Sharing](../../workflow-hub/references/visibility.md).
-For content templates, see [Templates](../templates/context-templates.md).
+For content templates, see [Content Templates](../templates/content.md).
 For search and discovery, see [Search & Discovery](./search.md).
 
 ## Private vs. Public
@@ -31,6 +31,17 @@ Every context asset has a `visibility` field. Choose based on who needs to read 
 - The content has been reviewed and is stable enough to represent the team externally.
 
 **Never set public without explicit user approval.** See [Approval Boundary](#approval-boundary).
+
+## Public Review Gate
+
+Before publishing a context asset, confirm all four:
+
+1. **External readability** — an outside reader can understand what the pack is for without workspace-specific background.
+2. **Safe content boundary** — no credentials, internal-only URLs, private identifiers, or sensitive notes are exposed.
+3. **Attribution quality** — source links, dates, versions, and references are included when they matter for trust or reuse.
+4. **Discovery fit** — title, visibility, and category are deliberate and match how others would search for this pack.
+
+If any item fails, keep the asset private and revise the content first.
 
 ## Category Reference
 
