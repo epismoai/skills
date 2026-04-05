@@ -1,12 +1,12 @@
-# Project Operations Runbook
+# Runbook
 
-Governs day-to-day operational writes on tasks, goals, and notes.
-For workflow release/update/deprecate, use [Workflow Release](./workflow-release.md).
-For query/filter semantics, use [Search & Filter](./search-filter.md).
-Operation labels below use the canonical surface conventions from [Project Operations](../SKILL.md#surface-conventions).
-Tracks hold project execution state; assets hold reusable stock content such as workflows.
+Governs day-to-day operational writes on tasks and goals.
+For workflow release/update/deprecate, use [Workflow Release](../../workflow-hub/references/release.md).
+For query/filter semantics, use [Search & Filter](./search.md).
+Surface conventions from [Epismo Basics](../../epismo-basics/SKILL.md).
+Tracks hold project execution state; assets hold reusable stock content such as workflows — see [Workflow Hub](../../workflow-hub/SKILL.md).
 
-Status values must match entity-specific definitions. `blocked_by_dependency` is a derived queue state, not a status field. Scope semantics and status definitions live in [Search & Filter](./search-filter.md).
+Status values must match entity-specific definitions. `blocked_by_dependency` is a derived queue state, not a status field. Scope semantics and status definitions live in [Search & Filter](./search.md).
 
 ## Mode Selector
 
@@ -25,13 +25,13 @@ When in doubt between New Item Creation and Large-Scale Planning, prefer New Ite
 
 Run before structural changes. Skip for simple partial updates and single-item creation.
 
-1. **Diagnose** — run `search track` and `search asset` to pull current goals, tasks, notes, and reusable workflows. Separate planned items from actively-moving items.
+1. **Diagnose** — run `search track` for current goals and tasks, then scan reusable workflows through [Workflow Hub — Search & Discovery](../../workflow-hub/references/search.md). Separate planned items from actively-moving items.
    → Output: current state summary.
 2. **Select mode** — choose one mode from the selector above. State why alternatives were rejected.
    → Output: chosen mode + one-line rationale.
 3. **Design contracts** — for each planned change, define owner, expected output, and true prerequisites. Keep independent work parallel.
    → Output: ownership and dependency map.
-4. **Confirm destination** — write to tracks first. Add a private workflow only when reusable structure is clearly needed.
+4. **Confirm destination** — write to tracks first. If reusable structure is clearly needed, hand off workflow authoring to [Workflow Hub](../../workflow-hub/SKILL.md).
    → Output: write destination confirmed.
 5. **Set checkpoint** — define the smallest useful next review point (date, event, or deliverable).
    → Output: next review trigger.
@@ -65,29 +65,6 @@ Use these as the smallest safe starting shapes for CLI `--input` payloads. Add o
 }
 ```
 
-### Workflow Asset
-
-```json
-{
-  "title": "Daily operating rhythm",
-  "content": "Reusable daily workflow.",
-  "category": "productivity",
-  "visibility": "private",
-  "projects": ["pj_123"],
-  "workflow": [
-    {
-      "id": "t001",
-      "title": "Morning briefing",
-      "content": "Review priorities and produce a short plan.",
-      "dueDate": "",
-      "dependsOn": [],
-      "parentId": "",
-      "assignee": "human"
-    }
-  ]
-}
-```
-
 ## Mode Playbooks
 
 ### 1) Partial Update
@@ -95,44 +72,73 @@ Use these as the smallest safe starting shapes for CLI `--input` payloads. Add o
 Entry: existing entities need localized changes only.
 Exit: delta reported, no structural changes introduced.
 
+Readiness checks:
+
+- Target entities identified from current results.
+- Requested change is real, not a no-op.
+- Project scope confirmed.
+- If task status is changing to `done`, downstream dependents check is queued.
+
 1. Read current entity values.
 2. Verify requested fields differ from current state — skip if no real change (no-op check).
-3. If a task status is changing to `done`, queue a downstream dependents check with `dependsOn=["{task-id}"]`.
+3. If a task status is changing to `done`, queue a downstream dependents check with `dependsOn=["<task-id>"]`.
 4. Update only the affected fields in the affected scope.
 5. If step 3 applies, read downstream dependents and separate `ready_now`, `blocked_by_dependency`, and `none`.
 6. Report exact delta, downstream result, and confirm unchanged structure.
 
-Typical writes: `upsert track` with entity type `task`, `goal`, or `note`, and field-level changes only.
+Typical writes: `upsert track` with entity type `task` or `goal`, and field-level changes only.
 
 ### 2) New Item Creation
 
-Entry: exactly one new task, note, or goal is needed; existing structure remains valid.
+Entry: exactly one new task or goal is needed; existing structure remains valid.
 Exit: one item created, linked references reported.
 
-1. Confirm active workspace, destination project, and item type (`task` / `note` / `goal`).
+Readiness checks:
+
+- Destination project and item type (`task` / `goal`) confirmed.
+- Duplicate check completed against active queue and backlog.
+- Project scope confirmed.
+
+1. Confirm active workspace, destination project, and item type (`task` / `goal`).
 2. Check for duplicate intent in active queue and backlog.
 3. Create one item with owner, due date, and minimal context.
 4. Report created item and any linked references (goal, parent task, dependencies).
 
-Typical writes: one `upsert track` for a `task`, `goal`, or `note`.
+Typical writes: one `upsert track` for a `task` or `goal`.
 
 ### 3) Large-Scale Planning
 
 Entry: multiple new items, a new goal structure, or a multi-step execution plan.
 Exit: coordinated items created with ownership contracts and dependency links.
 
-1. Run reuse check — scan workflows (`private` → `liked` → `public`).
+Readiness checks:
+
+- Current goals and tasks reviewed.
+- Reuse check completed against workflows (`private` → `liked` → `public`).
+- Why reuse is insufficient is explicit.
+- Project scope confirmed.
+
+1. Run reuse check through [Workflow Hub — Search & Discovery](../../workflow-hub/references/search.md#reuse-scan).
 2. Document why existing options do not fit.
 3. Propose minimal viable multi-step structure with owners and dependencies.
 4. Obtain approval if required (see [Write Safety](#write-safety-and-approval-gate)).
 5. Materialize only after confirmation.
 
-Typical writes: multiple `upsert track` operations, optional `upsert asset`.
+Typical writes: multiple `upsert track` operations. If the result should become a reusable workflow asset, hand off to [Workflow Hub](../../workflow-hub/SKILL.md).
 
 ### 4) Recovery and Backlog Hygiene
 
 Entry: delivery is slowed by overload, dependency blocking, stalled queues, or noisy backlog.
 Exit: smallest high-impact set of changes applied, load rebalanced.
+
+Readiness checks:
+
+- Recovery trigger identified.
+- Project scope confirmed.
+- Active queue snapshot captured (`backlog`, `todo`, `in_progress`, `blocked`).
+- Assignee load reviewed.
+- Dependency hotspots identified.
+- Backlog hygiene reviewed for stale, duplicate, and low-signal items.
 
 1. Build active-task snapshot by assignee and status.
 2. Identify overload, near-term deadline risks, and stale backlog segments.
@@ -173,7 +179,7 @@ Before any write:
 
 If the user has not answered a clarification question, do not write. Continue read-only analysis and report the pending decision.
 
-For workflow release/update/deprecate, apply [Workflow Release — Approval Boundary](./workflow-release.md#approval-boundary).
+For workflow release/update/deprecate, apply [Workflow Release — Approval Boundary](../../workflow-hub/references/release.md#approval-boundary).
 
 ## Operation Output
 
@@ -187,12 +193,8 @@ After every operation, return this structure. Prefer names and titles in user-fa
 
 ## Error Handling
 
-| Error                                    | Action                                                                                                      |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `Payment Required: Insufficient credits` | Stop. Navigate user to [Credit Purchase](./credit-purchase.md).                                             |
-| `Permission denied`                      | Re-check accessible projects and ownership scope.                                                           |
-| `Unauthorized` / `403`                   | Verify MCP token or `EPISMO_TOKEN` (CLI), active workspace, and subscription context.                       |
-| `Not Found` / `404`                      | Confirm entity ID exists. It may have been deleted or moved.                                                |
-| Invalid workflow graph                   | Normalize IDs and rebuild as an acyclic dependency graph. Remove self-dependencies and circular references. |
-| Rate limit / `429`                       | Wait and retry with backoff. Inform user if persistent.                                                     |
-| Timeout                                  | Retry once. If persistent, reduce batch size or switch to sequential writes.                                |
+For common errors (auth, credits, rate limits, timeouts), see [Epismo — Error Handling](../../epismo-basics/SKILL.md#error-handling).
+
+| Error | Action |
+| ----- | ------ |
+| `Payment Required: Insufficient credits` | Stop. See [Credit Purchase](../../epismo-basics/references/credit-purchase.md). |

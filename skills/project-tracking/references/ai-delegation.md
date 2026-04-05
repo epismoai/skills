@@ -3,6 +3,7 @@
 Design and assignment standards for AI-owned tasks.
 Use when creating or updating delegated work that requires clear outputs, acceptance criteria, and review gates.
 For overload and rebalance analysis, use [Runbook — Recovery](./runbook.md#4-recovery-and-backlog-hygiene).
+Surface conventions from [Epismo Basics](../../epismo-basics/SKILL.md).
 
 ## When to Delegate
 

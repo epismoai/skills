@@ -1,8 +1,9 @@
-# Workflow Release
+# Release
 
 Release, update, and deprecate decisions for reusable workflows.
-Quality gate must pass before any `release` or `update` — run [Workflow Quality](./workflow-quality.md) first.
-Use canonical operation labels from [Project Operations](../SKILL.md#surface-conventions) when describing the execution surface.
+Quality gate must pass before any `release` or `update` — run [Quality Gate](./quality.md) first.
+For visibility and approval rules, see [Visibility & Sharing](./visibility.md).
+Surface conventions from [Epismo Basics](../../epismo-basics/SKILL.md).
 
 ## Pre-Decision Checks
 
@@ -12,7 +13,7 @@ Confirm all six before proceeding:
 2. **Target workflow** is confirmed (ID or title).
 3. **Release target** is explicit: `private` or `public`.
 4. **Quality gate status**:
-   - `release` / `update`: quality gate passed per [Workflow Quality](./workflow-quality.md).
+   - `release` / `update`: quality gate passed per [Workflow Quality](./quality.md).
    - `deprecate`: quality gate not required; deprecation rationale and risk note are sufficient.
 5. **Duplication risk** checked — no clearly superior equivalent already exists.
 6. **Write scope** confirmed: `private` uses confirmed `projects[]`; `public` omits `projects[]`.
