@@ -4,12 +4,46 @@ When an operation returns `Payment Required: Insufficient credits`, check the cu
 
 **Pricing: 1 credit = $0.01**
 
-## Choose a Surface
+## Access Options
 
-- `API` if having an `access_token` or building an integration
-- `CLI` if operating interactively in a terminal
+- **CLI** — preferred when operating interactively. Run `epismo login` to authenticate.
+- **API (curl / scripted)** — use when building an integration or when the CLI is not available. Requires an OAuth `access_token`.
 
-### Option A: API
+### CLI
+
+#### Step 1. Authenticate (If Needed)
+
+```bash
+epismo login --email you@example.com
+epismo login --browser
+```
+
+#### Step 2. Check Credit Status
+
+```bash
+epismo credit balance
+epismo credit balance --workspace-id <workspace-id>
+```
+
+#### Step 3. Purchase Credits (Create Stripe Checkout)
+
+```bash
+epismo credit checkout --allocations '[{"userId":"<USER_ID>","quantity":10}]'
+epismo credit checkout --workspace-id <workspace-id> \
+  --allocations '[{"userId":"<USER_ID>","quantity":10}]'
+epismo credit checkout --input @checkout.json
+```
+
+#### Step 4. Complete the Purchase
+
+Open the returned Stripe Checkout URL in your browser and complete payment.
+
+1. Credits are added to the specified balance.
+2. Verify the updated balance with `epismo credit balance`.
+3. Retry the CLI call that failed with insufficient credits.
+4. If your session expired while purchasing, run `epismo login` again and retry.
+
+### API
 
 #### Step 1. Get an OAuth Access Token (If Needed)
 
@@ -82,37 +116,3 @@ Open the returned Stripe Checkout `url` in your browser and complete payment.
 2. Verify the updated balance with `GET /v1/credits`.
 3. Retry the API call that failed with insufficient credits.
 4. If the access token expired while purchasing, rerun the OTP flow and retry.
-
-### Option B: CLI
-
-#### Step 1. Authenticate (If Needed)
-
-```bash
-epismo login --email you@example.com
-epismo login --browser
-```
-
-#### Step 2. Check Credit Status
-
-```bash
-epismo credit balance
-epismo credit balance --workspace-id <workspace-id>
-```
-
-#### Step 3. Purchase Credits (Create Stripe Checkout)
-
-```bash
-epismo credit checkout --allocations '[{"userId":"<USER_ID>","quantity":10}]'
-epismo credit checkout --workspace-id <workspace-id> \
-  --allocations '[{"userId":"<USER_ID>","quantity":10}]'
-epismo credit checkout --input @checkout.json
-```
-
-#### Step 4. Complete the Purchase
-
-Open the returned Stripe Checkout URL in your browser and complete payment.
-
-1. Credits are added to the specified balance.
-2. Verify the updated balance with `epismo credit balance`.
-3. Retry the CLI call that failed with insufficient credits.
-4. If your session expired while purchasing, run `epismo login` again and retry.

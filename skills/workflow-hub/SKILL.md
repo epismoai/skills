@@ -13,6 +13,8 @@ Discover, adapt, and release reusable workflow assets in Epismo — from finding
 > For task/goal tracking, see [Project Tracking](../project-tracking/SKILL.md).
 > For workflow query patterns and loading, see [Search & Discovery](./references/search.md).
 
+> **Surface selection:** CLI and MCP connect to the same Epismo service. Use CLI if available; fall back to MCP if not. Never use both in the same session.
+
 ## Operations
 
 | Operation | CLI | MCP |

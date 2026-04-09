@@ -16,14 +16,13 @@ Skills that build on this:
 
 ## Connection
 
-Choose one surface and stick with it within a session.
+CLI and MCP are two interfaces to the **same Epismo service** — same account, same data, same tools. There is one Epismo account; the difference is only how you connect.
 
-- **MCP** — for tool-based agents. Requires an OAuth access token with `scope=mcp` and the correct `resource`. Standard MCP clients connect automatically via OAuth metadata discovery; no manual token setup required.
-- **CLI** — for shell-driven agents. Use `epismo login` or set `EPISMO_TOKEN`.
+**When both are available, use CLI.** If only MCP is available, use MCP. Never use both in the same session.
 
-If access is not ready, complete auth setup first — see the `github.com/epismoai/skills` README.
+### Auth
 
-### CLI Auth
+**CLI** (preferred):
 
 ```bash
 epismo login --email you@example.com   # OTP flow (default, no browser)
@@ -31,37 +30,8 @@ epismo login --browser                  # browser-based flow
 epismo whoami                           # verify
 ```
 
-### MCP Token (manual / scripted setup)
+**MCP**: add `https://mcp.epismo.ai` as an MCP server in your client. Authentication is handled automatically via OAuth.
 
-```bash
-# 1. Request OTP
-curl -sX POST https://api.epismo.ai/v1/otp-tokens \
-  -H "Content-Type: application/json" \
-  -d '{"email":"you@example.com"}'
-# => {"otpId":"<OTP_ID>"}
-
-# 2. Exchange OTP for API access token
-curl -sX POST https://api.epismo.ai/oauth/token \
-  -H "Content-Type: application/json" \
-  -d '{"grant_type":"otp","otp_id":"<OTP_ID>","pin":"<PIN>","client_id":"epismo-cli"}'
-# => {"access_token":"<API_TOKEN>", ...}
-
-# 3. List workspaces and pick one
-curl -sX GET https://api.epismo.ai/v1/workspaces \
-  -H "Authorization: Bearer <API_TOKEN>"
-
-# 4. Exchange for MCP token
-curl -sX POST https://api.epismo.ai/v1/mcp/tokens \
-  -H "Authorization: Bearer <API_TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{"resource":"https://mcp.epismo.ai/","workspaceId":"<workspace-id>"}'
-# => {"accessToken":"<MCP_TOKEN>","scope":"mcp", ...}
-
-# Refresh
-curl -sX POST https://api.epismo.ai/v1/mcp/tokens/refresh \
-  -H "Content-Type: application/json" \
-  -d '{"resource":"https://mcp.epismo.ai/","refreshToken":"<MCP_REFRESH_TOKEN>"}'
-```
 
 ---
 
@@ -193,7 +163,7 @@ Stop iterating when a page returns fewer than 20 results.
 | ----- | ------ |
 | `Payment Required: Insufficient credits` | Stop. Check balance and purchase credits — see [Credit Purchase](./references/credit-purchase.md). |
 | `Permission denied` | Re-check accessible projects and resource ownership. |
-| `Unauthorized` / `403` | Verify MCP token or `EPISMO_TOKEN` (CLI), active workspace, and subscription. |
+| `Unauthorized` / `403` | Re-authenticate: run `epismo login` (CLI) or reconnect via MCP OAuth. Verify active workspace and subscription. |
 | `Not Found` / `404` | Confirm the resource ID. It may have been deleted or the share token may have expired. |
 | Rate limit / `429` | Wait and retry with backoff. Inform user if persistent. |
 | Timeout | Retry once. If persistent, reduce payload size or split the operation. |

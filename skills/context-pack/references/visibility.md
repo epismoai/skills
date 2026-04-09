@@ -89,14 +89,7 @@ Obtain the share token from the upsert response or from the Epismo UI. The token
 https://epismo.ai/hub/contexts/{asset-id}
 ```
 
-**Resolving a share URL to an asset ID** (use any HTTP client):
-
-```bash
-curl -s -o /dev/null -w "%{redirect_url}" "https://epismo.ai/share/${TOKEN}"
-# → https://epismo.ai/hub/contexts/{id}
-```
-
-Use the resolved `id` with `get asset`.
+**Resolving a share URL to an asset ID:** see [Epismo Basics — Resolving Share URLs](../../epismo-basics/SKILL.md#resolving-share-urls).
 
 ### Who Can Use a Share URL
 

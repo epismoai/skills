@@ -11,6 +11,8 @@ The unit of organization is a **block** inside a pack. The goal is one well-stru
 
 > For Epismo connection setup, CLI/MCP surface conventions, scope model, share URL resolution, and error handling, see [Epismo Basics](../epismo-basics/SKILL.md).
 
+> **Surface selection:** CLI and MCP connect to the same Epismo service. Use CLI if available; fall back to MCP if not. Never use both in the same session.
+
 ## Commands
 
 | Command | Natural language triggers | → |
@@ -171,17 +173,7 @@ Two paths:
 
 Write for an external reader using the public guide template in [Content Templates](./templates/content.md). Content must be self-contained and pass the [Public Review Gate](./references/visibility.md#public-review-gate).
 
-Choose category carefully — it determines how people find this pack:
-
-| Category | When to use |
-| -------- | ----------- |
-| `productivity` | Workflow guides, session patterns, working norms |
-| `programming` | Code review checklists, architecture decisions, API design |
-| `design` | Design system norms, component guidelines, UX decisions |
-| `marketing` | Campaign rules, messaging frameworks, brand guidelines |
-| `operations` | Runbooks, incident post-mortems, deployment norms |
-| `learning` | Onboarding guides, tutorials, knowledge bases |
-| `life` | Personal knowledge, life planning, non-work contexts |
+Choose category carefully — it determines how people find this pack. See [Category Reference](./references/visibility.md#category-reference).
 
 Confirm with user, then `upsert asset`:
 
