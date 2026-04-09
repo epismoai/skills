@@ -1,6 +1,6 @@
 # Workflow Patterns
 
-Structured report templates for workflow asset operations.
+Structured report templates for workflow pack operations.
 Use these after discovery, quality, approval, and release checks are already complete.
 For internal validation, use [Quality Gate](../references/quality.md) and [Workflow Release](../references/release.md).
 
@@ -21,7 +21,7 @@ Use when: a successful execution pattern is a candidate for reuse across project
 
 ### Report
 
-- **Situation**: {workflow asset state after action}
+- **Situation**: {workflow pack state after action}
 - **Decision**: {release action taken and why}
 - **Evidence**: {execution records and quality gate results}
 - **Risks**: {duplication risk, scope limitations, or open concerns}
@@ -46,10 +46,10 @@ Use when: comparing candidate workflows and committing to a concrete adaptation 
 
 Candidate shortlist:
 
-| # | Pattern | Source | Relevance | Reuse cost | Gaps |
-| - | ------- | ------ | --------- | ---------- | ---- |
-| 1 | {title} | {source type} | {why relevant} | {low/med/high} | {what to adapt} |
-| 2 | {title} | {source type} | {why relevant} | {low/med/high} | {what to adapt} |
+| #   | Pattern | Source        | Relevance      | Reuse cost     | Gaps            |
+| --- | ------- | ------------- | -------------- | -------------- | --------------- |
+| 1   | {title} | {source type} | {why relevant} | {low/med/high} | {what to adapt} |
+| 2   | {title} | {source type} | {why relevant} | {low/med/high} | {what to adapt} |
 
 ### Recommendation
 
@@ -62,7 +62,7 @@ Candidate shortlist:
 - Modify: {steps and changes}
 - Add project-specific: {steps}
 - Ownership: AI-owned {steps} / Human-owned {steps}
-- Destination: {project tracks / private workflow asset / both}
+- Destination: {project tracks / private workflow pack / both}
 
 ### Report
 

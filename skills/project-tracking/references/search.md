@@ -2,17 +2,17 @@
 
 Query patterns, filter semantics, and entity relationship traversal for tracks.
 
-For surface conventions, selective fetch pattern, pagination, and asset reuse scan order, see [Epismo Basics](../../epismo-basics/SKILL.md).
-For reusable workflow discovery, see [Workflow Hub — Search & Discovery](../../workflow-hub/references/search.md).
+For surface conventions, selective fetch pattern, pagination, and pack reuse scan order, see [Epismo Basics](../../epismo-basics/SKILL.md).
+For reusable workflow discovery, see [Workflow Pack — Search & Discovery](../../workflow-pack/references/search.md).
 
 ## Operations (tracks)
 
-| Operation | CLI command | Key flags |
-| --------- | ----------- | --------- |
+| Operation      | CLI command           | Key flags                              |
+| -------------- | --------------------- | -------------------------------------- |
 | `search track` | `epismo track search` | `--type task\|goal` `--filter '{...}'` |
-| `get track` | `epismo track get` | `--id <id>` |
-| `upsert track` | `epismo track upsert` | `--input @item.json` |
-| `delete track` | `epismo track delete` | `--id <id>` |
+| `get track`    | `epismo track get`    | `--id <id>`                            |
+| `upsert track` | `epismo track upsert` | `--input @item.json`                   |
+| `delete track` | `epismo track delete` | `--id <id>`                            |
 
 ## Quick Reference
 
@@ -34,7 +34,7 @@ For reusable workflow discovery, see [Workflow Hub — Search & Discovery](../..
 3. `search track` accepts top-level `projects[]` to limit scope inside the active workspace.
 4. Omitting `projects[]` searches all accessible projects in the active workspace.
 5. `search track` requires `type`: `task` or `goal`.
-6. Keep `query` compact when searching related workflow assets through Workflow Hub: 2-6 domain keywords.
+6. Keep `query` compact when searching related workflow packs through Workflow Pack: 2-6 domain keywords.
 
 ## Entity Reference
 
