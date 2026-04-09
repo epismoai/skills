@@ -48,35 +48,17 @@ The agent will read this page and complete the steps. Or follow manually:
 
 ### 1. Connect
 
-Choose one surface:
+CLI and MCP connect to the same Epismo service. Use CLI if available; MCP otherwise.
 
-**MCP** — Standard MCP clients connect automatically via OAuth. For manual setup:
-
-```bash
-# Request OTP
-curl -sX POST https://api.epismo.ai/v1/otp-tokens \
-  -H "Content-Type: application/json" \
-  -d '{"email":"you@example.com"}'
-
-# Exchange for API token
-curl -sX POST https://api.epismo.ai/oauth/token \
-  -H "Content-Type: application/json" \
-  -d '{"grant_type":"otp","otp_id":"<OTP_ID>","pin":"<PIN>","client_id":"epismo-cli"}'
-
-# Exchange for MCP token
-curl -sX POST https://api.epismo.ai/v1/mcp/tokens \
-  -H "Authorization: Bearer <API_TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{"resource":"https://mcp.epismo.ai/","workspaceId":"<workspace-id>"}'
-```
-
-**CLI** — install and log in:
+**CLI** (preferred):
 
 ```bash
 npm install -g epismo
 epismo login --email you@example.com
 epismo whoami
 ```
+
+**MCP**: add `https://mcp.epismo.ai` as an MCP server in your client. Authentication is handled automatically via OAuth.
 
 ### 2. Select a workspace
 

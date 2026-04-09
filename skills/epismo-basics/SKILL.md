@@ -16,16 +16,13 @@ Skills that build on this:
 
 ## Connection
 
-CLI and MCP are two interfaces to the **same Epismo service** — same account, same data, same tools. Choose based on your environment, not based on what you're trying to do.
+CLI and MCP are two interfaces to the **same Epismo service** — same account, same data, same tools. There is one Epismo account; the difference is only how you connect.
 
-- **CLI** — preferred when available. Run `epismo login` once; credentials are stored locally.
-- **MCP** — for tool-based agent environments. MCP clients connect via OAuth metadata discovery; no manual token setup required.
+**When both are available, use CLI.** If only MCP is available, use MCP. Never use both in the same session.
 
-**When both are available, use CLI.** If only MCP is available, use MCP. Never try to use both in the same session.
+### Auth
 
-If access is not ready, complete auth setup first — see the `github.com/epismoai/skills` README.
-
-### Auth Setup (CLI)
+**CLI** (preferred):
 
 ```bash
 epismo login --email you@example.com   # OTP flow (default, no browser)
@@ -33,39 +30,8 @@ epismo login --browser                  # browser-based flow
 epismo whoami                           # verify
 ```
 
-### Auth Setup (MCP — manual / scripted)
+**MCP**: add `https://mcp.epismo.ai` as an MCP server in your client. Authentication is handled automatically via OAuth.
 
-MCP auth is handled automatically by standard MCP clients via OAuth metadata discovery. If you need to set up a token manually (e.g. for a custom client):
-
-```bash
-# 1. Request OTP
-curl -sX POST https://api.epismo.ai/v1/otp-tokens \
-  -H "Content-Type: application/json" \
-  -d '{"email":"you@example.com"}'
-# => {"otpId":"<OTP_ID>"}
-
-# 2. Exchange OTP for API access token
-curl -sX POST https://api.epismo.ai/oauth/token \
-  -H "Content-Type: application/json" \
-  -d '{"grant_type":"otp","otp_id":"<OTP_ID>","pin":"<PIN>","client_id":"epismo-cli"}'
-# => {"access_token":"<API_TOKEN>", ...}
-
-# 3. List workspaces and pick one
-curl -sX GET https://api.epismo.ai/v1/workspaces \
-  -H "Authorization: Bearer <API_TOKEN>"
-
-# 4. Exchange for MCP-scoped token
-curl -sX POST https://api.epismo.ai/v1/mcp/tokens \
-  -H "Authorization: Bearer <API_TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{"resource":"https://mcp.epismo.ai/","workspaceId":"<workspace-id>"}'
-# => {"accessToken":"<MCP_TOKEN>","scope":"mcp", ...}
-
-# Refresh
-curl -sX POST https://api.epismo.ai/v1/mcp/tokens/refresh \
-  -H "Content-Type: application/json" \
-  -d '{"resource":"https://mcp.epismo.ai/","refreshToken":"<MCP_REFRESH_TOKEN>"}'
-```
 
 ---
 
