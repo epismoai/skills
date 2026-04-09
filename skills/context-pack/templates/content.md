@@ -1,8 +1,8 @@
 # Content Templates
 
-Content structure templates for context assets.
+Content structure templates for context packs.
 For visibility settings, see [Visibility & Sharing](../references/visibility.md).
-For finding existing assets, see [Search & Discovery](../references/search.md).
+For finding existing packs, see [Search & Discovery](../references/search.md).
 
 ## What A Context Pack Should Optimize For
 
@@ -30,16 +30,16 @@ Good reasons to split into separate blocks:
 
 Useful block types:
 
-| Block type | Use when the reader needs |
-| ---------- | ------------------------- |
-| `Overview` / `What This Is` | fast orientation |
-| `Source` | metadata about a video, blog post, paper, or document |
-| `Summary` | the core idea in compressed form |
-| `Key Takeaways` | scannable insights or claims |
-| `Decisions` / `Constraints` | durable rules that affect future work |
-| `Next Steps` / `Action Items` | what to do next |
-| `Prompt` / `Instructions` | reusable execution guidance |
-| `References` | exact links, IDs, citations, and related packs |
+| Block type                    | Use when the reader needs                             |
+| ----------------------------- | ----------------------------------------------------- |
+| `Overview` / `What This Is`   | fast orientation                                      |
+| `Source`                      | metadata about a video, blog post, paper, or document |
+| `Summary`                     | the core idea in compressed form                      |
+| `Key Takeaways`               | scannable insights or claims                          |
+| `Decisions` / `Constraints`   | durable rules that affect future work                 |
+| `Next Steps` / `Action Items` | what to do next                                       |
+| `Prompt` / `Instructions`     | reusable execution guidance                           |
+| `References`                  | exact links, IDs, citations, and related packs        |
 
 ## Available Templates
 
@@ -51,6 +51,7 @@ Use when saving the essence of a YouTube video, blog post, paper, talk, or other
 # [Source Title] — Summary
 
 ## Source
+
 - Type: [YouTube / blog / paper / talk / doc]
 - Author / channel: [Name]
 - URL: [Link]
@@ -58,19 +59,23 @@ Use when saving the essence of a YouTube video, blog post, paper, talk, or other
 - Why this matters: [Why you saved it]
 
 ## Summary
+
 [A short paragraph with the main idea, argument, or contribution.]
 
 ## Key Takeaways
+
 - [Insight 1]
 - [Insight 2]
 - [Insight 3]
 
 ## Reuse Notes
+
 - [How this connects to your project, workflow, or decision]
 - [What to borrow, test, or remember]
 
 ## References
-- [Related asset, paper, repo, or note](URL)
+
+- [Related pack, paper, repo, or note](URL)
 ```
 
 **When to set visibility:** `private` for personal or team research. `public` if the summary is cleaned up for broader reuse and the source can be discussed openly.
@@ -85,25 +90,31 @@ Use when moving work between tools, agents, or threads and needing to resume wit
 # Session Handoff — [Topic] — [Date]
 
 ## Context
+
 [What this workstream is, where it was happening, and why it matters.]
 
 ## Decisions
+
 - [Decision 1 with rationale]
 - [Decision 2 with rationale]
 
 ## Work Done
+
 - [Completed action 1]
 - [Completed action 2]
 
 ## Next Steps
+
 - [ ] [Immediate next action — owner: me/team]
 - [ ] [Follow-up action]
 
 ## Open Questions
+
 - [Unresolved point]
 
 ## References
-- [Related asset, track, PR, or doc](URL)
+
+- [Related pack, track, PR, or doc](URL)
 ```
 
 **When to set visibility:** `private`. This is usually working memory or an internal handoff.
@@ -118,21 +129,26 @@ Use when storing durable project knowledge that new sessions, contributors, or a
 # [Project Name] — Working Context
 
 ## Purpose
+
 [What this project or workstream is trying to achieve.]
 
 ## Current Shape
+
 - [Current architecture, plan, or state]
 - [What stage the project is in]
 
 ## Constraints
+
 - [Technical, product, legal, or team constraint]
 - [Non-goal or boundary]
 
 ## Decisions
+
 - [Important decision and why]
 - [Important decision and why]
 
 ## References
+
 - [Spec, repo, design, track, or related context pack](URL)
 ```
 
@@ -148,27 +164,33 @@ Use when transferring an active task to another person or agent with enough cont
 # Handoff — [Task Title]
 
 ## What This Is
+
 [One sentence describing the task and how it fits into the larger project.]
 
 ## Current State
+
 - Status: [in_progress / blocked / review needed]
 - Last updated: [Date]
 - Track / PR / issue: [ID or link]
 
 ## What Was Done
+
 - [Completed step 1]
 - [Completed step 2]
 
 ## What Remains
+
 - [ ] [Next action]
 - [ ] [Following action]
 
 ## Important Context
+
 - [Constraint, decision, or caveat]
 - [Dependency, credential location, or environment detail]
 
 ## References
-- [Relevant document, asset, or ticket](URL)
+
+- [Relevant document, pack, or ticket](URL)
 ```
 
 **When to set visibility:** `private`, usually scoped to the relevant project.
@@ -183,21 +205,26 @@ Use when saving a prompt pattern, operating instructions, or reusable execution 
 # [Prompt or Workflow Name]
 
 ## When To Use This
+
 - [Trigger or situation]
 - [What problem it solves]
 
 ## Inputs
+
 - [Required input 1]
 - [Optional input 2]
 
 ## Instructions
+
 [The reusable prompt, checklist, or operating procedure.]
 
 ## Output Expectations
+
 - [Expected format]
 - [Acceptance criteria]
 
 ## Variations
+
 - [How to adapt this for a different tool, model, or audience]
 ```
 
@@ -213,25 +240,31 @@ Use when publishing reusable knowledge for a broader audience.
 # [Guide Title]
 
 ## What This Covers
+
 [The problem this guide solves and who it is for.]
 
 ## When To Use It
+
 - [Condition 1]
 - [Condition 2]
 
 ## Approach
+
 - [Core principle 1]
 - [Core principle 2]
 
 ## Steps
+
 1. [Step 1]
 2. [Step 2]
 3. [Step 3]
 
 ## Examples
+
 - [Example, scenario, or before/after]
 
 ## References
+
 - [Related guide, source, repo, or tool](URL)
 ```
 
@@ -243,15 +276,31 @@ Use when publishing reusable knowledge for a broader audience.
 
 Use this as the smallest safe starting shape. Add optional fields only when needed.
 
+**Key rule:** Block content belongs in `"blocks[]"`, not embedded in the top-level `"content"` string. The top-level `"content"` is a short intro or summary only. If you put all content in `"content"`, blocks will appear empty when fetched.
+
 ### Private source summary
 
 ```json
 {
   "title": "Attention Is All You Need - Summary",
-  "content": "## Source\n- Type: paper\n- URL: https://arxiv.org/...\n\n## Summary\n...\n\n## Key Takeaways\n- ...",
+  "content": "Summary of the Attention Is All You Need paper.",
   "type": "context",
   "visibility": "private",
-  "projects": ["pj_123"]
+  "projects": ["pj_123"],
+  "blocks": [
+    {
+      "title": "Source",
+      "content": "- Type: paper\n- URL: https://arxiv.org/..."
+    },
+    {
+      "title": "Summary",
+      "content": "..."
+    },
+    {
+      "title": "Key Takeaways",
+      "content": "- ..."
+    }
+  ]
 }
 ```
 
@@ -260,11 +309,36 @@ Use this as the smallest safe starting shape. Add optional fields only when need
 ```json
 {
   "title": "How To Hand Off Work Between AI Tools",
-  "content": "## What This Covers\n...\n\n## Steps\n1. ...",
+  "content": "A guide for moving context across tools, threads, and agents.",
   "type": "context",
   "visibility": "public",
-  "category": "productivity"
+  "category": "productivity",
+  "blocks": [
+    {
+      "title": "What This Covers",
+      "content": "..."
+    },
+    {
+      "title": "Steps",
+      "content": "1. ..."
+    }
+  ]
 }
 ```
 
-> Note: `projects[]` is valid only when `visibility="private"`. Omit it for public assets.
+### Updating existing blocks
+
+Pass `"id"` on each block to update it in place. Blocks without `"id"` are added as new. Blocks omitted from the array are removed.
+
+```json
+{
+  "id": "<pack-id>",
+  "blocks": [
+    { "id": "b001", "title": "Source", "content": "<updated content>" },
+    { "id": "b002", "title": "Summary", "content": "<updated content>" },
+    { "title": "New Block", "content": "<new block content>" }
+  ]
+}
+```
+
+> Note: `projects[]` is valid only when `visibility="private"`. Omit it for public packs.

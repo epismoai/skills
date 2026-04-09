@@ -1,15 +1,15 @@
-# Asset Alias
+# Pack Alias
 
-An alias is a short, human-readable name that resolves to an asset ID. Use it anywhere `--id` is accepted on `asset get` to avoid copying and pasting full UUIDs.
+An alias is a short, human-readable name that resolves to a pack ID. Use it anywhere `--id` is accepted on `pack get` to avoid copying and pasting full UUIDs.
 
-`alias` is a top-level resource — managed via `epismo alias ...` (CLI) or `/v1/aliases` (API), separate from asset CRUD.
+`alias` is a top-level resource — managed via `epismo alias ...` (CLI) or `/v1/aliases` (API), separate from pack CRUD.
 
 ## Alias Format
 
-| Format | Where accepted | Resolves to |
-| ------ | -------------- | ----------- |
-| `myproject` | upsert, get, list, delete | Your own alias |
-| `@handle/myproject` | get only | Another user's alias |
+| Format              | Where accepted            | Resolves to          |
+| ------------------- | ------------------------- | -------------------- |
+| `myproject`         | upsert, get, list, delete | Your own alias       |
+| `@handle/myproject` | get only                  | Another user's alias |
 
 - **upsert / delete** — bare name only (`myproject`). The namespace is always your own account.
 - **get** — accepts both forms to support referencing others' aliases.
@@ -30,7 +30,7 @@ epismo alias upsert --type workflow --id <id> --alias myproject
 epismo alias upsert --type context  --id <id> --alias mycontext
 ```
 
-You can only alias your own assets. The command verifies ownership before writing.
+You can only alias your own packs. The command verifies ownership before writing.
 
 #### Get (resolve a single alias)
 
@@ -44,7 +44,7 @@ Returns `id`, `type`, `accountId`, and `alias`.
 
 #### List (all your aliases)
 
-`--type` is optional. Omit to return all aliases; pass it to narrow results to a specific asset type.
+`--type` is optional. Omit to return all aliases; pass it to narrow results to a specific pack type.
 
 ```bash
 epismo alias list
@@ -58,14 +58,14 @@ epismo alias list --type context
 epismo alias delete --alias myproject
 ```
 
-#### Use an alias to fetch an asset
+#### Use an alias to fetch a pack
 
-`asset get` accepts `--alias` as an alternative to `--id`:
+`pack get` accepts `--alias` as an alternative to `--id`:
 
 ```bash
-epismo asset get --alias myproject
-epismo asset get --alias @handle/myproject
-epismo asset get --alias mycontext --block-id <block-id>
+epismo pack get --alias myproject
+epismo pack get --alias @handle/myproject
+epismo pack get --alias mycontext --block-id <block-id>
 ```
 
 `--id` and `--alias` are mutually exclusive; one is required.
@@ -82,7 +82,7 @@ epismo asset get --alias mycontext --block-id <block-id>
 curl -sX PUT https://api.epismo.ai/v1/aliases \
   -H "Authorization: Bearer <ACCESS_TOKEN>" \
   -H "Content-Type: application/json" \
-  -d '{"type":"workflow","id":"<asset-id>","alias":"myproject"}'
+  -d '{"type":"workflow","id":"<pack-id>","alias":"myproject"}'
 ```
 
 #### List
@@ -115,10 +115,10 @@ curl -sX DELETE "https://api.epismo.ai/v1/aliases/myproject" \
   -H "Authorization: Bearer <ACCESS_TOKEN>"
 ```
 
-#### Use an alias to fetch an asset
+#### Use an alias to fetch a pack
 
 ```bash
-curl -sX GET "https://api.epismo.ai/v1/assets?alias=myproject" \
+curl -sX GET "https://api.epismo.ai/v1/packs?alias=myproject" \
   -H "Authorization: Bearer <ACCESS_TOKEN>"
 ```
 
@@ -126,6 +126,6 @@ curl -sX GET "https://api.epismo.ai/v1/assets?alias=myproject" \
 
 ## Access Control
 
-- **Upsert / Delete** — your aliases only. Ownership of the target asset is verified at write time.
-- **Get (by alias)** — resolves the alias, then runs the normal asset ACL check. If you lack read access to the asset, the fetch fails even if the alias exists.
+- **Upsert / Delete** — your aliases only. Ownership of the target pack is verified at write time.
+- **Get (by alias)** — resolves the alias, then runs the normal pack ACL check. If you lack read access to the pack, the fetch fails even if the alias exists.
 - **List** — your aliases only.

@@ -58,18 +58,18 @@ Use when: multiple items, a new goal structure, or a coordinated multi-step plan
 
 ### Write Shape
 
-| Step | Title | Owner | Output | Depends on |
-| ---- | ----- | ----- | ------ | ---------- |
-| A | {title} | {AI/human} | {deliverable} | {step IDs or none} |
-| B | {title} | {AI/human} | {deliverable} | {step IDs or none} |
+| Step | Title   | Owner      | Output        | Depends on         |
+| ---- | ------- | ---------- | ------------- | ------------------ |
+| A    | {title} | {AI/human} | {deliverable} | {step IDs or none} |
+| B    | {title} | {AI/human} | {deliverable} | {step IDs or none} |
 
-- Materialization: {tracks only / tracks + workflow asset}
+- Materialization: {tracks only / tracks + workflow pack}
 
 ### Report
 
 - **Situation**: {what is active now}
 - **Delta**: {items created/updated with structure summary}
-- **Evidence**: {tracks, assets, or sources that informed the plan}
+- **Evidence**: {tracks, packs, or sources that informed the plan}
 - **Risks**: {open questions or dependency concerns}
 - **Next action**: {smallest useful step}
 

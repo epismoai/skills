@@ -14,27 +14,27 @@ Skills solve this by packaging proven operational patterns into portable instruc
 
 ## Skills
 
-| Skill | What it does |
-| ----- | ------------ |
-| [Epismo Basics](./skills/epismo-basics/SKILL.md) | Platform fundamentals: auth, CLI/MCP conventions, scope, share URL resolution, error handling |
-| [Project Tracking](./skills/project-tracking/SKILL.md) | Create and update tasks and goals; plan multi-step work; unblock stalled queues |
-| [Workflow Hub](./skills/workflow-hub/SKILL.md) | Discover, adapt, and release reusable workflow assets |
-| [Context Pack](./skills/context-pack/SKILL.md) | Save session context, hand off tasks, load saved context from any tool |
+| Skill                                                  | What it does                                                                                  |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| [Epismo Basics](./skills/epismo-basics/SKILL.md)       | Platform fundamentals: auth, CLI/MCP conventions, scope, share URL resolution, error handling |
+| [Project Tracking](./skills/project-tracking/SKILL.md) | Create and update tasks and goals; plan multi-step work; unblock stalled queues               |
+| [Workflow Pack](./skills/workflow-pack/SKILL.md)       | Discover, adapt, and release reusable workflows                                               |
+| [Context Pack](./skills/context-pack/SKILL.md)         | Save session context, hand off tasks, load saved context from any tool                        |
 
 **Epismo Basics** is a shared foundation — load it alongside any other skill.
 
 ## Use Cases
 
-| Goal | Skills to load |
-| ---- | -------------- |
-| Resume work after switching tools | Context Pack |
-| Hand off a task to a teammate | Context Pack |
-| Add tasks, update status, plan a sprint | Epismo Basics + Project Tracking |
-| Find and reuse a community workflow | Epismo Basics + Workflow Hub |
-| Capture a proven process and publish it | Epismo Basics + Workflow Hub |
-| Delegate work to an AI agent with clear criteria | Epismo Basics + Project Tracking |
-| Publish a best-practice guide for the community | Context Pack |
-| Full project operations | Epismo Basics + Project Tracking + Workflow Hub |
+| Goal                                             | Skills to load                                   |
+| ------------------------------------------------ | ------------------------------------------------ |
+| Resume work after switching tools                | Context Pack                                     |
+| Hand off a task to a teammate                    | Context Pack                                     |
+| Add tasks, update status, plan a sprint          | Epismo Basics + Project Tracking                 |
+| Find and reuse a community workflow              | Epismo Basics + Workflow Pack                    |
+| Capture a proven process and publish it          | Epismo Basics + Workflow Pack                    |
+| Delegate work to an AI agent with clear criteria | Epismo Basics + Project Tracking                 |
+| Publish a best-practice guide for the community  | Context Pack                                     |
+| Full project operations                          | Epismo Basics + Project Tracking + Workflow Pack |
 
 ## Quick Start
 

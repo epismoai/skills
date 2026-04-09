@@ -1,10 +1,10 @@
 # Runbook
 
 Governs day-to-day operational writes on tasks and goals.
-For workflow release/update/deprecate, use [Workflow Release](../../workflow-hub/references/release.md).
+For workflow release/update/deprecate, use [Workflow Release](../../workflow-pack/references/release.md).
 For query/filter semantics, use [Search & Filter](./search.md).
 Surface conventions from [Epismo Basics](../../epismo-basics/SKILL.md).
-Tracks hold project execution state; assets hold reusable stock content such as workflows — see [Workflow Hub](../../workflow-hub/SKILL.md).
+Tracks hold project execution state; packs hold reusable stock content such as workflows — see [Workflow Pack](../../workflow-pack/SKILL.md).
 
 Status values must match entity-specific definitions. `blocked_by_dependency` is a derived queue state, not a status field. Scope semantics and status definitions live in [Search & Filter](./search.md).
 
@@ -25,13 +25,13 @@ When in doubt between New Item Creation and Large-Scale Planning, prefer New Ite
 
 Run before structural changes. Skip for simple partial updates and single-item creation.
 
-1. **Diagnose** — run `search track` for current goals and tasks, then scan reusable workflows through [Workflow Hub — Search & Discovery](../../workflow-hub/references/search.md). Separate planned items from actively-moving items.
+1. **Diagnose** — run `search track` for current goals and tasks, then scan reusable workflows through [Workflow Pack — Search & Discovery](../../workflow-pack/references/search.md). Separate planned items from actively-moving items.
    → Output: current state summary.
 2. **Select mode** — choose one mode from the selector above. State why alternatives were rejected.
    → Output: chosen mode + one-line rationale.
 3. **Design contracts** — for each planned change, define owner, expected output, and true prerequisites. Keep independent work parallel.
    → Output: ownership and dependency map.
-4. **Confirm destination** — write to tracks first. If reusable structure is clearly needed, hand off workflow authoring to [Workflow Hub](../../workflow-hub/SKILL.md).
+4. **Confirm destination** — write to tracks first. If reusable structure is clearly needed, hand off workflow authoring to [Workflow Pack](../../workflow-pack/SKILL.md).
    → Output: write destination confirmed.
 5. **Set checkpoint** — define the smallest useful next review point (date, event, or deliverable).
    → Output: next review trigger.
@@ -118,13 +118,13 @@ Readiness checks:
 - Why reuse is insufficient is explicit.
 - Project scope confirmed.
 
-1. Run reuse check through [Workflow Hub — Search & Discovery](../../workflow-hub/references/search.md#reuse-scan).
+1. Run reuse check through [Workflow Pack — Search & Discovery](../../workflow-pack/references/search.md#reuse-scan).
 2. Document why existing options do not fit.
 3. Propose minimal viable multi-step structure with owners and dependencies.
 4. Obtain approval if required (see [Write Safety](#write-safety-and-approval-gate)).
 5. Materialize only after confirmation.
 
-Typical writes: multiple `upsert track` operations. If the result should become a reusable workflow asset, hand off to [Workflow Hub](../../workflow-hub/SKILL.md).
+Typical writes: multiple `upsert track` operations. If the result should become a reusable workflow pack, hand off to [Workflow Pack](../../workflow-pack/SKILL.md).
 
 ### 4) Recovery and Backlog Hygiene
 
@@ -179,7 +179,7 @@ Before any write:
 
 If the user has not answered a clarification question, do not write. Continue read-only analysis and report the pending decision.
 
-For workflow release/update/deprecate, apply [Workflow Release — Approval Boundary](../../workflow-hub/references/release.md#approval-boundary).
+For workflow release/update/deprecate, apply [Workflow Release — Approval Boundary](../../workflow-pack/references/release.md#approval-boundary).
 
 ## Operation Output
 
@@ -187,7 +187,7 @@ After every operation, return this structure. Prefer names and titles in user-fa
 
 1. **Situation** — what is active now.
 2. **Delta** — what changed (created, updated, deleted) or why no write occurred.
-3. **Evidence** — which tracks, assets, or external sources informed the decision.
+3. **Evidence** — which tracks, packs, or external sources informed the decision.
 4. **Risks / decisions** — open questions or items needing confirmation. If a task was marked `done`, note whether downstream tasks are now ready or still blocked.
 5. **Next action** — the single smallest useful next step.
 
@@ -195,6 +195,6 @@ After every operation, return this structure. Prefer names and titles in user-fa
 
 For common errors (auth, credits, rate limits, timeouts), see [Epismo — Error Handling](../../epismo-basics/SKILL.md#error-handling).
 
-| Error | Action |
-| ----- | ------ |
+| Error                                    | Action                                                                          |
+| ---------------------------------------- | ------------------------------------------------------------------------------- |
 | `Payment Required: Insufficient credits` | Stop. See [Credit Purchase](../../epismo-basics/references/credit-purchase.md). |
