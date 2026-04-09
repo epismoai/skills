@@ -4,7 +4,7 @@ Discovery and loading patterns for workflow assets.
 For release and update decisions, see [Release](./release.md).
 For visibility and sharing, see [Visibility & Sharing](./visibility.md).
 
-This reference shows CLI forms. Derive MCP tool names mechanically: spaces → underscores.
+This reference shows CLI forms. For surface conventions, see [Epismo Basics — Surface Conventions](../../epismo-basics/SKILL.md#surface-conventions).
 
 ## Operations
 
@@ -14,7 +14,6 @@ This reference shows CLI forms. Derive MCP tool names mechanically: spaces → u
 | `get asset` | `epismo asset get --id <id>` | `[--full]` `[--step-id <step-id-1>,<step-id-2>]` |
 | `upsert asset` | `epismo asset upsert` | `--input @asset.json` |
 | `delete asset` | `epismo asset delete --id <id>` | — |
-| `import asset` | `epismo asset import --id <id> --project-id <project-id>` | `[--item-ids <item-ids>]` |
 | `like asset` | `epismo asset like --id <id>` | `--liked` / `--no-liked` |
 
 ## Quick Reference
@@ -69,11 +68,7 @@ epismo asset get --id <asset-id> --step-id <step-id-1>,<step-id-2>
 
 ## Reuse Scan
 
-Search in this order to avoid rebuilding something that already exists:
-
-1. `visibility=["private"]` + `query=<topic>`
-2. `like="liked"` + `query=<topic>`
-3. `visibility=["public"]` + `query=<topic>`
+Search in this order to avoid rebuilding something that already exists — see [Epismo Basics — Asset Reuse Scan Order](../../epismo-basics/SKILL.md#asset-reuse-scan-order).
 
 If a strong match exists, prefer adapting it over creating a new workflow from scratch.
 

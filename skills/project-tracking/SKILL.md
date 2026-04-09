@@ -12,6 +12,8 @@ Operate on tasks and goals in Epismo projects — from a quick status update to 
 > For connection setup, surface conventions, scope model, share URL resolution, and error handling, see [Epismo Basics](../epismo-basics/SKILL.md).
 > For workflow asset discovery and release, see [Workflow Hub](../workflow-hub/SKILL.md).
 
+> **Surface selection:** CLI and MCP connect to the same Epismo service. Use CLI if available; fall back to MCP if not. Never use both in the same session.
+
 ## Operations
 
 | Operation | CLI | MCP |

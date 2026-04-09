@@ -161,7 +161,7 @@ Recovery thresholds (calibrate per project):
 Before any write:
 
 1. Confirm active workspace and target project scope.
-2. Resolve entity and assignee IDs from current Epismo results (MCP references or CLI JSON output).
+2. Resolve entity and assignee IDs from current Epismo results.
 3. Classify change type: `partial update` / `new item creation` / `large-scale planning` / `recovery structural` / `destructive or visibility change`.
 
 **Require explicit approval for:**

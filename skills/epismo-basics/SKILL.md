@@ -16,14 +16,16 @@ Skills that build on this:
 
 ## Connection
 
-Choose one surface and stick with it within a session.
+CLI and MCP are two interfaces to the **same Epismo service** — same account, same data, same tools. Choose based on your environment, not based on what you're trying to do.
 
-- **MCP** — for tool-based agents. Requires an OAuth access token with `scope=mcp` and the correct `resource`. Standard MCP clients connect automatically via OAuth metadata discovery; no manual token setup required.
-- **CLI** — for shell-driven agents. Use `epismo login` or set `EPISMO_TOKEN`.
+- **CLI** — preferred when available. Run `epismo login` once; credentials are stored locally.
+- **MCP** — for tool-based agent environments. MCP clients connect via OAuth metadata discovery; no manual token setup required.
+
+**When both are available, use CLI.** If only MCP is available, use MCP. Never try to use both in the same session.
 
 If access is not ready, complete auth setup first — see the `github.com/epismoai/skills` README.
 
-### CLI Auth
+### Auth Setup (CLI)
 
 ```bash
 epismo login --email you@example.com   # OTP flow (default, no browser)
@@ -31,7 +33,9 @@ epismo login --browser                  # browser-based flow
 epismo whoami                           # verify
 ```
 
-### MCP Token (manual / scripted setup)
+### Auth Setup (MCP — manual / scripted)
+
+MCP auth is handled automatically by standard MCP clients via OAuth metadata discovery. If you need to set up a token manually (e.g. for a custom client):
 
 ```bash
 # 1. Request OTP
@@ -50,7 +54,7 @@ curl -sX POST https://api.epismo.ai/oauth/token \
 curl -sX GET https://api.epismo.ai/v1/workspaces \
   -H "Authorization: Bearer <API_TOKEN>"
 
-# 4. Exchange for MCP token
+# 4. Exchange for MCP-scoped token
 curl -sX POST https://api.epismo.ai/v1/mcp/tokens \
   -H "Authorization: Bearer <API_TOKEN>" \
   -H "Content-Type: application/json" \
@@ -193,7 +197,7 @@ Stop iterating when a page returns fewer than 20 results.
 | ----- | ------ |
 | `Payment Required: Insufficient credits` | Stop. Check balance and purchase credits — see [Credit Purchase](./references/credit-purchase.md). |
 | `Permission denied` | Re-check accessible projects and resource ownership. |
-| `Unauthorized` / `403` | Verify MCP token or `EPISMO_TOKEN` (CLI), active workspace, and subscription. |
+| `Unauthorized` / `403` | Re-authenticate: run `epismo login` (CLI) or reconnect via MCP OAuth. Verify active workspace and subscription. |
 | `Not Found` / `404` | Confirm the resource ID. It may have been deleted or the share token may have expired. |
 | Rate limit / `429` | Wait and retry with backoff. Inform user if persistent. |
 | Timeout | Retry once. If persistent, reduce payload size or split the operation. |

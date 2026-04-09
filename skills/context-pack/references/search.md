@@ -4,8 +4,7 @@ Discovery and loading patterns for context assets.
 For content templates, see [Content Templates](../templates/content.md).
 For visibility and sharing, see [Visibility & Sharing](./visibility.md).
 
-This reference shows CLI forms. Derive MCP tool names mechanically: spaces → underscores.
-Surface conventions are defined in [Context Pack](../SKILL.md#operations-context-assets).
+This reference shows CLI forms. For surface conventions, see [Epismo Basics — Surface Conventions](../../epismo-basics/SKILL.md#surface-conventions).
 
 ## Surface Resolution
 
@@ -165,20 +164,8 @@ Look for titles containing "Handoff" or your name in the results.
 
 ### Reuse scan before creating a new asset
 
-Search private assets first, then liked, then public — to avoid duplicating something that already exists.
-
-1. `visibility=["private"]` + `query=<topic>`
-2. `like="liked"` + `query=<topic>`
-3. `visibility=["public"]` + `query=<topic>`
-
-If a close match is found, prefer `get asset` over creating a new one.
+See [Epismo Basics — Asset Reuse Scan Order](../../epismo-basics/SKILL.md#asset-reuse-scan-order).
 
 ## Pagination
 
-All `search asset` calls use page size 20. For large result sets, iterate `page=1, 2, 3…` and merge results.
-
-```bash
-epismo asset search --type context --filter '{"visibility":["public"]}' --page 2
-```
-
-Stop iterating when a page returns fewer than 20 results.
+See [Epismo Basics — Pagination](../../epismo-basics/SKILL.md#pagination).
