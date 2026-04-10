@@ -1,6 +1,6 @@
 ---
 name: workflow-pack
-description: "Discover, reuse, and release workflow packs in Epismo. Trigger on: 'find a workflow', 'new workflow', 'create workflow', 'capture pattern', 'adapt a workflow', 'reuse this pattern', 'update workflow', 'organize steps', 'release this as a workflow', 'publish a workflow', 'deprecate workflow', or any intent to search community workflows or capture a proven execution pattern for reuse."
+description: "Discover, reuse, and release workflow packs in Epismo. Trigger on: 'find a workflow', 'get <id>', 'read <alias>', 'new workflow', 'create workflow', 'capture pattern', 'adapt a workflow', 'reuse this pattern', 'update workflow', 'organize steps', 'release this as a workflow', 'publish a workflow', 'deprecate workflow', or any intent to search community workflows or capture a proven execution pattern for reuse."
 ---
 
 # Workflow Pack
@@ -18,7 +18,7 @@ Discover, adapt, and release reusable workflow packs in Epismo — from finding 
 | Command                 | Natural language triggers                                             | →                     |
 | ----------------------- | --------------------------------------------------------------------- | --------------------- |
 | `new`                   | create workflow, capture pattern, adapt a pattern, new workflow       | [NEW](#new)           |
-| `use <id\|alias>`       | load this ID, open alias, load workflow                               | [USE](#use)           |
+| `get <id\|alias>`       | get this ID, load this ID, read alias, open alias, load workflow      | [GET](#get)           |
 | `find <query>`          | find a workflow, search workflows, what workflows do I have           | [FIND](#find)         |
 | `update [<id\|alias>]`  | edit steps, update workflow, modify steps                             | [UPDATE](#update)     |
 | `organize`              | reorganize steps, reorder, clean up workflow                          | [ORGANIZE](#organize) |
@@ -30,7 +30,7 @@ Discover, adapt, and release reusable workflow packs in Epismo — from finding 
 | Operation      | CLI                                                                                                         | MCP                  |
 | -------------- | ----------------------------------------------------------------------------------------------------------- | -------------------- |
 | `search pack`  | `epismo pack search --type workflow --filter '{...}'`                                                       | `epismo_pack_search` |
-| `get pack`     | `epismo pack get --id <id> [--full] [--step-id <ids>]`<br>`epismo pack get --type workflow --alias <alias>` | `epismo_pack_get`    |
+| `get pack`     | `epismo pack get --id <id> [--full] [--step-id <ids>]`<br>`epismo pack get --alias <alias>` | `epismo_pack_get`    |
 | `upsert pack`  | `epismo pack upsert --input '<json>'`                                                                       | `epismo_pack_upsert` |
 | `delete pack`  | `epismo pack delete --id <id>`                                                                              | `epismo_pack_delete` |
 | `like pack`    | `epismo pack like --id <id> --liked`                                                                        | `epismo_pack_like`   |
@@ -121,25 +121,36 @@ step      <step-id>      <step-title>
 
 ---
 
-## USE
+## GET
 
-**Goal:** load a workflow when the user supplies an ID, alias, or short label.
+**Goal:** fetch a workflow by ID, alias, or explicit read/open target.
+
+### Route intent before resolving
+
+Prefer **alias-first** unless the input is obviously a search query.
+
+| Input pattern | Route | Why |
+| --- | --- | --- |
+| `get ...`, `use ...`, `load ...`, `open ...`, `read ...` | [GET](#get) | Explicit retrieval |
+| `find ...`, `search ...`, `what workflows do I have`, `show workflows` | [FIND](#find) | Explicit discovery |
+| Bare UUID | [GET](#get) | IDs are unambiguous |
+| Bare alias-shaped token | [GET](#get) | Try alias first, then search if it misses |
+| Short ambiguous phrase | [GET](#get) | Try alias first, then search if it misses |
+| Obvious search query, question, or long descriptive phrase | [FIND](#find) | Discovery intent is clearer than alias intent |
 
 ### Resolve the input
 
-| Input looks like    | Try first             | Fallback                                        |
-| ------------------- | --------------------- | ----------------------------------------------- |
-| UUID                | `get pack` by `id`    | —                                               |
-| `@handle/name`      | `get pack` by `alias` | tell user if not found                          |
-| short word / phrase | `get pack` by `alias` | if not found → [FIND](#find) with it as keyword |
-
-Do not ask the user to clarify before trying both paths.
+1. UUID → `get pack --id`.
+2. `@handle/name` or one compact token like `prd-review` → `get pack --alias`; if it misses, run [FIND](#find) with the same text.
+3. Short phrase like `deployment checklist` → try `get pack --alias` first; if it misses, run [FIND](#find).
+4. Question, explicit search wording, or long descriptive text → [FIND](#find) first.
+5. `get/read/open/use <target>` always counts as retrieval intent.
 
 `get pack` — default returns outline only; pass `--full` for all steps, or `--step-id` to load specific steps.
 
 ```bash
 epismo pack get --id <pack-id> --full
-epismo pack get --type workflow --alias <alias> --full
+epismo pack get --alias <alias> --full
 epismo pack get --id <pack-id> --step-id <step-id-1>,<step-id-2>
 ```
 
@@ -149,7 +160,7 @@ epismo pack get --id <pack-id> --step-id <step-id-1>,<step-id-2>
 
 **Goal:** discover the right workflow when the ID is not known.
 
-`search pack` — scan titles only (no step content). Search in this order:
+`search pack` — scan titles only (no step content). Use this for natural-language discovery requests and multi-keyword topic phrases. Search in this order:
 
 1. `type: workflow`, `query: <topic>`, `filter: { visibility: ["private"] }`
 2. `type: workflow`, `query: <topic>`, `filter: { like: "liked" }`
@@ -167,7 +178,15 @@ For filter keys, sort options, and search recipes, see [Search & Discovery](./re
 
 ### ID or alias known
 
-`get pack` → `upsert pack` with `id` and updated `steps` or fields.
+Always fetch before writing.
+
+`get pack` → inspect current steps and metadata → `upsert pack` with `id` and updated `steps` or fields.
+
+For `update <alias> based on this conversation`:
+
+- modify the steps where the new guidance belongs
+- add new steps only for new execution work
+- keep `dependsOn`, ownership, and ordering coherent
 
 ### ID unknown
 

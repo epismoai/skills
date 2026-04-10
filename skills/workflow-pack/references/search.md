@@ -48,6 +48,16 @@ This reference shows CLI forms. For surface conventions, see [Epismo Basics — 
 
 Use the two-step scan-then-fetch pattern to avoid loading full workflow content before you know the candidate is relevant.
 
+## Query vs Alias
+
+Use `get pack --alias` first for alias-shaped targets.
+
+- Good alias candidates: `@handle/name`, `prd-review`, `incident_postmortem`
+- Short phrases can still be aliases: try alias first unless the input is obviously a search query
+- Search-first inputs: `what workflows do I have for release`, `find release workflow`, longer descriptive requests
+- `get/read/open <target>` → try alias or ID first, then `search pack --query` if it misses
+- For bare multi-word input, default to `search pack --query` rather than alias resolution.
+
 ### Step 1 — Scan titles
 
 ```bash
