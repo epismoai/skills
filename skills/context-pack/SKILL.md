@@ -1,6 +1,6 @@
 ---
 name: context-pack
-description: "Pack, share, and load context using Epismo context packs. Trigger on: 'pack this', 'new pack', 'use <id>', 'load my context', 'what context do I have', 'restore session', 'save this context', 'share with my team', 'pack this up', 'hand this off', 'publish this guide', 'organize my packs', or any intent to persist or retrieve knowledge across tools or sessions."
+description: "Pack, share, and load context using Epismo context packs. Trigger on: 'pack this', 'new pack', 'get <id>', 'read <alias>', 'load my context', 'what context do I have', 'restore session', 'save this context', 'share with my team', 'pack this up', 'hand this off', 'publish this guide', 'organize my packs', or any intent to persist or retrieve knowledge across tools or sessions."
 ---
 
 # Context Pack
@@ -20,7 +20,7 @@ The unit of organization is a **block** inside a pack. The goal is one well-stru
 | `pack`                 | pack this, save this, summarize session                               | [PACK](#pack)         |
 | `new`                  | new pack, start fresh, hand off a task, share project status          | [NEW](#new)           |
 | `publish [<id>]`       | publish this, make this public, publish a guide, share with community | [PUBLISH](#publish)   |
-| `use <id\|alias>`      | load this ID, restore from ID, load alias                             | [USE](#use)           |
+| `get <id\|alias>`      | get this ID, load this ID, restore from ID, read alias, open alias    | [GET](#get)           |
 | `find <query>`         | what context do I have, load my context, search                       | [FIND](#find)         |
 | `update [<id\|alias>]` | edit this pack, update my last pack                                   | [UPDATE](#update)     |
 | `organize`             | reorganize blocks, split this, clean up                               | [ORGANIZE](#organize) |
@@ -28,17 +28,17 @@ The unit of organization is a **block** inside a pack. The goal is one well-stru
 
 ## Operations (context packs)
 
-| Operation      | CLI                                                                                                        | MCP                  |
-| -------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
-| `search pack`  | `epismo pack search --type context [--query <keywords>] [--filter '{...}']`                                | `epismo_pack_search` |
-| `get pack`     | `epismo pack get --id <id> [--full] [--block-id <id>]`<br>`epismo pack get --type context --alias <alias>` | `epismo_pack_get`    |
-| `upsert pack`  | `epismo pack upsert --input '<json>'`                                                                      | `epismo_pack_upsert` |
-| `delete pack`  | `epismo pack delete --id <id>`                                                                             | `epismo_pack_delete` |
-| `like pack`    | `epismo pack like --id <id> --liked`                                                                       | `epismo_pack_like`   |
-| `upsert alias` | `epismo alias upsert --type context --id <id> --alias <name>`                                              | —                    |
-| `get alias`    | `epismo alias get --alias <name>`                                                                          | —                    |
-| `list aliases` | `epismo alias list --type context`                                                                         | —                    |
-| `delete alias` | `epismo alias delete --alias <name>`                                                                       | —                    |
+| Operation      | CLI                                                                                         | MCP                  |
+| -------------- | ------------------------------------------------------------------------------------------- | -------------------- |
+| `search pack`  | `epismo pack search --type context [--query <keywords>] [--filter '{...}']`                 | `epismo_pack_search` |
+| `get pack`     | `epismo pack get --id <id> [--full] [--block-id <id>]`<br>`epismo pack get --alias <alias>` | `epismo_pack_get`    |
+| `upsert pack`  | `epismo pack upsert --input '<json>'`                                                       | `epismo_pack_upsert` |
+| `delete pack`  | `epismo pack delete --id <id>`                                                              | `epismo_pack_delete` |
+| `like pack`    | `epismo pack like --id <id> --liked`                                                        | `epismo_pack_like`   |
+| `upsert alias` | `epismo alias upsert --type context --id <id> --alias <name>`                               | —                    |
+| `get alias`    | `epismo alias get --alias <name>`                                                           | —                    |
+| `list aliases` | `epismo alias list --type context`                                                          | —                    |
+| `delete alias` | `epismo alias delete --alias <name>`                                                        | —                    |
 
 ---
 
@@ -215,21 +215,31 @@ share    https://epismo.ai/hub/contexts/<id>
 
 ---
 
-## USE
+## GET
 
-**Goal:** load a pack when the user gives an ID, an alias, or a short label that might be either.
+**Goal:** fetch a pack by ID, alias, or explicit read/open target.
+
+### Route intent before resolving
+
+Prefer **alias-first** unless the input is obviously a search query.
+
+| Input pattern                                                           | Route         | Why                                           |
+| ----------------------------------------------------------------------- | ------------- | --------------------------------------------- |
+| `get ...`, `use ...`, `load ...`, `open ...`, `read ...`, `restore ...` | [GET](#get)   | Explicit retrieval                            |
+| `find ...`, `search ...`, `what context do I have`, `show my packs`     | [FIND](#find) | Explicit discovery                            |
+| Bare UUID                                                               | [GET](#get)   | IDs are unambiguous                           |
+| Short ambiguous phrase                                                  | [GET](#get)   | Try alias first, then search if it misses     |
+| Obvious search query, question, or long descriptive phrase              | [FIND](#find) | Discovery intent is clearer than alias intent |
 
 ### Resolve the input
 
-| Input looks like    | Try first             | Fallback                                        |
-| ------------------- | --------------------- | ----------------------------------------------- |
-| UUID                | `get pack` by `id`    | —                                               |
-| `@handle/name`      | `get pack` by `alias` | tell user if not found                          |
-| short word / phrase | `get pack` by `alias` | if not found → [FIND](#find) with it as keyword |
+1. UUID → `get pack --id`.
+2. `@handle/name` or one compact token like `weekly-handoff` → `get pack --alias`; if it misses, run [FIND](#find) with the same text.
+3. Short phrase like `auth refactor handoff` → try `get pack --alias` first; if it misses, run [FIND](#find).
+4. Question, explicit search wording, or long descriptive text → [FIND](#find) first.
+5. `get/read/open/use <target>` always counts as retrieval intent.
 
-When a short word fails alias resolution, treat it as a search keyword rather than an error. Do not ask the user to clarify before trying both paths.
-
-`get pack` — by `id`, or by `alias` with `type: context`. Default returns outline only; pass `--full` for all blocks, or `--block-id` to load a single block.
+`get pack` — by `id`, or by `alias`. Default returns outline only; pass `--full` for all blocks, or `--block-id` to load a single block.
 
 Read the most relevant block first. Continue from there without re-reading history.
 
@@ -239,7 +249,7 @@ Read the most relevant block first. Continue from there without re-reading histo
 
 **Goal:** discover the right pack when the ID is not known.
 
-`search pack` — scan titles only (no full content). Search in this order:
+`search pack` — scan titles only (no full content). Use this for natural-language discovery requests and multi-keyword topic phrases. Search in this order:
 
 1. `type: context`, `query: <topic>`, `filter: { visibility: ["private"] }`
 2. `type: context`, `query: <topic>`, `filter: { like: "liked" }`
@@ -257,7 +267,15 @@ For filter keys, sort options, and search recipes, see [Search & Discovery](./re
 
 ### ID or alias known
 
-`get pack` → `upsert pack` with `id`, updated `"blocks[]"` (include block `"id"` to update existing blocks in place), and updated `"content"` if the top-level intro changed.
+Always fetch before writing.
+
+`get pack` → inspect current blocks → `upsert pack` with `id`, updated `"blocks[]"`, and updated `"content"` if needed.
+
+For `update <alias> based on this conversation`:
+
+- merge new context into the right existing blocks
+- rewrite blocks coherently instead of appending raw notes
+- add a new block only for a distinct new topic
 
 ### ID unknown
 
