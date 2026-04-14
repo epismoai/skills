@@ -20,7 +20,8 @@ Operate on tasks and goals in Epismo projects — from a quick status update to 
 | -------------- | -------------------------------------------------------- | --------------------- |
 | `search track` | `epismo track search --type task\|goal --filter '{...}'` | `epismo_track_search` |
 | `get track`    | `epismo track get --id <id>`                             | `epismo_track_get`    |
-| `upsert track` | `epismo track upsert --input '<json>'`                   | `epismo_track_upsert` |
+| `create track` | `epismo track create --input '<json>'`                   | `epismo_track_create` |
+| `update track` | `epismo track update --id <id> --input '<json>'`         | `epismo_track_update` |
 | `delete track` | `epismo track delete --id <id>`                          | `epismo_track_delete` |
 
 For filter keys, status values, entity relationships, and search recipes, see [Search & Filter](./references/search.md).

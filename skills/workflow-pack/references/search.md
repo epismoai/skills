@@ -8,13 +8,14 @@ This reference shows CLI forms. For surface conventions, see [Epismo Basics — 
 
 ## Operations
 
-| Operation     | CLI command                          | Key flags                                        |
-| ------------- | ------------------------------------ | ------------------------------------------------ |
-| `search pack` | `epismo pack search --type workflow` | `--query <keywords>` `--filter '{...}'`          |
-| `get pack`    | `epismo pack get --id <id>`          | `[--full]` `[--step-id <step-id-1>,<step-id-2>]` |
-| `upsert pack` | `epismo pack upsert`                 | `--input @pack.json`                             |
-| `delete pack` | `epismo pack delete --id <id>`       | —                                                |
-| `like pack`   | `epismo pack like --id <id>`         | `--liked` / `--no-liked`                         |
+| Operation      | CLI command                                    | Key flags                                        |
+| -------------- | ---------------------------------------------- | ------------------------------------------------ |
+| `search pack`  | `epismo pack search --type workflow`           | `--query <keywords>` `--filter '{...}'`          |
+| `get pack`     | `epismo pack get --id <id>`                    | `[--full]` `[--step-id <step-id-1>,<step-id-2>]` |
+| `create pack`  | `epismo pack create`                           | `--input @pack.json`                             |
+| `update pack`  | `epismo pack update --id <id>`                 | `--input @changes.json`                          |
+| `delete pack`  | `epismo pack delete --id <id>`                 | —                                                |
+| `like pack`    | `epismo pack like --id <id>`                   | `--liked` / `--no-liked`                         |
 
 ## Quick Reference
 
@@ -33,8 +34,8 @@ This reference shows CLI forms. For surface conventions, see [Epismo Basics — 
 2. `search pack --type workflow` returns both private and public workflows unless filtered.
 3. `filter.visibility=["private"]` returns only private workflows in the active workspace.
 4. `filter.visibility=["public"]` returns globally discoverable public workflows.
-5. In `upsert pack`, `projects[]` is valid only when `visibility="private"`.
-6. If `visibility` is omitted on pack upsert, default is `private`.
+5. In `create pack` and `update pack`, `projects[]` is valid only when `visibility="private"`.
+6. If `visibility` is omitted on pack create/update, default is `private`.
 7. Keep `query` compact: 2-6 domain keywords.
 
 ## Supported Filter Keys

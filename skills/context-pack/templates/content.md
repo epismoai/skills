@@ -272,7 +272,7 @@ Use when publishing reusable knowledge for a broader audience.
 
 ---
 
-## Minimal Upsert Payload
+## Minimal Create Payload
 
 Use this as the smallest safe starting shape. Add optional fields only when needed.
 
@@ -328,15 +328,16 @@ Use this as the smallest safe starting shape. Add optional fields only when need
 
 ### Updating existing blocks
 
-Pass `"id"` on each block to update it in place. Blocks without `"id"` are added as new. Blocks omitted from the array are removed.
+Use `update pack` with explicit `op` fields. Omitting `"blocks"` keeps all existing blocks unchanged. Passing an empty array `[]` is a no-op. To remove all blocks, send a `"remove"` op for each existing block ID.
 
 ```json
 {
   "id": "<pack-id>",
   "blocks": [
-    { "id": "b001", "title": "Source", "content": "<updated content>" },
-    { "id": "b002", "title": "Summary", "content": "<updated content>" },
-    { "title": "New Block", "content": "<new block content>" }
+    { "op": "update", "id": "b001", "title": "Source", "content": "<updated content>" },
+    { "op": "update", "id": "b002", "title": "Summary", "content": "<updated content>" },
+    { "op": "add", "title": "New Block", "content": "<new block content>" },
+    { "op": "remove", "id": "b003" }
   ]
 }
 ```

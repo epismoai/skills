@@ -14,7 +14,7 @@ Every context pack has a `visibility` field. Choose based on who needs to read t
 | `private`  | Owner and workspace members with access | Only via direct ID or workspace search | Working notes, team rules, handoffs, internal status reports |
 | `public`   | Anyone on Epismo                        | Global search and community discovery  | Best-practice guides, open project norms, reusable templates |
 
-**Default:** `private`. If `visibility` is omitted in an upsert payload, Epismo treats the pack as private.
+**Default:** `private`. If `visibility` is omitted in an update payload, Epismo treats the pack as private.
 
 ### When to choose private
 
@@ -83,7 +83,7 @@ The Epismo share URL format is:
 https://epismo.ai/share/{token}
 ```
 
-Obtain the share token from the upsert response or from the Epismo UI. The token resolves to a redirect at:
+Obtain the share token from the create/update response or from the Epismo UI. The token resolves to a redirect at:
 
 ```
 https://epismo.ai/hub/contexts/{pack-id}

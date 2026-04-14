@@ -82,18 +82,28 @@ When the user refers to "my project", resolve both layers before writing:
 
 ## Resolving Share URLs
 
-`epismo.ai/share/{token}` resolves to a resource without credentials by following the HTTP redirect.
+Share URLs resolve to a resource without credentials by following the HTTP redirect.
+
+- Public packs typically use `https://epismo.ai/share/{token}`.
+- Internal/private workspace packs may use `https://{workspace}.epismo.ai/share/{token}`.
+- Do not assume the host is always the root domain; preserve the original host from the share URL.
 
 ```bash
 # curl
 curl -s -o /dev/null -w "%{redirect_url}" "https://epismo.ai/share/${TOKEN}"
 # → https://epismo.ai/hub/workflows/{id}
 # → https://epismo.ai/hub/contexts/{id}
+
+# internal/private packs may redirect from a workspace subdomain instead
+curl -s -o /dev/null -w "%{redirect_url}" "https://${WORKSPACE}.epismo.ai/share/${TOKEN}"
+# → https://${WORKSPACE}.epismo.ai/hub/workflows/{id}
+# → https://${WORKSPACE}.epismo.ai/hub/contexts/{id}
 ```
 
 ```typescript
 // fetch (Node.js)
-const res = await fetch(`https://epismo.ai/share/${token}`, {
+const shareUrl = new URL(process.argv[2]);
+const res = await fetch(shareUrl, {
   redirect: "manual",
 });
 const location = res.headers.get("location") ?? "";
@@ -108,7 +118,7 @@ const contextMatch = location.match(/\/hub\/contexts\/([^/?#]+)/);
 | `/hub/workflows/{id}` | `workflow` pack |
 | `/hub/contexts/{id}`  | `context` pack  |
 
-Use the resolved `id` with `get pack` on any surface.
+Use the resolved `id` with `get pack` on any surface. If the original share URL is on a workspace subdomain, keep using that host when handing the link back to the user.
 
 ---
 

@@ -11,7 +11,8 @@ For reusable workflow discovery, see [Workflow Pack — Search & Discovery](../.
 | -------------- | --------------------- | -------------------------------------- |
 | `search track` | `epismo track search` | `--type task\|goal` `--filter '{...}'` |
 | `get track`    | `epismo track get`    | `--id <id>`                            |
-| `upsert track` | `epismo track upsert` | `--input @item.json`                   |
+| `create track` | `epismo track create` | `--input @item.json`                   |
+| `update track` | `epismo track update` | `--id <id>` `--input @item.json`       |
 | `delete track` | `epismo track delete` | `--id <id>`                            |
 
 ## Quick Reference

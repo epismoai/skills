@@ -36,14 +36,15 @@ Run before structural changes. Skip for simple partial updates and single-item c
 5. **Set checkpoint** — define the smallest useful next review point (date, event, or deliverable).
    → Output: next review trigger.
 
-## Minimal Upsert Payloads
+## Minimal Payloads
 
 Use these as the smallest safe starting shapes for CLI `--input` payloads. Add optional fields only when needed.
 
-### Task
+### Create — Task
 
 ```json
 {
+  "type": "task",
   "title": "Investigate update task error",
   "projects": ["pj_123"],
   "task": {
@@ -52,15 +53,26 @@ Use these as the smallest safe starting shapes for CLI `--input` payloads. Add o
 }
 ```
 
-### Goal
+### Create — Goal
 
 ```json
 {
+  "type": "goal",
   "title": "Release agent task assignment",
   "projects": ["pj_123", "pj_456"],
   "goal": {
     "status": "not_started",
     "progress": 0
+  }
+}
+```
+
+### Update (PATCH — omit fields to keep existing)
+
+```json
+{
+  "task": {
+    "status": "done"
   }
 }
 ```
@@ -86,7 +98,7 @@ Readiness checks:
 5. If step 3 applies, read downstream dependents and separate `ready_now`, `blocked_by_dependency`, and `none`.
 6. Report exact delta, downstream result, and confirm unchanged structure.
 
-Typical writes: `upsert track` with entity type `task` or `goal`, and field-level changes only.
+Typical writes: `update track` with field-level changes only (PATCH — omit unchanged fields).
 
 ### 2) New Item Creation
 
@@ -104,7 +116,7 @@ Readiness checks:
 3. Create one item with owner, due date, and minimal context.
 4. Report created item and any linked references (goal, parent task, dependencies).
 
-Typical writes: one `upsert track` for a `task` or `goal`.
+Typical writes: one `create track` for a `task` or `goal`.
 
 ### 3) Large-Scale Planning
 
@@ -124,7 +136,7 @@ Readiness checks:
 4. Obtain approval if required (see [Write Safety](#write-safety-and-approval-gate)).
 5. Materialize only after confirmation.
 
-Typical writes: multiple `upsert track` operations. If the result should become a reusable workflow pack, hand off to [Workflow Pack](../../workflow-pack/SKILL.md).
+Typical writes: multiple `create track` operations. If the result should become a reusable workflow pack, hand off to [Workflow Pack](../../workflow-pack/SKILL.md).
 
 ### 4) Recovery and Backlog Hygiene
 
