@@ -13,7 +13,7 @@ Every workflow pack has a `visibility` field. Choose based on who the workflow i
 | `private`  | Owner and workspace members with access | Only via direct ID or workspace search | Team-specific workflows, drafts, work in progress        |
 | `public`   | Anyone on Epismo                        | Global search and community discovery  | Proven, generalizable patterns ready for community reuse |
 
-**Default:** `private`. If `visibility` is omitted in an upsert payload, Epismo treats the pack as private.
+**Default:** `private`. If `visibility` is omitted in a create or update payload, Epismo treats the pack as private.
 
 ### When to choose private
 
@@ -65,7 +65,7 @@ After publishing, deliver to the intended audience via share URL.
 
 ### Share URL
 
-Obtain the share token from the upsert response or the Epismo UI. Resolve it to a pack ID:
+Obtain the share token from the create or update response or the Epismo UI. Resolve it to a pack ID:
 
 ```bash
 curl -s -o /dev/null -w "%{redirect_url}" "https://epismo.ai/share/${TOKEN}"

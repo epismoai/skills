@@ -63,6 +63,7 @@ Candidate shortlist:
 - Add project-specific: {steps}
 - Ownership: AI-owned {steps} / Human-owned {steps}
 - Destination: {project tracks / private workflow pack / both}
+  - If tracks: use `apply track` with step IDs as client labels — `dependsOn` cross-references resolve in one request
 
 ### Report
 

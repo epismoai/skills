@@ -32,7 +32,8 @@ The unit of organization is a **block** inside a pack. The goal is one well-stru
 | -------------- | ------------------------------------------------------------------------------------------- | -------------------- |
 | `search pack`  | `epismo pack search --type context [--query <keywords>] [--filter '{...}']`                 | `epismo_pack_search` |
 | `get pack`     | `epismo pack get --id <id> [--full] [--block-id <id>]`<br>`epismo pack get --alias <alias>` | `epismo_pack_get`    |
-| `upsert pack`  | `epismo pack upsert --input '<json>'`                                                       | `epismo_pack_upsert` |
+| `create pack`  | `epismo pack create --input '<json>'`                                                       | `epismo_pack_create` |
+| `update pack`  | `epismo pack update --id <id> --input '<json>'`                                             | `epismo_pack_update` |
 | `delete pack`  | `epismo pack delete --id <id>`                                                              | `epismo_pack_delete` |
 | `like pack`    | `epismo pack like --id <id> --liked`                                                        | `epismo_pack_like`   |
 | `upsert alias` | `epismo alias upsert --type context --id <id> --alias <name>`                               | —                    |
@@ -67,26 +68,23 @@ Infer 2–4 topic keywords from the current session. Search private packs (title
 
 The pack should read well from scratch at any point. Do not leave stale or contradicted information in place.
 
-### Step 3 — Upsert and return
+### Step 3 — Update and return
 
-`upsert pack`:
+`update pack`:
 
 ```json
 {
   "id": "<existing-id>",
   "content": "<top-level summary or intro — does not include block content>",
   "blocks": [
-    {
-      "id": "<existing-block-id>",
-      "title": "<block-title>",
-      "content": "<updated block content>"
-    },
-    { "title": "<new-block-title>", "content": "<new block content>" }
+    { "op": "update", "id": "<existing-block-id>", "title": "<block-title>", "content": "<updated block content>" },
+    { "op": "add", "title": "<new-block-title>", "content": "<new block content>" }
   ]
 }
 ```
 
-- Pass `"id"` on existing blocks to update them in place. Omit `"id"` to add a new block.
+- Omitted fields are left unchanged. Omitting `"blocks"` means no block changes.
+- `"op": "update"` updates an existing block by ID. `"op": "add"` adds a new block. `"op": "remove"` deletes a block by ID (only `"id"` needed).
 - `"content"` at the top level is a brief intro or summary. Block content lives in `"blocks[]"`, not in the top-level `"content"`.
 
 ```
@@ -133,7 +131,7 @@ Content rules:
 
 Default `private`. Use [PUBLISH](#publish) to go public.
 
-`upsert pack`:
+`create pack`:
 
 ```json
 {
@@ -178,7 +176,7 @@ Two paths:
 
 1. `get pack` — fetch the pack. Run the [Public Review Gate](./references/visibility.md#public-review-gate). Flag issues before proceeding.
 2. Confirm with user: **"Publish '{title}' (`{id}`) as public under category `{category}`?"**
-3. `upsert pack`:
+3. `update pack`:
 
 ```json
 {
@@ -194,7 +192,7 @@ Write for an external reader using the public guide template in [Content Templat
 
 Choose category carefully — it determines how people find this pack. See [Category Reference](./references/visibility.md#category-reference).
 
-Confirm with user, then `upsert pack`:
+Confirm with user, then `create pack`:
 
 ```json
 {
@@ -269,7 +267,7 @@ For filter keys, sort options, and search recipes, see [Search & Discovery](./re
 
 Always fetch before writing.
 
-`get pack` → inspect current blocks → `upsert pack` with `id`, updated `"blocks[]"`, and updated `"content"` if needed.
+`get pack` → inspect current blocks → `update pack` with `id` and block operations using `op` fields.
 
 For `update <alias> based on this conversation`:
 
@@ -303,7 +301,7 @@ The most common need is not managing many packs — it's making the blocks insid
 | A block is no longer relevant                         | **Remove** — delete the block from the pack                   |
 | The whole pack is no longer needed                    | **Delete** — delete the pack (needs approval)                 |
 
-All changes are applied via `upsert pack` with the updated `"blocks[]"` array. Pass `"id"` on each block to update in place; omit blocks you want to remove. `delete pack` requires explicit user approval.
+All changes are applied via `update pack` using `op` fields. Use `"op": "add"` for new blocks, `"op": "update"` for existing ones, `"op": "remove"` to delete a block by ID. `delete pack` requires explicit user approval.
 
 ---
 
@@ -311,7 +309,7 @@ All changes are applied via `upsert pack` with the updated `"blocks[]"` array. P
 
 1. **Default private** — `pack`, `new`, and `update` always write private. Use [PUBLISH](#publish) to go public.
 2. **No silent writes** — if scope is unclear, ask once before writing.
-3. **Approval required** — public publication, deletion, and overwriting another owner's pack require explicit user confirmation before upsert.
+3. **Approval required** — public publication, deletion, and overwriting another owner's pack require explicit user confirmation before writing.
 
 For the full approval matrix, see [Visibility & Sharing — Approval Boundary](./references/visibility.md#approval-boundary).
 

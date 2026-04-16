@@ -27,17 +27,18 @@ Discover, adapt, and release reusable workflow packs in Epismo — from finding 
 
 ## Operations
 
-| Operation      | CLI                                                                                                         | MCP                  |
-| -------------- | ----------------------------------------------------------------------------------------------------------- | -------------------- |
-| `search pack`  | `epismo pack search --type workflow --filter '{...}'`                                                       | `epismo_pack_search` |
+| Operation      | CLI                                                                                         | MCP                  |
+| -------------- | ------------------------------------------------------------------------------------------- | -------------------- |
+| `search pack`  | `epismo pack search --type workflow --filter '{...}'`                                       | `epismo_pack_search` |
 | `get pack`     | `epismo pack get --id <id> [--full] [--step-id <ids>]`<br>`epismo pack get --alias <alias>` | `epismo_pack_get`    |
-| `upsert pack`  | `epismo pack upsert --input '<json>'`                                                                       | `epismo_pack_upsert` |
-| `delete pack`  | `epismo pack delete --id <id>`                                                                              | `epismo_pack_delete` |
-| `like pack`    | `epismo pack like --id <id> --liked`                                                                        | `epismo_pack_like`   |
-| `upsert alias` | `epismo alias upsert --type workflow --id <id> --alias <name>`                                              | —                    |
-| `get alias`    | `epismo alias get --alias <name>`                                                                           | —                    |
-| `list aliases` | `epismo alias list --type workflow`                                                                         | —                    |
-| `delete alias` | `epismo alias delete --alias <name>`                                                                        | —                    |
+| `create pack`  | `epismo pack create --input '<json>'`                                                       | `epismo_pack_create` |
+| `update pack`  | `epismo pack update --id <id> --input '<json>'`                                             | `epismo_pack_update` |
+| `delete pack`  | `epismo pack delete --id <id>`                                                              | `epismo_pack_delete` |
+| `like pack`    | `epismo pack like --id <id> --liked`                                                        | `epismo_pack_like`   |
+| `upsert alias` | `epismo alias upsert --type workflow --id <id> --alias <name>`                              | —                    |
+| `get alias`    | `epismo alias get --alias <name>`                                                           | —                    |
+| `list aliases` | `epismo alias list --type workflow`                                                         | —                    |
+| `delete alias` | `epismo alias delete --alias <name>`                                                        | —                    |
 
 ---
 
@@ -62,8 +63,8 @@ epismo pack search --type workflow --query "<topic>" --filter '{"visibility":["p
 
 | Result        | Action                                                                     |
 | ------------- | -------------------------------------------------------------------------- |
-| Strong match  | Fetch full content → adapt steps → [Step 3 — Upsert](#step-3--upsert-1)    |
-| Partial match | Fetch → use as base, modify steps → [Step 3 — Upsert](#step-3--upsert-1)   |
+| Strong match  | Fetch full content → adapt steps → [Step 3 — Create](#step-3--create)      |
+| Partial match | Fetch → use as base, modify steps → [Step 3 — Create](#step-3--create)     |
 | No match      | Design steps from scratch → [Step 2 — Design steps](#step-2--design-steps) |
 
 ### Step 2 — Design steps
@@ -83,11 +84,26 @@ Before materializing:
 3. Reassign owners as appropriate for the new context.
 4. Confirm destination: private pack for future reuse, or project tracks for immediate execution.
 
+**To materialize steps as project tracks**, map each workflow step to an `updateDrafts` entry — use the step's `id` (e.g. `s001`) as a client label; the server resolves it to a UUID. Preserve `dependsOn` directly from the workflow steps:
+
+```bash
+epismo track apply --input '{
+  "projects": ["pj_123"],
+  "updateDrafts": [
+    { "id": "s001", "title": "Define scope", "task": { "status": "todo" } },
+    { "id": "s002", "title": "Implement", "task": { "status": "todo", "dependsOn": ["s001"] } },
+    { "id": "s003", "title": "Review and ship", "task": { "status": "todo", "dependsOn": ["s002"] } }
+  ]
+}'
+```
+
 Use [Workflow Patterns — Discovery](./templates/patterns.md#2-workflow-discovery) for structured adaptation reports.
 
-### Step 3 — Upsert
+### Step 3 — Create
 
 Default `private`. Use [RELEASE](#release) to publish publicly.
+
+`create pack`:
 
 ```json
 {
@@ -129,14 +145,14 @@ step      <step-id>      <step-title>
 
 Prefer **alias-first** unless the input is obviously a search query.
 
-| Input pattern | Route | Why |
-| --- | --- | --- |
-| `get ...`, `use ...`, `load ...`, `open ...`, `read ...` | [GET](#get) | Explicit retrieval |
-| `find ...`, `search ...`, `what workflows do I have`, `show workflows` | [FIND](#find) | Explicit discovery |
-| Bare UUID | [GET](#get) | IDs are unambiguous |
-| Bare alias-shaped token | [GET](#get) | Try alias first, then search if it misses |
-| Short ambiguous phrase | [GET](#get) | Try alias first, then search if it misses |
-| Obvious search query, question, or long descriptive phrase | [FIND](#find) | Discovery intent is clearer than alias intent |
+| Input pattern                                                          | Route         | Why                                           |
+| ---------------------------------------------------------------------- | ------------- | --------------------------------------------- |
+| `get ...`, `use ...`, `load ...`, `open ...`, `read ...`               | [GET](#get)   | Explicit retrieval                            |
+| `find ...`, `search ...`, `what workflows do I have`, `show workflows` | [FIND](#find) | Explicit discovery                            |
+| Bare UUID                                                              | [GET](#get)   | IDs are unambiguous                           |
+| Bare alias-shaped token                                                | [GET](#get)   | Try alias first, then search if it misses     |
+| Short ambiguous phrase                                                 | [GET](#get)   | Try alias first, then search if it misses     |
+| Obvious search query, question, or long descriptive phrase             | [FIND](#find) | Discovery intent is clearer than alias intent |
 
 ### Resolve the input
 
@@ -180,7 +196,7 @@ For filter keys, sort options, and search recipes, see [Search & Discovery](./re
 
 Always fetch before writing.
 
-`get pack` → inspect current steps and metadata → `upsert pack` with `id` and updated `steps` or fields.
+`get pack` → inspect current steps and metadata → `update pack` with `id` and step operations using `op` fields.
 
 For `update <alias> based on this conversation`:
 
@@ -208,7 +224,7 @@ step      <step-id>      <step-title>    # when a specific step was updated
 
 **Goal:** improve the step structure of an existing workflow.
 
-`get pack --full` → review all steps → apply changes → `upsert pack`.
+`get pack --full` → review all steps → apply changes → `update pack`.
 
 | Situation                                       | Action                                                              |
 | ----------------------------------------------- | ------------------------------------------------------------------- |
@@ -218,7 +234,7 @@ step      <step-id>      <step-title>    # when a specific step was updated
 | Steps are out of execution order                | **Reorder** — update `dependsOn` chains to reflect correct sequence |
 | The whole workflow is obsolete                  | **Delete** — requires explicit user approval                        |
 
-All changes are applied via `upsert pack` (rewrite the full steps array). `delete pack` requires explicit user approval.
+All changes are applied via `update pack` using `op` fields. Use `"op": "add"` for new steps, `"op": "update"` for existing ones, `"op": "remove"` to delete a step by ID. `delete pack` requires explicit user approval.
 
 ---
 
@@ -248,9 +264,11 @@ Run [Quality Gate](./references/quality.md) before any release decision. All 8 c
 
 Run the pre-decision checks in [Release](./references/release.md) before choosing one of these paths.
 
-### Step 3 — Confirm and upsert
+### Step 3 — Confirm and update
 
 **Confirm with user before writing:** state the workflow title, ID, and target visibility.
+
+`update pack`:
 
 ```json
 {
@@ -283,7 +301,7 @@ share     https://epismo.ai/hub/workflows/<id>
 
 1. **Default private** — `new` and `update` always write private. Use [RELEASE](#release) to go public.
 2. **No silent writes** — if scope is unclear, ask once before writing.
-3. **Approval required** — public publication, deprecation, and overwriting another owner's workflow require explicit user confirmation.
+3. **Approval required** — public publication, deprecation, and overwriting another owner's workflow require explicit user confirmation before writing.
 
 For the full approval matrix, see [Visibility & Sharing — Approval Boundary](./references/visibility.md#approval-boundary).
 
