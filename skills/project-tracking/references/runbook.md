@@ -67,6 +67,34 @@ Use these as the smallest safe starting shapes for CLI `--input` payloads. Add o
 }
 ```
 
+### Apply (bulk create / update / delete in one request)
+
+Use a non-UUID client label (e.g. `"t001"`) as `id` to create a new track. Use a UUID to update an existing one. Labels in `task.parentId`, `task.dependsOn`, and `task.goalId` are resolved to the assigned UUIDs by the server, so cross-references between new entries work in a single call.
+
+```json
+{
+  "projects": ["pj_123"],
+  "updateDrafts": [
+    {
+      "id": "g001",
+      "title": "Release agent task assignment",
+      "goal": { "status": "not_started", "progress": 0 }
+    },
+    {
+      "id": "t001",
+      "title": "Design API contract",
+      "task": { "status": "todo", "goalId": "g001" }
+    },
+    {
+      "id": "t002",
+      "title": "Implement endpoint",
+      "task": { "status": "todo", "goalId": "g001", "dependsOn": ["t001"] }
+    }
+  ],
+  "deleteDrafts": []
+}
+```
+
 ### Update (PATCH — omit fields to keep existing)
 
 ```json
@@ -136,7 +164,7 @@ Readiness checks:
 4. Obtain approval if required (see [Write Safety](#write-safety-and-approval-gate)).
 5. Materialize only after confirmation.
 
-Typical writes: multiple `create track` operations. If the result should become a reusable workflow pack, hand off to [Workflow Pack](../../workflow-pack/SKILL.md).
+Typical writes: one `apply track` call with `updateDrafts` containing all new items (use client labels as IDs to wire cross-references in a single request). Fall back to sequential `create track` calls only when items are independent and few. If the result should become a reusable workflow pack, hand off to [Workflow Pack](../../workflow-pack/SKILL.md).
 
 ### 4) Recovery and Backlog Hygiene
 

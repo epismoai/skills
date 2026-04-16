@@ -11,25 +11,18 @@ All criteria must pass. A single fail means: fix the issue or keep the workflow 
 
 1. **Proven execution** — at least one real execution path with observable outcome (tracks or linked records with identifiers), OR seed-source evidence (blog/docs/design rationale) with explicit assumptions and limits.
    Fail: outcome claimed but no records, links, or rationale provided.
-
 2. **Reusability** — steps avoid project-specific names, IDs, and one-off constraints.
    Fail: steps reference specific team members, internal URLs, or non-generalizable configurations.
-
-3. **Structural integrity** — step IDs are unique; `dependsOn` and `parentId` references resolve correctly; no self-dependency or circular references; parallelizable work uses minimal valid `dependsOn`.
-   Fail: circular references, broken IDs, or unnecessary serialization.
-
+3. **Structural integrity** — step IDs are unique; `dependsOn` and `parentId` references resolve correctly; no self-dependency or circular references; each step lists only direct predecessors (no transitive edges).
+   Fail: circular references, broken IDs, unnecessary serialization, or redundant edges that are already implied by another step's `dependsOn`.
 4. **Actionability** — each step has a clear verb and deliverable; another team can follow the sequence without hidden assumptions.
    Fail: vague steps ("research X", "improve Y") with no concrete deliverable.
-
 5. **Safe defaults** — human assignment is possible when agent assignment is unavailable.
    Fail: requires a specific AI agent with no documented human fallback.
-
 6. **Reproducibility evidence** — overview and steps include enough context for another team to replay; prompt examples added where they improve repeatability; supporting links included when relevant.
    Fail: missing tool context, replay hints, or prompt examples where they would prevent rework.
-
 7. **Publication boundary** — published content excludes internal release metadata (release target/intent, gate decision, approvals).
    Fail: internal notes, gate results, or approval state embedded in published fields.
-
 8. **Review traceability** — release decision rationale is explicit and reviewable; ownership and dependency changes are justified.
    Fail: decision trail absent or vague.
 
@@ -49,9 +42,14 @@ Apply these rules when designing workflow steps. They balance reproducibility wi
    - If the exact tool is not listed, assign the closest equivalent and note the assumption in the step content.
    - When a step is shared between human and AI, assign the party who owns the deliverable.
 3. Right-size step granularity
-   - Avoid splitting work into too many fine-grained steps; excessive steps increase cognitive load and tracking overhead.
-   - Use assignee boundaries as the primary split heuristic: create a new step when the responsible person changes.
-   - A workflow with 3-8 top-level steps is typical; exceed this only when assignee changes or hard dependencies require it.
+   - Design step boundaries around ownership handoffs: create a new step when the responsible party changes (human → AI, AI → human, or role to role).
+   - Work that stays with the same owner is one step, unless it produces a distinct deliverable that the next step depends on.
+   - A workflow with 3–8 top-level steps is typical. Exceed this only when a genuine ownership change or hard dependency boundary requires it.
+4. Keep `dependsOn` direct — no transitive edges
+   - List only the immediate predecessor(s) a step is waiting for.
+   - If C must follow B, and B must follow A, write `C.dependsOn = ["B"]` — not `["A", "B"]`. Adding A is redundant: it is already implied by the B→A edge.
+   - Redundant edges create a tangled graph without adding scheduling information.
+   - A well-formed workflow graph looks like a chain or tree, not a web.
 
 ## Release Decision
 

@@ -64,6 +64,7 @@ Use when: multiple items, a new goal structure, or a coordinated multi-step plan
 | B    | {title} | {AI/human} | {deliverable} | {step IDs or none} |
 
 - Materialization: {tracks only / tracks + workflow pack}
+- Write method: {`apply track` (preferred for cross-referenced batches) / sequential `create track`}
 
 ### Report
 

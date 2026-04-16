@@ -23,6 +23,7 @@ Operate on tasks and goals in Epismo projects — from a quick status update to 
 | `create track` | `epismo track create --input '<json>'`                   | `epismo_track_create` |
 | `update track` | `epismo track update --id <id> --input '<json>'`         | `epismo_track_update` |
 | `delete track` | `epismo track delete --id <id>`                          | `epismo_track_delete` |
+| `apply track`  | `epismo track apply --input '<json>'`                    | `epismo_track_apply`  |
 
 For filter keys, status values, entity relationships, and search recipes, see [Search & Filter](./references/search.md).
 
