@@ -286,7 +286,9 @@ Use this as the smallest safe starting shape. Add optional fields only when need
   "content": "Summary of the Attention Is All You Need paper.",
   "type": "context",
   "visibility": "private",
-  "projects": ["pj_123"],
+  "targets": {
+    "projectIds": ["pj_123"]
+  },
   "blocks": [
     {
       "title": "Source",
@@ -342,4 +344,4 @@ Use `update pack` with explicit `op` fields. Omitting `"blocks"` keeps all exist
 }
 ```
 
-> Note: `projects[]` is valid only when `visibility="private"`. Omit it for public packs.
+> Note: `targets.projectIds[]` is valid only when `visibility="private"`. Omit `targets` for public packs.

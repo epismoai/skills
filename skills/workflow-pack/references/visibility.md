@@ -50,14 +50,14 @@ Choose the most specific category that fits. If two apply equally, prefer the on
 
 ## Project Scoping
 
-`projects[]` attaches a private workflow pack to one or more workspace projects. This controls which project members can discover the pack in project-scoped searches.
+`targets.projectIds[]` attaches a private workflow pack to one or more workspace projects. This controls which project members can discover the pack in project-scoped searches.
 
 **Rules:**
 
-- `projects[]` is valid **only** when `visibility="private"`.
-- For public packs, omit `projects[]` — public packs are workspace-level and globally discoverable.
+- `targets.projectIds[]` is valid **only** when `visibility="private"`.
+- For public packs, omit `targets` — public packs are workspace-level and globally discoverable.
 - A pack can belong to multiple projects simultaneously.
-- Changing `projects[]` on an existing pack is a safe partial update — it does not change content or visibility.
+- Changing `targets.projectIds[]` on an existing pack is a safe partial update — it does not change content or visibility.
 
 ## Sharing a Workflow Pack
 
@@ -102,7 +102,7 @@ Some actions require **explicit user approval** before writing. Do not proceed w
 | Deprecating a workflow                                | **Yes**            | Affects existing users of the pattern            |
 | Overwriting another owner's workflow                  | **Yes**            | Affects content the current user does not own    |
 | Creating or updating a private workflow               | No                 | Low risk, reversible                             |
-| Changing `projects[]` on a private workflow           | No                 | Scoping change only                              |
+| Changing `targets.projectIds[]` on a private workflow | No                 | Scoping change only                              |
 | Liking or un-liking                                   | No                 | Reversible signal, no content change             |
 
 **How to obtain approval:** state the intended action, the workflow title, and the visibility setting. Wait for an explicit "yes" or equivalent before writing.

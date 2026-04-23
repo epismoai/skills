@@ -22,15 +22,12 @@ epismo login --browser
 
 ```bash
 epismo credit balance
-epismo credit balance --workspace-id <workspace-id>
 ```
 
 #### Step 3. Purchase Credits (Create Stripe Checkout)
 
 ```bash
 epismo credit checkout --allocations '[{"userId":"<USER_ID>","quantity":10}]'
-epismo credit checkout --workspace-id <workspace-id> \
-  --allocations '[{"userId":"<USER_ID>","quantity":10}]'
 epismo credit checkout --input @checkout.json
 ```
 

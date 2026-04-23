@@ -51,7 +51,7 @@ The unit of organization is a **block** inside a pack. The goal is one well-stru
 
 Infer 2–4 topic keywords from the current session. Search private packs (titles only — one fast call).
 
-`search pack` — `type: context`, `query: <inferred topic>`, `filter: { visibility: ["private"] }`, `sort: updatedAt:desc`
+`search pack` — `type: context`, `query: <inferred topic>`, `filter: { visibility: ["private"] }`
 
 | Result              | Action                                    |
 | ------------------- | ----------------------------------------- |
@@ -149,10 +149,10 @@ Default `private`. Use [PUBLISH](#publish) to go public.
 - Blocks are passed as a separate `"blocks[]"` array — **not** embedded in the top-level `"content"` string.
 - `"content"` at the top level is a brief intro only. All substantive content belongs in blocks.
 
-| Who needs it | `visibility` | `projects[]` |
-| ------------ | ------------ | ------------ |
-| Just me      | `"private"`  | omit         |
-| My team      | `"private"`  | `["pj_xxx"]` |
+| Who needs it | `visibility` | Access target                    |
+| ------------ | ------------ | -------------------------------- |
+| Just me      | `"private"`  | omit `targets`                   |
+| My team      | `"private"`  | `targets.projectIds=["pj_xxx"]` |
 
 ```
 context  <context-id>  <context-title>
@@ -255,7 +255,7 @@ Read the most relevant block first. Continue from there without re-reading histo
 
 Present the title list; if the match is clear, `get pack` immediately.
 
-For filter keys, sort options, and search recipes, see [Search & Discovery](./references/search.md).
+For filter keys and search recipes, see [Search & Discovery](./references/search.md).
 
 ---
 
@@ -277,12 +277,12 @@ For `update <alias> based on this conversation`:
 
 ### ID unknown
 
-1. `search pack` — `type: context`, `query: <inferred topic>`, `filter: { visibility: ["private"] }`, `sort: updatedAt:desc`
+1. `search pack` — `type: context`, `query: <inferred topic>`, `filter: { visibility: ["private"] }`
 2. **One clear match** → fetch and update without asking.
 3. **Multiple candidates** → show titles and IDs, ask the user to pick.
 4. **No match** → fall back to [NEW](#new).
 
-**"Last pack" shortcut:** sort `updatedAt:desc`, take the first result.
+**"Last pack" shortcut:** search private context packs and take the first result from the default recent-first outline.
 
 ---
 

@@ -37,12 +37,12 @@ epismo whoami                           # verify
 
 ## Surface Conventions
 
-| Surface | Pattern                                        | Example                             |
-| ------- | ---------------------------------------------- | ----------------------------------- |
-| `cli`   | `epismo <resource> <action> [--flags]`         | `epismo pack search --type context` |
-| `mcp`   | `epismo_<resource>_<action>` + same parameters | `epismo_pack_search`                |
+| Surface | Pattern                                | Example                             |
+| ------- | -------------------------------------- | ----------------------------------- |
+| `cli`   | `epismo <resource> <action> [--flags]` | `epismo pack search --type context` |
+| `mcp`   | `epismo_<resource>_<action>` + JSON    | `epismo_pack_search`                |
 
-MCP tool name = CLI command with spaces and hyphens replaced by underscores. Parameters are identical across both surfaces.
+MCP tool name = CLI command with spaces and hyphens replaced by underscores. Conceptual payloads are the same across surfaces; CLI flags are mapped into the JSON shape used by API/MCP.
 
 ### Pack Aliases
 
@@ -63,20 +63,23 @@ epismo workspace use --workspace-id <workspace-id>   # save default
 epismo workspace current                              # show saved default (no network)
 ```
 
-Workspace selection is CLI-only. In MCP, workspace scope is implicit in the OAuth token.
+Workspace selection is CLI-only. All CLI commands resolve workspace automatically from `EPISMO_TOKEN`, saved default, then personal space. In MCP, workspace scope is implicit in the OAuth token.
 
 ---
 
 ## Scope Model
 
 - `workspace` — top-level access boundary. All operations run within the active workspace.
-- `projects[]` — narrows scope to specific projects within the active workspace.
-- Omitting `projects[]` on a search means "all accessible projects in the active workspace".
+- `targets.projectIds[]` — narrows private search or write access to specific projects within the active workspace.
+- `targets.userIds[]` / `targets.emails[]` — grant private write access to specific people on mutation calls.
+- `targets.self` — for search, include private items that target the current user directly; defaults to `true`.
+- CLI search/write flags such as `--project-ids`, `--user-ids`, `--emails`, and `--self` are convenience flags that build the `targets` object.
+- For search, omitting `targets.projectIds` uses the default private scope for the current context; `targets.projectIds: []` explicitly disables project targets.
 
 When the user refers to "my project", resolve both layers before writing:
 
 1. Active workspace
-2. Target project(s) via `projects[]`
+2. Target project(s) via `targets.projectIds[]`
 
 ---
 

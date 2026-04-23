@@ -9,11 +9,11 @@ Surface conventions are defined in [Context Pack](../SKILL.md#operations-context
 
 ## Surface Resolution
 
-| Operation     | CLI command                          | Key flags                               |
-| ------------- | ------------------------------------ | --------------------------------------- |
-| `search pack` | `epismo pack search --type context`  | `--query <keywords>` `--filter '{...}'` |
-| `get pack`    | `epismo pack get --id <id>`          | `[--full]` `[--block-id <block-id>]`    |
-| `like pack`   | `epismo pack like --id <id> --liked` | `--no-liked` to remove                  |
+| Operation     | CLI command                          | Key flags                                                |
+| ------------- | ------------------------------------ | -------------------------------------------------------- |
+| `search pack` | `epismo pack search --type context`  | `--query <keywords>` `--filter '{...}'` `--project-ids`  |
+| `get pack`    | `epismo pack get --id <id>`          | `[--full]` `[--block-id <block-id>]`                     |
+| `like pack`   | `epismo pack like --id <id> --liked` | `--no-liked` to remove                                   |
 
 ## Quick Reference
 
@@ -34,9 +34,10 @@ Surface conventions are defined in [Context Pack](../SKILL.md#operations-context
 2. `search pack --type context` returns both private (yours) and public packs unless filtered.
 3. `filter.visibility=["private"]` returns only your private packs.
 4. `filter.visibility=["public"]` returns all public packs discoverable from the active workspace.
-5. `filter.projects=["<project-id>"]` narrows results to private packs scoped to that project.
-6. `query` runs a semantic / keyword search on title and content. Keep it to 2–6 domain keywords.
-7. Omitting all filters returns the most recently updated packs in the active workspace.
+5. `targets.projectIds=["<project-id>"]` narrows private search scope to that project. In CLI, pass `--project-ids <ids>`.
+6. `targets.self` controls whether search includes packs that target the current user directly. In CLI, pass `--self false` to exclude them.
+7. `query` runs a semantic / keyword search on title and content. Keep it to 2–6 domain keywords.
+8. Omitting all filters returns the most recently updated packs in the active workspace.
 
 ## Supported Filter Keys
 
@@ -114,8 +115,7 @@ When resuming work in a new tool or session:
 ```json
 {
   "type": "context",
-  "filter": { "visibility": ["private"] },
-  "sort": "updatedAt:desc"
+  "filter": { "visibility": ["private"] }
 }
 ```
 
@@ -158,9 +158,11 @@ Look for titles containing "Handoff" or your name in the results.
 ```json
 {
   "type": "context",
+  "targets": {
+    "projectIds": ["pj_123"]
+  },
   "filter": {
-    "visibility": ["private"],
-    "projects": ["pj_123"]
+    "visibility": ["private"]
   }
 }
 ```

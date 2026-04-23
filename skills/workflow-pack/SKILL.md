@@ -125,10 +125,10 @@ Default `private`. Use [RELEASE](#release) to publish publicly.
 }
 ```
 
-| Who needs it | `visibility` | `projects[]` |
-| ------------ | ------------ | ------------ |
-| Just me      | `"private"`  | omit         |
-| My team      | `"private"`  | `["pj_xxx"]` |
+| Who needs it | `visibility` | Access target                    |
+| ------------ | ------------ | -------------------------------- |
+| Just me      | `"private"`  | omit `targets`                   |
+| My team      | `"private"`  | `targets.projectIds=["pj_xxx"]` |
 
 ```
 workflow  <workflow-id>  <workflow-title>
@@ -184,7 +184,7 @@ epismo pack get --id <pack-id> --step-id <step-id-1>,<step-id-2>
 
 Present the title list; if the match is clear, `get pack` immediately.
 
-For filter keys, sort options, and search recipes, see [Search & Discovery](./references/search.md).
+For filter keys and search recipes, see [Search & Discovery](./references/search.md).
 
 ---
 
@@ -206,12 +206,12 @@ For `update <alias> based on this conversation`:
 
 ### ID unknown
 
-1. `search pack` — `type: workflow`, `query: <inferred topic>`, `filter: { visibility: ["private"] }`, `sort: updatedAt:desc`
+1. `search pack` — `type: workflow`, `query: <inferred topic>`, `filter: { visibility: ["private"] }`
 2. **One clear match** → fetch and update without asking.
 3. **Multiple candidates** → show titles and IDs, ask the user to pick.
 4. **No match** → fall back to [NEW](#new).
 
-**"Last workflow" shortcut:** sort `updatedAt:desc`, take the first result.
+**"Last workflow" shortcut:** search private workflow packs and take the first result from the default recent-first outline.
 
 ```
 workflow  <workflow-id>  <workflow-title>

@@ -62,14 +62,14 @@ Choose the most specific category that fits. If two categories apply equally, pr
 
 ## Project Scoping
 
-`projects[]` attaches a private pack to one or more workspace projects. This controls which project members can discover the pack in project-scoped searches.
+`targets.projectIds[]` attaches a private pack to one or more workspace projects. This controls which project members can discover the pack in project-scoped searches.
 
 **Rules:**
 
-- `projects[]` is valid **only** when `visibility="private"`.
-- For public packs, omit `projects[]` — public packs are workspace-level and globally discoverable regardless of project.
+- `targets.projectIds[]` is valid **only** when `visibility="private"`.
+- For public packs, omit `targets` — public packs are workspace-level and globally discoverable regardless of project.
 - A pack can belong to multiple projects simultaneously.
-- Changing `projects[]` on an existing pack is a safe partial update — it does not change content or visibility.
+- Changing `targets.projectIds[]` on an existing pack is a safe partial update — it does not change content or visibility.
 
 ## Sharing a Context Pack
 
@@ -124,7 +124,7 @@ Some visibility and lifecycle actions require **explicit user approval** before 
 | Deleting a pack (`delete pack`)                       | **Yes**            | Irreversible if not in trash/recovery             |
 | Overwriting another owner's pack                      | **Yes**            | Affects content the user does not own             |
 | Creating or updating a private pack                   | No                 | Low risk, reversible                              |
-| Changing `projects[]` on an existing private pack     | No                 | Scoping change only                               |
+| Changing `targets.projectIds[]` on an existing private pack | No                 | Scoping change only                               |
 | Liking or un-liking a pack                            | No                 | Reversible signal, no content change              |
 
 **How to obtain approval:** state the intended action, the pack title, and the visibility setting. Wait for an explicit "yes", "go ahead", or equivalent confirmation before writing.
@@ -136,7 +136,7 @@ Use this table to decide visibility and distribution method based on who needs t
 | Audience                                     | Visibility               | Distribution method                                                            |
 | -------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------ |
 | Just me, this session                        | `private`                | Read directly via `get pack` in the next session                               |
-| My team in this workspace                    | `private` + `projects[]` | Share URL (team members have workspace access)                                 |
+| My team in this workspace                    | `private` + `targets.projectIds[]` | Share URL (team members have workspace access)                                 |
 | A specific person (any tool)                 | `private` then share     | Share URL — recipient can view if they have access; use `public` if they don't |
 | Everyone on Epismo                           | `public`                 | Share URL or community search                                                  |
 | External audience (no Epismo account needed) | `public`                 | Share URL — no login required to view                                          |
