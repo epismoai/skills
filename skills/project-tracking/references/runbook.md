@@ -46,7 +46,9 @@ Use these as the smallest safe starting shapes for CLI `--input` payloads. Add o
 {
   "type": "task",
   "title": "Investigate update task error",
-  "projects": ["pj_123"],
+  "targets": {
+    "projectIds": ["pj_123"]
+  },
   "task": {
     "status": "todo"
   }
@@ -59,7 +61,9 @@ Use these as the smallest safe starting shapes for CLI `--input` payloads. Add o
 {
   "type": "goal",
   "title": "Release agent task assignment",
-  "projects": ["pj_123", "pj_456"],
+  "targets": {
+    "projectIds": ["pj_123", "pj_456"]
+  },
   "goal": {
     "status": "not_started",
     "progress": 0

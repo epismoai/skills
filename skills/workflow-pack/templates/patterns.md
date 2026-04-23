@@ -40,7 +40,7 @@ Use when: comparing candidate workflows and committing to a concrete adaptation 
 - Desired outcome: {what the user wants to achieve}
 - Project context: {team and project constraints}
 - Search plan:
-  - Tracks: {projects / status / date filters used}
+  - Tracks: {targets.projectIds / status / date filters used}
   - Workflows: {visibility / like / category filters used}
   - Keyword queries: {2-6 domain keywords or none}
 

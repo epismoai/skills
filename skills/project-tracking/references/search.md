@@ -7,13 +7,13 @@ For reusable workflow discovery, see [Workflow Pack — Search & Discovery](../.
 
 ## Operations (tracks)
 
-| Operation      | CLI command           | Key flags                              |
-| -------------- | --------------------- | -------------------------------------- |
-| `search track` | `epismo track search` | `--type task\|goal` `--filter '{...}'` |
-| `get track`    | `epismo track get`    | `--id <id>`                            |
-| `create track` | `epismo track create` | `--input @item.json`                   |
-| `update track` | `epismo track update` | `--id <id>` `--input @item.json`       |
-| `delete track` | `epismo track delete` | `--id <id>`                            |
+| Operation      | CLI command           | Key flags                                                 |
+| -------------- | --------------------- | --------------------------------------------------------- |
+| `search track` | `epismo track search` | `--type task\|goal` `--filter '{...}'` `--project-ids`    |
+| `get track`    | `epismo track get`    | `--id <id>`                                               |
+| `create track` | `epismo track create` | `--input @item.json` or `--project-ids <ids>`             |
+| `update track` | `epismo track update` | `--id <id>` `--input @item.json` or `--project-ids <ids>` |
+| `delete track` | `epismo track delete` | `--id <id>`                                               |
 
 ## Quick Reference
 
@@ -32,10 +32,11 @@ For reusable workflow discovery, see [Workflow Pack — Search & Discovery](../.
 
 1. `workspace` is the top-level access boundary for CLI and MCP calls.
 2. Each workspace can contain multiple projects.
-3. `search track` accepts top-level `projects[]` to limit scope inside the active workspace.
-4. Omitting `projects[]` searches all accessible projects in the active workspace.
-5. `search track` requires `type`: `task` or `goal`.
-6. Keep `query` compact when searching related workflow packs through Workflow Pack: 2-6 domain keywords.
+3. `search track` accepts `targets.projectIds[]` to limit private scope inside the active workspace. In CLI, pass `--project-ids <ids>`.
+4. Omitting `targets.projectIds` uses the default private scope for the current context; `targets.projectIds: []` explicitly disables project targets.
+5. `targets.self` controls whether search includes tracks that target the current user directly. In CLI, pass `--self false` to exclude them.
+6. `search track` requires `type`: `task` or `goal`.
+7. Keep `query` compact when searching related workflow packs through Workflow Pack: 2-6 domain keywords.
 
 ## Entity Reference
 
@@ -113,5 +114,5 @@ These are computed from entity data, not stored as status field values. Use them
 
 ### Release evidence — completed work in a period
 
-- Tasks: `status=["done"]` + `doneAtFrom=<iso8601>` + optional `projects=["<project-id>"]`
-- Goals: `status=["completed"]` + `updatedAtFrom=<iso8601>` + optional `projects=["<project-id>"]`
+- Tasks: `status=["done"]` + `doneAtFrom=<iso8601>` + optional `targets.projectIds=["<project-id>"]`
+- Goals: `status=["completed"]` + `updatedAtFrom=<iso8601>` + optional `targets.projectIds=["<project-id>"]`
