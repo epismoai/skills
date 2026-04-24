@@ -6,13 +6,14 @@ An alias is a short, human-readable name that resolves to a pack ID. Use it anyw
 
 ## Alias Format
 
-| Format              | Where accepted            | Resolves to          |
-| ------------------- | ------------------------- | -------------------- |
-| `myproject`         | upsert, get, list, delete | Your own alias       |
-| `@handle/myproject` | get only                  | Another user's alias |
+| Format              | Where accepted            | Resolves to              |
+| ------------------- | ------------------------- | ------------------------ |
+| `myproject`         | upsert, get, list, delete | Your own alias           |
+| `@myproject`        | upsert, get, delete       | Your own alias reference |
+| `@handle/myproject` | get only                  | Another user's alias     |
 
-- **upsert / delete** — bare name only (`myproject`). The namespace is always your own account.
-- **get** — accepts both forms to support referencing others' aliases.
+- **upsert / delete** — accept `myproject` or `@myproject`; both are stored as `myproject`. The namespace is always your own account.
+- **get** — prefer `@myproject` for your own alias and `@handle/myproject` for another user's alias. Bare aliases are accepted for compatibility.
 
 ## Access Options
 
@@ -26,8 +27,8 @@ An alias is a short, human-readable name that resolves to a pack ID. Use it anyw
 #### Upsert (create or update)
 
 ```bash
-epismo alias upsert --type workflow --id <id> --alias myproject
-epismo alias upsert --type context  --id <id> --alias mycontext
+epismo alias upsert --type workflow --id <id> --alias @myproject
+epismo alias upsert --type context  --id <id> --alias @mycontext
 ```
 
 You can only alias your own packs. The command verifies ownership before writing.
@@ -35,9 +36,9 @@ You can only alias your own packs. The command verifies ownership before writing
 #### Get (resolve a single alias)
 
 ```bash
-epismo alias get --alias myproject
+epismo alias get --alias @myproject
 epismo alias get --alias @handle/myproject    # another user's alias
-epismo alias get --alias myproject --type workflow
+epismo alias get --alias @myproject --type workflow
 ```
 
 Returns `id`, `type`, `accountId`, and `alias`.
@@ -55,7 +56,7 @@ epismo alias list --type context
 #### Delete
 
 ```bash
-epismo alias delete --alias myproject
+epismo alias delete --alias @myproject
 ```
 
 #### Use an alias to fetch a pack
@@ -63,9 +64,9 @@ epismo alias delete --alias myproject
 `pack get` accepts `--alias` as an alternative to `--id`:
 
 ```bash
-epismo pack get --alias myproject
+epismo pack get --alias @myproject
 epismo pack get --alias @handle/myproject
-epismo pack get --alias mycontext --block-id <block-id>
+epismo pack get --alias @mycontext --block-id <block-id>
 ```
 
 `--id` and `--alias` are mutually exclusive; one is required.
@@ -82,7 +83,7 @@ epismo pack get --alias mycontext --block-id <block-id>
 curl -sX PUT https://api.epismo.ai/v1/aliases \
   -H "Authorization: Bearer <ACCESS_TOKEN>" \
   -H "Content-Type: application/json" \
-  -d '{"type":"workflow","id":"<pack-id>","alias":"myproject"}'
+  -d '{"type":"workflow","id":"<pack-id>","alias":"@myproject"}'
 ```
 
 #### List
@@ -96,7 +97,7 @@ curl -sX GET https://api.epismo.ai/v1/aliases \
 
 ```bash
 # Own alias
-curl -sX GET "https://api.epismo.ai/v1/aliases?alias=myproject" \
+curl -sX GET "https://api.epismo.ai/v1/aliases?alias=%40myproject" \
   -H "Authorization: Bearer <ACCESS_TOKEN>"
 
 # Another user's alias
@@ -104,21 +105,21 @@ curl -sX GET "https://api.epismo.ai/v1/aliases?alias=%40epismo%2Fmyproject" \
   -H "Authorization: Bearer <ACCESS_TOKEN>"
 
 # With type filter
-curl -sX GET "https://api.epismo.ai/v1/aliases?alias=myproject&type=workflow" \
+curl -sX GET "https://api.epismo.ai/v1/aliases?alias=%40myproject&type=workflow" \
   -H "Authorization: Bearer <ACCESS_TOKEN>"
 ```
 
 #### Delete
 
 ```bash
-curl -sX DELETE "https://api.epismo.ai/v1/aliases/myproject" \
+curl -sX DELETE "https://api.epismo.ai/v1/aliases/%40myproject" \
   -H "Authorization: Bearer <ACCESS_TOKEN>"
 ```
 
 #### Use an alias to fetch a pack
 
 ```bash
-curl -sX GET "https://api.epismo.ai/v1/packs?alias=myproject" \
+curl -sX GET "https://api.epismo.ai/v1/packs?alias=%40myproject" \
   -H "Authorization: Bearer <ACCESS_TOKEN>"
 ```
 

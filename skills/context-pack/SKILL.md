@@ -36,10 +36,10 @@ The unit of organization is a **block** inside a pack. The goal is one well-stru
 | `update pack`  | `epismo pack update --id <id> --input '<json>'`                                             | `epismo_pack_update` |
 | `delete pack`  | `epismo pack delete --id <id>`                                                              | `epismo_pack_delete` |
 | `like pack`    | `epismo pack like --id <id> --liked`                                                        | `epismo_pack_like`   |
-| `upsert alias` | `epismo alias upsert --type context --id <id> --alias <name>`                               | —                    |
+| `upsert alias` | `epismo alias upsert --type context --id <id> --alias <@name>`                              | —                    |
 | `get alias`    | `epismo alias get --alias <name>`                                                           | —                    |
 | `list aliases` | `epismo alias list --type context`                                                          | —                    |
-| `delete alias` | `epismo alias delete --alias <name>`                                                        | —                    |
+| `delete alias` | `epismo alias delete --alias <@name>`                                                       | —                    |
 
 ---
 
@@ -77,8 +77,17 @@ The pack should read well from scratch at any point. Do not leave stale or contr
   "id": "<existing-id>",
   "content": "<top-level summary or intro — does not include block content>",
   "blocks": [
-    { "op": "update", "id": "<existing-block-id>", "title": "<block-title>", "content": "<updated block content>" },
-    { "op": "add", "title": "<new-block-title>", "content": "<new block content>" }
+    {
+      "op": "update",
+      "id": "<existing-block-id>",
+      "title": "<block-title>",
+      "content": "<updated block content>"
+    },
+    {
+      "op": "add",
+      "title": "<new-block-title>",
+      "content": "<new block content>"
+    }
   ]
 }
 ```
@@ -149,9 +158,9 @@ Default `private`. Use [PUBLISH](#publish) to go public.
 - Blocks are passed as a separate `"blocks[]"` array — **not** embedded in the top-level `"content"` string.
 - `"content"` at the top level is a brief intro only. All substantive content belongs in blocks.
 
-| Who needs it | `visibility` | Access target                    |
-| ------------ | ------------ | -------------------------------- |
-| Just me      | `"private"`  | omit `targets`                   |
+| Who needs it | `visibility` | Access target                   |
+| ------------ | ------------ | ------------------------------- |
+| Just me      | `"private"`  | omit `targets`                  |
 | My team      | `"private"`  | `targets.projectIds=["pj_xxx"]` |
 
 ```
@@ -232,7 +241,7 @@ Prefer **alias-first** unless the input is obviously a search query.
 ### Resolve the input
 
 1. UUID → `get pack --id`.
-2. `@handle/name` or one compact token like `weekly-handoff` → `get pack --alias`; if it misses, run [FIND](#find) with the same text.
+2. `@alias`, `@handle/name`, or one compact token like `weekly-handoff` → `get pack --alias`; if it misses, run [FIND](#find) with the same text.
 3. Short phrase like `auth refactor handoff` → try `get pack --alias` first; if it misses, run [FIND](#find).
 4. Question, explicit search wording, or long descriptive text → [FIND](#find) first.
 5. `get/read/open/use <target>` always counts as retrieval intent.

@@ -9,11 +9,11 @@ Surface conventions are defined in [Context Pack](../SKILL.md#operations-context
 
 ## Surface Resolution
 
-| Operation     | CLI command                          | Key flags                                                |
-| ------------- | ------------------------------------ | -------------------------------------------------------- |
-| `search pack` | `epismo pack search --type context`  | `--query <keywords>` `--filter '{...}'` `--project-ids`  |
-| `get pack`    | `epismo pack get --id <id>`          | `[--full]` `[--block-id <block-id>]`                     |
-| `like pack`   | `epismo pack like --id <id> --liked` | `--no-liked` to remove                                   |
+| Operation     | CLI command                          | Key flags                                               |
+| ------------- | ------------------------------------ | ------------------------------------------------------- |
+| `search pack` | `epismo pack search --type context`  | `--query <keywords>` `--filter '{...}'` `--project-ids` |
+| `get pack`    | `epismo pack get --id <id>`          | `[--full]` `[--block-id <block-id>]`                    |
+| `like pack`   | `epismo pack like --id <id> --liked` | `--no-liked` to remove                                  |
 
 ## Quick Reference
 
@@ -64,7 +64,7 @@ Use the two-step scan-then-fetch pattern to avoid pulling full content from pack
 
 Use `get pack --alias` first for alias-shaped targets.
 
-- Good alias candidates: `@handle/name`, `weekly-handoff`, `frontend_notes`
+- Good alias candidates: `@alias`, `@handle/name`, `weekly-handoff`, `frontend_notes`
 - Short phrases can still be aliases: try alias first unless the input is obviously a search query
 - Search-first inputs: `what context do I have for onboarding`, `find onboarding notes`, longer descriptive requests
 - `get/read/open <target>` → try alias or ID first, then `search pack --query` if it misses

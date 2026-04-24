@@ -35,10 +35,10 @@ Discover, adapt, and release reusable workflow packs in Epismo — from finding 
 | `update pack`  | `epismo pack update --id <id> --input '<json>'`                                             | `epismo_pack_update` |
 | `delete pack`  | `epismo pack delete --id <id>`                                                              | `epismo_pack_delete` |
 | `like pack`    | `epismo pack like --id <id> --liked`                                                        | `epismo_pack_like`   |
-| `upsert alias` | `epismo alias upsert --type workflow --id <id> --alias <name>`                              | —                    |
+| `upsert alias` | `epismo alias upsert --type workflow --id <id> --alias <@name>`                             | —                    |
 | `get alias`    | `epismo alias get --alias <name>`                                                           | —                    |
 | `list aliases` | `epismo alias list --type workflow`                                                         | —                    |
-| `delete alias` | `epismo alias delete --alias <name>`                                                        | —                    |
+| `delete alias` | `epismo alias delete --alias <@name>`                                                       | —                    |
 
 ---
 
@@ -125,9 +125,9 @@ Default `private`. Use [RELEASE](#release) to publish publicly.
 }
 ```
 
-| Who needs it | `visibility` | Access target                    |
-| ------------ | ------------ | -------------------------------- |
-| Just me      | `"private"`  | omit `targets`                   |
+| Who needs it | `visibility` | Access target                   |
+| ------------ | ------------ | ------------------------------- |
+| Just me      | `"private"`  | omit `targets`                  |
 | My team      | `"private"`  | `targets.projectIds=["pj_xxx"]` |
 
 ```
@@ -157,7 +157,7 @@ Prefer **alias-first** unless the input is obviously a search query.
 ### Resolve the input
 
 1. UUID → `get pack --id`.
-2. `@handle/name` or one compact token like `prd-review` → `get pack --alias`; if it misses, run [FIND](#find) with the same text.
+2. `@alias`, `@handle/name`, or one compact token like `prd-review` → `get pack --alias`; if it misses, run [FIND](#find) with the same text.
 3. Short phrase like `deployment checklist` → try `get pack --alias` first; if it misses, run [FIND](#find).
 4. Question, explicit search wording, or long descriptive text → [FIND](#find) first.
 5. `get/read/open/use <target>` always counts as retrieval intent.

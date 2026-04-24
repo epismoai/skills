@@ -8,14 +8,14 @@ This reference shows CLI forms. For surface conventions, see [Epismo Basics — 
 
 ## Operations
 
-| Operation      | CLI command                          | Key flags                                        |
-| -------------- | ------------------------------------ | ------------------------------------------------ |
-| `search pack`  | `epismo pack search --type workflow` | `--query <keywords>` `--filter '{...}'` `--project-ids` |
-| `get pack`     | `epismo pack get --id <id>`          | `[--full]` `[--step-id <step-id-1>,<step-id-2>]` |
-| `create pack`  | `epismo pack create`                 | `--input @pack.json` or `--project-ids <ids>`    |
-| `update pack`  | `epismo pack update --id <id>`       | `--input @changes.json` or `--project-ids <ids>` |
-| `delete pack`  | `epismo pack delete --id <id>`       | —                                                |
-| `like pack`    | `epismo pack like --id <id>`         | `--liked` / `--no-liked`                         |
+| Operation     | CLI command                          | Key flags                                               |
+| ------------- | ------------------------------------ | ------------------------------------------------------- |
+| `search pack` | `epismo pack search --type workflow` | `--query <keywords>` `--filter '{...}'` `--project-ids` |
+| `get pack`    | `epismo pack get --id <id>`          | `[--full]` `[--step-id <step-id-1>,<step-id-2>]`        |
+| `create pack` | `epismo pack create`                 | `--input @pack.json` or `--project-ids <ids>`           |
+| `update pack` | `epismo pack update --id <id>`       | `--input @changes.json` or `--project-ids <ids>`        |
+| `delete pack` | `epismo pack delete --id <id>`       | —                                                       |
+| `like pack`   | `epismo pack like --id <id>`         | `--liked` / `--no-liked`                                |
 
 ## Quick Reference
 
@@ -54,7 +54,7 @@ Use the two-step scan-then-fetch pattern to avoid loading full workflow content 
 
 Use `get pack --alias` first for alias-shaped targets.
 
-- Good alias candidates: `@handle/name`, `prd-review`, `incident_postmortem`
+- Good alias candidates: `@alias`, `@handle/name`, `prd-review`, `incident_postmortem`
 - Short phrases can still be aliases: try alias first unless the input is obviously a search query
 - Search-first inputs: `what workflows do I have for release`, `find release workflow`, longer descriptive requests
 - `get/read/open <target>` → try alias or ID first, then `search pack --query` if it misses
