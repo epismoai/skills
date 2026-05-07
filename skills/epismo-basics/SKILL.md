@@ -150,13 +150,13 @@ epismo pack get --id <id> --block-id <block-id>
 epismo pack get --id <id> --step-id <step-id-1>,<step-id-2>
 ```
 
-## Pack Reuse Scan Order
+## Pack Reuse Scan
 
-Before creating any new pack, scan in this order to avoid duplicating something that already exists:
+Before creating any new pack, scan private and public candidates for the same topic so local work and community patterns can be compared directly:
 
-1. `visibility=["private"]` + `query=<topic>` — your own packs first
-2. `like="liked"` + `query=<topic>` — packs you bookmarked
-3. `visibility=["public"]` + `query=<topic>` — community packs
+1. `visibility=["private"]` + `query=<topic>` — your own or workspace-scoped packs
+2. `visibility=["public"]` + `query=<topic>` — community packs for the same topic
+3. `like="liked"` + `query=<topic>` — bookmarked packs as a quality signal or fallback
 
 If a close match is found, prefer `get pack` over creating new.
 

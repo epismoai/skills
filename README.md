@@ -41,7 +41,7 @@ Skills solve this by packaging proven operational patterns into portable instruc
 Tell your agent:
 
 ```
-Set up Epismo access and load the Skills from https://raw.githubusercontent.com/epismoai/skills/main/README.md.
+Set up Epismo access and load the Skills from github.com/epismoai/skills.
 ```
 
 The agent will read this page and complete the steps. Or follow manually:

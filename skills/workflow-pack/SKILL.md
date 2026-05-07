@@ -7,7 +7,7 @@ description: "Discover, reuse, and release workflow packs in Epismo. Trigger on:
 
 Discover, adapt, and release reusable workflow packs in Epismo — from finding a community pattern to publishing a proven execution structure.
 
-**Core principle: reuse before creating. Search private → liked → public before building anything new.**
+**Core principle: reuse before creating. Search private and public candidates together, then compare with liked/bookmarked workflows before building anything new.**
 
 > For connection setup, surface conventions, scope model, share URL resolution, and error handling, see [Epismo Basics](../epismo-basics/SKILL.md).
 > For task/goal tracking, see [Project Tracking](../project-tracking/SKILL.md).
@@ -48,17 +48,17 @@ Discover, adapt, and release reusable workflow packs in Epismo — from finding 
 
 ### Step 1 — Reuse scan
 
-Infer 2–4 topic keywords from the user's intent. Search in this order:
+Infer 2–4 topic keywords from the user's intent. Search private and public scopes together so local patterns and community patterns can be compared before choosing a base.
 
 ```bash
-# 1. Your own private workflows
+# Private workflows in the active workspace
 epismo pack search --type workflow --query "<topic>" --filter '{"visibility":["private"]}'
 
-# 2. Workflows you bookmarked
-epismo pack search --type workflow --filter '{"like":"liked"}'
-
-# 3. Community public workflows
+# Public community workflows
 epismo pack search --type workflow --query "<topic>" --filter '{"visibility":["public"]}'
+
+# Bookmarked workflows, useful as a quality signal or fallback
+epismo pack search --type workflow --query "<topic>" --filter '{"like":"liked"}'
 ```
 
 | Result        | Action                                                                     |
@@ -176,11 +176,11 @@ epismo pack get --id <pack-id> --step-id <step-id-1>,<step-id-2>
 
 **Goal:** discover the right workflow when the ID is not known.
 
-`search pack` — scan titles only (no step content). Use this for natural-language discovery requests and multi-keyword topic phrases. Search in this order:
+`search pack` — scan titles only (no step content). Use this for natural-language discovery requests and multi-keyword topic phrases. Search private and public scopes for the same topic, then compare results before fetching full content:
 
 1. `type: workflow`, `query: <topic>`, `filter: { visibility: ["private"] }`
-2. `type: workflow`, `query: <topic>`, `filter: { like: "liked" }`
-3. `type: workflow`, `query: <topic>`, `filter: { visibility: ["public"] }`
+2. `type: workflow`, `query: <topic>`, `filter: { visibility: ["public"] }`
+3. `type: workflow`, `query: <topic>`, `filter: { like: "liked" }`
 
 Present the title list; if the match is clear, `get pack` immediately.
 
@@ -206,7 +206,7 @@ For `update <alias> based on this conversation`:
 
 ### ID unknown
 
-1. `search pack` — `type: workflow`, `query: <inferred topic>`, `filter: { visibility: ["private"] }`
+1. `search pack` — `type: workflow`, `query: <inferred topic>`, run both `filter: { visibility: ["private"] }` and `filter: { visibility: ["public"] }`
 2. **One clear match** → fetch and update without asking.
 3. **Multiple candidates** → show titles and IDs, ask the user to pick.
 4. **No match** → fall back to [NEW](#new).
