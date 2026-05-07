@@ -4,6 +4,8 @@ When an operation returns `Payment Required: Insufficient credits`, check the cu
 
 **Pricing: 1 credit = $0.01**
 
+**Minimum purchase: 500 credits ($5.00) total per checkout**
+
 ## Access Options
 
 - **CLI** — preferred when operating interactively. Run `epismo login` to authenticate.
@@ -27,7 +29,7 @@ epismo credit balance
 #### Step 3. Purchase Credits (Create Stripe Checkout)
 
 ```bash
-epismo credit checkout --allocations '[{"userId":"<USER_ID>","quantity":10}]'
+epismo credit checkout --allocations '[{"userId":"<USER_ID>","quantity":500}]'
 epismo credit checkout --input @checkout.json
 ```
 
@@ -85,7 +87,7 @@ Call `POST /v1/credits` with `Authorization: Bearer <ACCESS_TOKEN>`.
 - `workspaceId` (optional): target workspace. If provided, the caller must belong to that workspace.
 - `allocations`: recipients and quantities.
 - `userId`: recipient user ID.
-- `quantity`: number of credits (integer).
+- `quantity`: number of credits (integer). The allocation total must be at least 500 credits.
 
 ```bash
 curl -sX POST https://api.epismo.ai/v1/credits \

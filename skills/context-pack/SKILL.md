@@ -256,11 +256,11 @@ Read the most relevant block first. Continue from there without re-reading histo
 
 **Goal:** discover the right pack when the ID is not known.
 
-`search pack` — scan titles only (no full content). Use this for natural-language discovery requests and multi-keyword topic phrases. Search in this order:
+`search pack` — scan titles only (no full content). Use this for natural-language discovery requests and multi-keyword topic phrases. Search private and public scopes for the same topic, then compare results before fetching full content:
 
 1. `type: context`, `query: <topic>`, `filter: { visibility: ["private"] }`
-2. `type: context`, `query: <topic>`, `filter: { like: "liked" }`
-3. `type: context`, `query: <topic>`, `filter: { visibility: ["public"] }`
+2. `type: context`, `query: <topic>`, `filter: { visibility: ["public"] }`
+3. `type: context`, `query: <topic>`, `filter: { like: "liked" }`
 
 Present the title list; if the match is clear, `get pack` immediately.
 

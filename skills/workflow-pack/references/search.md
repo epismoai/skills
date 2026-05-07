@@ -80,7 +80,7 @@ epismo pack get --id <pack-id> --step-id <step-id-1>,<step-id-2>
 
 ## Reuse Scan
 
-Search in this order to avoid rebuilding something that already exists — see [Epismo Basics — Pack Reuse Scan Order](../../epismo-basics/SKILL.md#pack-reuse-scan-order).
+Search private and public scopes for the same topic, then compare candidates before fetching full content — see [Epismo Basics — Pack Reuse Scan](../../epismo-basics/SKILL.md#pack-reuse-scan).
 
 ## Search Recipes
 

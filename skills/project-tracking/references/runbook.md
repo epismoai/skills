@@ -158,7 +158,7 @@ Exit: coordinated items created with ownership contracts and dependency links.
 Readiness checks:
 
 - Current goals and tasks reviewed.
-- Reuse check completed against workflows (`private` → `liked` → `public`).
+- Reuse check completed against both private and public workflows, with liked workflows checked as a quality signal or fallback.
 - Why reuse is insufficient is explicit.
 - Project scope confirmed.
 

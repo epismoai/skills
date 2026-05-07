@@ -178,11 +178,11 @@ Look for titles containing "Handoff" or your name in the results.
 
 ### Reuse scan before creating a new pack
 
-Search private packs first, then liked, then public — to avoid duplicating something that already exists.
+Search private and public packs for the same topic, then compare candidates before fetching full content. Check liked packs as a quality signal or fallback.
 
 1. `visibility=["private"]` + `query=<topic>`
-2. `like="liked"` + `query=<topic>`
-3. `visibility=["public"]` + `query=<topic>`
+2. `visibility=["public"]` + `query=<topic>`
+3. `like="liked"` + `query=<topic>`
 
 If a close match is found, prefer `get pack` over creating a new one.
 
