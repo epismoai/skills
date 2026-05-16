@@ -105,10 +105,10 @@ Recipients can like a public pack to bookmark it and signal quality:
 
 ```bash
 # CLI
-epismo pack like --id <id> --liked
+epismo pack like <id> --liked
 
 # To un-like
-epismo pack like --id <id> --no-liked
+epismo pack like <id> --no-liked
 ```
 
 Liked packs appear in search results filtered by `like="liked"` and surface higher in community discovery.

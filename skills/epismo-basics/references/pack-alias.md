@@ -1,19 +1,19 @@
 # Pack Alias
 
-An alias is a short, human-readable name that resolves to a pack ID. Use it anywhere `--id` is accepted on `pack get` to avoid copying and pasting full UUIDs.
+An alias is a short, human-readable name that resolves to a pack ID. Pass it as the positional `<reference>` to `pack get` (same slot as the ID) to avoid copying and pasting full UUIDs.
 
 `alias` is a top-level resource — managed via `epismo alias ...` (CLI) or `/v1/aliases` (API), separate from pack CRUD.
 
 ## Alias Format
 
-| Format              | Where accepted            | Resolves to              |
-| ------------------- | ------------------------- | ------------------------ |
-| `myproject`         | upsert, get, list, delete | Your own alias           |
-| `@myproject`        | upsert, get, delete       | Your own alias reference |
-| `@handle/myproject` | get only                  | Another user's alias     |
+| Format                    | Where accepted            | Resolves to          |
+| ------------------------- | ------------------------- | -------------------- |
+| `<alias>`                 | upsert, get, list, delete | Your own alias       |
+| `@<alias>`                | upsert, get, delete       | Your own alias       |
+| `@<handle>/<alias>`       | get only                  | Another user's alias |
 
-- **upsert / delete** — accept `myproject` or `@myproject`; both are stored as `myproject`. The namespace is always your own account.
-- **get** — prefer `@myproject` for your own alias and `@handle/myproject` for another user's alias. Bare aliases are accepted for compatibility.
+- **upsert / delete** — accept `<alias>` or `@<alias>`; both are stored without `@`. The namespace is always your own account.
+- **get** — prefer `@<alias>` for your own alias and `@<handle>/<alias>` for another user's alias. Bare aliases are accepted for compatibility.
 
 ## Access Options
 
@@ -27,8 +27,8 @@ An alias is a short, human-readable name that resolves to a pack ID. Use it anyw
 #### Upsert (create or update)
 
 ```bash
-epismo alias upsert --type workflow --id <id> --alias @myproject
-epismo alias upsert --type context  --id <id> --alias @mycontext
+epismo alias upsert @myproject --type workflow --id <id>
+epismo alias upsert @mycontext --type context  --id <id>
 ```
 
 You can only alias your own packs. The command verifies ownership before writing.
@@ -36,9 +36,9 @@ You can only alias your own packs. The command verifies ownership before writing
 #### Get (resolve a single alias)
 
 ```bash
-epismo alias get --alias @myproject
-epismo alias get --alias @handle/myproject    # another user's alias
-epismo alias get --alias @myproject --type workflow
+epismo alias get @myproject
+epismo alias get @handle/myproject    # another user's alias
+epismo alias get @myproject --type workflow
 ```
 
 Returns `id`, `type`, `accountId`, and `alias`.
@@ -56,20 +56,18 @@ epismo alias list --type context
 #### Delete
 
 ```bash
-epismo alias delete --alias @myproject
+epismo alias delete @myproject
 ```
 
 #### Use an alias to fetch a pack
 
-`pack get` accepts `--alias` as an alternative to `--id`:
+`pack get` accepts an alias in the same positional `<reference>` slot as an ID:
 
 ```bash
-epismo pack get --alias @myproject
-epismo pack get --alias @handle/myproject
-epismo pack get --alias @mycontext --block-id <block-id>
+epismo pack get @myproject
+epismo pack get @handle/myproject
+epismo pack get @mycontext --block-id <block-id>
 ```
-
-`--id` and `--alias` are mutually exclusive; one is required.
 
 ---
 

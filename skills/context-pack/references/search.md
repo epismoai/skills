@@ -9,11 +9,11 @@ Surface conventions are defined in [Context Pack](../SKILL.md#operations-context
 
 ## Surface Resolution
 
-| Operation     | CLI command                          | Key flags                                               |
-| ------------- | ------------------------------------ | ------------------------------------------------------- |
-| `search pack` | `epismo pack search --type context`  | `--query <keywords>` `--filter '{...}'` `--project-ids` |
-| `get pack`    | `epismo pack get --id <id>`          | `[--full]` `[--block-id <block-id>]`                    |
-| `like pack`   | `epismo pack like --id <id> --liked` | `--no-liked` to remove                                  |
+| Operation     | CLI command                         | Key flags                                               |
+| ------------- | ----------------------------------- | ------------------------------------------------------- |
+| `search pack` | `epismo pack search --type context` | `--query <keywords>` `--filter '{...}'` `--project-ids` |
+| `get pack`    | `epismo pack get <id>`              | `[--full]` `[--block-id <block-id>]`                    |
+| `like pack`   | `epismo pack like <id> --liked`     | `--no-liked` to remove                                  |
 
 ## Quick Reference
 
@@ -62,9 +62,9 @@ Use the two-step scan-then-fetch pattern to avoid pulling full content from pack
 
 ## Query vs Alias
 
-Use `get pack --alias` first for alias-shaped targets.
+Use `get pack @<alias>` first for alias-shaped targets.
 
-- Good alias candidates: `@alias`, `@handle/name`, `weekly-handoff`, `frontend_notes`
+- Good alias candidates: `@<alias>`, `@<handle>/<alias>`, `weekly-handoff`, `frontend_notes`
 - Short phrases can still be aliases: try alias first unless the input is obviously a search query
 - Search-first inputs: `what context do I have for onboarding`, `find onboarding notes`, longer descriptive requests
 - `get/read/open <target>` → try alias or ID first, then `search pack --query` if it misses
@@ -84,10 +84,10 @@ Review the returned titles to identify the right pack.
 
 ```bash
 # Full content (all blocks)
-epismo pack get --id <pack-id> --full
+epismo pack get <pack-id> --full
 
 # Single block only
-epismo pack get --id <pack-id> --block-id <block-id>
+epismo pack get <pack-id> --block-id <block-id>
 ```
 
 `get pack` without `--full` returns outline only (`id`, `title`, `view`, `contentIndex`). Use `--full` to load all block content into the session.
@@ -104,7 +104,7 @@ When resuming work in a new tool or session:
 
 1. Search for the context pack by topic or date: `search pack --query "<topic>"`.
 2. Identify the matching pack by title.
-3. Fetch its full content: `get pack --id <id>`.
+3. Fetch its full content: `get pack <id>`.
 4. Read the opening block that explains what the pack is, then the block most relevant to the current task, such as `Next Steps`, `Summary`, or `Key Takeaways`.
 5. Proceed from that block instead of re-reading the original conversation or source.
 

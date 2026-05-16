@@ -77,16 +77,16 @@ See [Epismo Basics — Resolving Share URLs](../../epismo-basics/SKILL.md#resolv
 ### Who Can Use a Share URL
 
 | Pack visibility | Recipient has workspace access | Can view via link |
-| ---------------- | ------------------------------ | ----------------- |
-| `private`        | Yes                            | Yes               |
-| `private`        | No                             | No                |
-| `public`         | Any                            | Yes               |
+| --------------- | ------------------------------ | ----------------- |
+| `private`       | Yes                            | Yes               |
+| `private`       | No                             | No                |
+| `public`        | Any                            | Yes               |
 
 ### Liking a Public Workflow
 
 ```bash
-epismo pack like --id <id> --liked      # bookmark and signal quality
-epismo pack like --id <id> --no-liked   # remove like
+epismo pack like <id> --liked      # bookmark and signal quality
+epismo pack like <id> --no-liked   # remove like
 ```
 
 Liked packs surface higher in community discovery and appear in `like="liked"` filtered searches.
