@@ -7,13 +7,13 @@ For reusable workflow discovery, see [Workflow Pack — Search & Discovery](../.
 
 ## Operations (tracks)
 
-| Operation      | CLI command           | Key flags                                                 |
-| -------------- | --------------------- | --------------------------------------------------------- |
-| `search track` | `epismo track search` | `--type task\|goal` `--filter '{...}'` `--project-ids`    |
-| `get track`    | `epismo track get`    | `--id <id>`                                               |
-| `create track` | `epismo track create` | `--input @item.json` or `--project-ids <ids>`             |
-| `update track` | `epismo track update` | `--id <id>` `--input @item.json` or `--project-ids <ids>` |
-| `delete track` | `epismo track delete` | `--id <id>`                                               |
+| Operation      | CLI command                | Key flags                                              |
+| -------------- | -------------------------- | ------------------------------------------------------ |
+| `search track` | `epismo track search`      | `--type task\|goal` `--filter '{...}'` `--project-ids` |
+| `get track`    | `epismo track get <id>`    | —                                                      |
+| `create track` | `epismo track create`      | `--input @item.json` or `--project-ids <ids>`          |
+| `update track` | `epismo track update <id>` | `--input @item.json` or `--project-ids <ids>`          |
+| `delete track` | `epismo track delete <id>` | —                                                      |
 
 ## Quick Reference
 

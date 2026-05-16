@@ -46,7 +46,7 @@ MCP tool name = CLI command with spaces and hyphens replaced by underscores. Con
 
 ### Pack Aliases
 
-Packs can be fetched by a short alias instead of a full ID. Pass `--alias <name>` (or `alias` parameter in MCP) wherever `--id` is accepted on `get pack`. To create and manage aliases, see [Pack Alias](./references/pack-alias.md).
+Packs can be fetched by a short alias instead of a full ID. On the CLI, pass the alias (with or without `@` prefix) as the positional `<reference>` to `pack get` — same slot the ID goes in. In MCP, pass it via the `reference` parameter. To create and manage aliases, see [Pack Alias](./references/pack-alias.md).
 
 ### CLI Input Conventions
 
@@ -59,7 +59,7 @@ Packs can be fetched by a short alias instead of a full ID. Pass `--alias <name>
 
 ```bash
 epismo workspace list
-epismo workspace use --workspace-id <workspace-id>   # save default
+epismo workspace use <workspace-id>                   # save default
 epismo workspace current                              # show saved default (no network)
 ```
 
@@ -144,10 +144,10 @@ To load a single block or step instead of the full pack:
 
 ```bash
 # context pack — fetch one block
-epismo pack get --id <id> --block-id <block-id>
+epismo pack get <id> --block-id <block-id>
 
 # workflow pack — fetch specific steps
-epismo pack get --id <id> --step-id <step-id-1>,<step-id-2>
+epismo pack get <id> --step-id <step-id-1>,<step-id-2>
 ```
 
 ## Pack Reuse Scan

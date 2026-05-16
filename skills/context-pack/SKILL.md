@@ -28,18 +28,18 @@ The unit of organization is a **block** inside a pack. The goal is one well-stru
 
 ## Operations (context packs)
 
-| Operation      | CLI                                                                                         | MCP                  |
-| -------------- | ------------------------------------------------------------------------------------------- | -------------------- |
-| `search pack`  | `epismo pack search --type context [--query <keywords>] [--filter '{...}']`                 | `epismo_pack_search` |
-| `get pack`     | `epismo pack get --id <id> [--full] [--block-id <id>]`<br>`epismo pack get --alias <alias>` | `epismo_pack_get`    |
-| `create pack`  | `epismo pack create --input '<json>'`                                                       | `epismo_pack_create` |
-| `update pack`  | `epismo pack update --id <id> --input '<json>'`                                             | `epismo_pack_update` |
-| `delete pack`  | `epismo pack delete --id <id>`                                                              | `epismo_pack_delete` |
-| `like pack`    | `epismo pack like --id <id> --liked`                                                        | `epismo_pack_like`   |
-| `upsert alias` | `epismo alias upsert --type context --id <id> --alias <@name>`                              | —                    |
-| `get alias`    | `epismo alias get --alias <name>`                                                           | —                    |
-| `list aliases` | `epismo alias list --type context`                                                          | —                    |
-| `delete alias` | `epismo alias delete --alias <@name>`                                                       | —                    |
+| Operation      | CLI                                                                             | MCP                  |
+| -------------- | ------------------------------------------------------------------------------- | -------------------- |
+| `search pack`  | `epismo pack search --type context [--query <keywords>] [--filter '{...}']`     | `epismo_pack_search` |
+| `get pack`     | `epismo pack get <id> [--full] [--block-id <id>]`<br>`epismo pack get @<alias>` | `epismo_pack_get`    |
+| `create pack`  | `epismo pack create --input '<json>'`                                           | `epismo_pack_create` |
+| `update pack`  | `epismo pack update <id> --input '<json>'`                                      | `epismo_pack_update` |
+| `delete pack`  | `epismo pack delete <id>`                                                       | `epismo_pack_delete` |
+| `like pack`    | `epismo pack like <id> --liked`                                                 | `epismo_pack_like`   |
+| `upsert alias` | `epismo alias upsert @<name> --type context --id <id>`                          | —                    |
+| `get alias`    | `epismo alias get @<name>`                                                      | —                    |
+| `list aliases` | `epismo alias list --type context`                                              | —                    |
+| `delete alias` | `epismo alias delete @<name>`                                                   | —                    |
 
 ---
 
@@ -240,9 +240,9 @@ Prefer **alias-first** unless the input is obviously a search query.
 
 ### Resolve the input
 
-1. UUID → `get pack --id`.
-2. `@alias`, `@handle/name`, or one compact token like `weekly-handoff` → `get pack --alias`; if it misses, run [FIND](#find) with the same text.
-3. Short phrase like `auth refactor handoff` → try `get pack --alias` first; if it misses, run [FIND](#find).
+1. UUID → `get pack <id>`.
+2. `@<alias>`, `@<handle>/<alias>`, or one compact token like `weekly-handoff` → `get pack @<alias>`; if it misses, run [FIND](#find) with the same text.
+3. Short phrase like `auth refactor handoff` → try `get pack @<alias>` first; if it misses, run [FIND](#find).
 4. Question, explicit search wording, or long descriptive text → [FIND](#find) first.
 5. `get/read/open/use <target>` always counts as retrieval intent.
 

@@ -19,10 +19,10 @@ Operate on tasks and goals in Epismo projects — from a quick status update to 
 | Operation      | CLI                                                      | MCP                   |
 | -------------- | -------------------------------------------------------- | --------------------- |
 | `search track` | `epismo track search --type task\|goal --filter '{...}'` | `epismo_track_search` |
-| `get track`    | `epismo track get --id <id>`                             | `epismo_track_get`    |
+| `get track`    | `epismo track get <id>`                                  | `epismo_track_get`    |
 | `create track` | `epismo track create --input '<json>'`                   | `epismo_track_create` |
-| `update track` | `epismo track update --id <id> --input '<json>'`         | `epismo_track_update` |
-| `delete track` | `epismo track delete --id <id>`                          | `epismo_track_delete` |
+| `update track` | `epismo track update <id> --input '<json>'`              | `epismo_track_update` |
+| `delete track` | `epismo track delete <id>`                               | `epismo_track_delete` |
 | `apply track`  | `epismo track apply --input '<json>'`                    | `epismo_track_apply`  |
 
 For filter keys, status values, entity relationships, and search recipes, see [Search & Filter](./references/search.md).
