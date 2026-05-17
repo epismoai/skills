@@ -70,16 +70,22 @@ Workspace selection is CLI-only. All CLI commands resolve workspace automaticall
 ## Scope Model
 
 - `workspace` — top-level access boundary. All operations run within the active workspace.
-- `targets.projectIds[]` — narrows private search or write access to specific projects within the active workspace.
-- `targets.userIds[]` / `targets.emails[]` — grant private write access to specific people on mutation calls.
-- `targets.self` — for search, include private items that target the current user directly; defaults to `true`.
-- CLI search/write flags such as `--project-ids`, `--user-ids`, `--emails`, and `--self` are convenience flags that build the `targets` object.
-- For search, omitting `targets.projectIds` uses the default private scope for the current context; `targets.projectIds: []` explicitly disables project targets.
+- **Search inputs** use `targets`:
+  - `targets.projectIds[]` — narrows private search to specific projects within the active workspace. Omit to use the default private scope; `targets.projectIds: []` explicitly disables project targets.
+  - `targets.self` — include private items that target the current user directly; defaults to `true`.
+  - CLI search flags `--project-ids` and `--self` build the `targets` object.
+- **Mutation inputs** (pack/track create, update, apply) use `scope` plus optional `sharedWith`:
+  - `scope: { type: "personal" }` — write to the caller's personal space.
+  - `scope: { type: "projects", ids: [...] }` — write to specific projects. `ids` must be non-empty and a subset of the caller's accessible projects (see `references.projects`). `projects` scope is only valid in a workspace context.
+  - `sharedWith: { userIds?: [...], emails?: [...] }` — optional, grants write access to specific people. Works with both `personal` and `projects` scope.
+  - On create, `scope` is required (no implicit personal fallback). On update, omit `scope`/`sharedWith` to preserve existing ACL bits; passing them replaces.
+  - Updating an item that has hidden project shares to `scope: { type: "personal" }` errors out.
+  - CLI mutation flags: `--personal`, `--projects <id...>`, `--share-with <userIdOrEmail...>` (values containing `@` are treated as emails).
 
 When the user refers to "my project", resolve both layers before writing:
 
 1. Active workspace
-2. Target project(s) via `targets.projectIds[]`
+2. Target project(s) via `scope: { type: "projects", ids: [...] }`
 
 ---
 

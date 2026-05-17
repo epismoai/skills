@@ -60,16 +60,23 @@ Set `category` on public packs to improve discoverability. On private packs it i
 
 Choose the most specific category that fits. If two categories apply equally, prefer the one the intended audience would search in.
 
-## Project Scoping
+## Scope & Sharing
 
-`targets.projectIds[]` attaches a private pack to one or more workspace projects. This controls which project members can discover the pack in project-scoped searches.
+Private context packs use `scope` plus optional `sharedWith` to control who can find and write to them.
+
+- `scope: { type: "personal" }` — the pack lives in the caller's personal space.
+- `scope: { type: "projects", ids: [...] }` — attaches the pack to one or more workspace projects. Project members can discover it in project-scoped searches.
+- `sharedWith: { userIds?: [...], emails?: [...] }` — optional, grants access to specific people in addition to the chosen `scope`. Works with both `personal` and `projects` scope.
 
 **Rules:**
 
-- `targets.projectIds[]` is valid **only** when `visibility="private"`.
-- For public packs, omit `targets` — public packs are workspace-level and globally discoverable regardless of project.
-- A pack can belong to multiple projects simultaneously.
-- Changing `targets.projectIds[]` on an existing pack is a safe partial update — it does not change content or visibility.
+- `scope` is required on create. There is no implicit personal fallback — omitting it returns a validation error.
+- On update, omit `scope`/`sharedWith` to preserve existing ACL bits; passing them replaces.
+- `scope.projects.ids` must be non-empty and a subset of the caller's accessible projects (`references.projects`).
+- `scope: { type: "projects" }` is only valid in a workspace context.
+- Switching an item with hidden project shares to `scope: { type: "personal" }` errors out.
+- `scope`/`sharedWith` apply only when `visibility="private"`. For public packs, omit them — public packs are workspace-level and globally discoverable regardless of project.
+- CLI flags: `--personal`, `--projects <id...>`, `--share-with <userIdOrEmail...>` (values containing `@` are treated as emails).
 
 ## Sharing a Context Pack
 
@@ -117,15 +124,15 @@ Liked packs appear in search results filtered by `like="liked"` and surface high
 
 Some visibility and lifecycle actions require **explicit user approval** before writing. Do not proceed without it.
 
-| Action                                                | Approval required? | Why                                               |
-| ----------------------------------------------------- | ------------------ | ------------------------------------------------- |
-| First-time public publication (`visibility="public"`) | **Yes**            | Irreversible — content becomes globally visible   |
-| Changing existing pack from `private` to `public`     | **Yes**            | Visibility change may expose internal information |
-| Deleting a pack (`delete pack`)                       | **Yes**            | Irreversible if not in trash/recovery             |
-| Overwriting another owner's pack                      | **Yes**            | Affects content the user does not own             |
-| Creating or updating a private pack                   | No                 | Low risk, reversible                              |
-| Changing `targets.projectIds[]` on an existing private pack | No                 | Scoping change only                               |
-| Liking or un-liking a pack                            | No                 | Reversible signal, no content change              |
+| Action                                                       | Approval required? | Why                                               |
+| ------------------------------------------------------------ | ------------------ | ------------------------------------------------- |
+| First-time public publication (`visibility="public"`)        | **Yes**            | Irreversible — content becomes globally visible   |
+| Changing existing pack from `private` to `public`            | **Yes**            | Visibility change may expose internal information |
+| Deleting a pack (`delete pack`)                              | **Yes**            | Irreversible if not in trash/recovery             |
+| Overwriting another owner's pack                             | **Yes**            | Affects content the user does not own             |
+| Creating or updating a private pack                          | No                 | Low risk, reversible                              |
+| Changing `scope` or `sharedWith` on an existing private pack | No                 | Scoping change only                               |
+| Liking or un-liking a pack                                   | No                 | Reversible signal, no content change              |
 
 **How to obtain approval:** state the intended action, the pack title, and the visibility setting. Wait for an explicit "yes", "go ahead", or equivalent confirmation before writing.
 
@@ -133,12 +140,12 @@ Some visibility and lifecycle actions require **explicit user approval** before 
 
 Use this table to decide visibility and distribution method based on who needs the pack.
 
-| Audience                                     | Visibility               | Distribution method                                                            |
-| -------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------ |
-| Just me, this session                        | `private`                | Read directly via `get pack` in the next session                               |
-| My team in this workspace                    | `private` + `targets.projectIds[]` | Share URL (team members have workspace access)                                 |
-| A specific person (any tool)                 | `private` then share     | Share URL — recipient can view if they have access; use `public` if they don't |
-| Everyone on Epismo                           | `public`                 | Share URL or community search                                                  |
-| External audience (no Epismo account needed) | `public`                 | Share URL — no login required to view                                          |
+| Audience                                     | Visibility                                            | Distribution method                                                            |
+| -------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Just me, this session                        | `private`                                             | Read directly via `get pack` in the next session                               |
+| My team in this workspace                    | `private` + `scope: { type: "projects", ids: [...] }` | Share URL (team members have workspace access)                                 |
+| A specific person (any tool)                 | `private` then share                                  | Share URL — recipient can view if they have access; use `public` if they don't |
+| Everyone on Epismo                           | `public`                                              | Share URL or community search                                                  |
+| External audience (no Epismo account needed) | `public`                                              | Share URL — no login required to view                                          |
 
 If the recipient does not have workspace access and the content is safe to share openly, publish as `public`. If the content must stay private but needs to reach someone outside the workspace, discuss access provisioning with the user — this skill cannot grant workspace access.

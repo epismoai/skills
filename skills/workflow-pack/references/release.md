@@ -16,7 +16,7 @@ Confirm all six before proceeding:
    - `release` / `update`: quality gate passed per [Workflow Quality](./quality.md).
    - `deprecate`: quality gate not required; deprecation rationale and risk note are sufficient.
 5. **Duplication risk** checked — no clearly superior equivalent already exists.
-6. **Write scope** confirmed: `private` uses confirmed `targets.projectIds[]`; `public` omits `targets`.
+6. **Write scope** confirmed: `private` uses confirmed `scope` (`{ type: "personal" }` or `{ type: "projects", ids: [...] }`) plus optional `sharedWith`; `public` omits `scope`/`sharedWith`.
 
 ## Approval Boundary
 

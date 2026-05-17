@@ -158,10 +158,11 @@ Default `private`. Use [PUBLISH](#publish) to go public.
 - Blocks are passed as a separate `"blocks[]"` array — **not** embedded in the top-level `"content"` string.
 - `"content"` at the top level is a brief intro only. All substantive content belongs in blocks.
 
-| Who needs it | `visibility` | Access target                   |
-| ------------ | ------------ | ------------------------------- |
-| Just me      | `"private"`  | omit `targets`                  |
-| My team      | `"private"`  | `targets.projectIds=["pj_xxx"]` |
+| Who needs it    | `visibility` | Scope / share                                    |
+| --------------- | ------------ | ------------------------------------------------ |
+| Just me         | `"private"`  | `scope: { type: "personal" }`                    |
+| My team         | `"private"`  | `scope: { type: "projects", ids: ["pj_xxx"] }`   |
+| Specific people | `"private"`  | any `scope` + `sharedWith: { userIds / emails }` |
 
 ```
 context  <context-id>  <context-title>

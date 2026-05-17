@@ -34,7 +34,7 @@ This reference shows CLI forms. For surface conventions, see [Epismo Basics — 
 2. `search pack --type workflow` returns both private and public workflows unless filtered.
 3. `filter.visibility=["private"]` returns only private workflows in the active workspace.
 4. `filter.visibility=["public"]` returns globally discoverable public workflows.
-5. In `create pack` and `update pack`, `targets.projectIds[]` is valid only when `visibility="private"`. In CLI, pass `--project-ids <ids>`.
+5. In `create pack` and `update pack`, `scope` and `sharedWith` apply only when `visibility="private"`. Use `scope: { type: "personal" }` or `scope: { type: "projects", ids: [...] }`, plus optional `sharedWith: { userIds, emails }`. In CLI, pass `--personal`, `--projects <id...>`, or `--share-with <userIdOrEmail...>`.
 6. `targets.self` controls whether search includes workflows that target the current user directly. In CLI, pass `--self false` to exclude them.
 7. If `visibility` is omitted on pack create/update, default is `private`.
 8. Keep `query` compact: 2-6 domain keywords.
