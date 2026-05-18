@@ -9,10 +9,10 @@ For reusable workflow discovery, see [Workflow Pack — Search & Discovery](../.
 
 | Operation      | CLI command                | Key flags                                              |
 | -------------- | -------------------------- | ------------------------------------------------------ |
-| `search track` | `epismo track search`      | `--type task\|goal` `--filter '{...}'` `--project-ids` |
+| `search track` | `epismo track search`      | `--type task\|goal` `--filter '{...}'` `--projects`    |
 | `get track`    | `epismo track get <id>`    | —                                                      |
-| `create track` | `epismo track create`      | `--input @item.json` or `--project-ids <ids>`          |
-| `update track` | `epismo track update <id>` | `--input @item.json` or `--project-ids <ids>`          |
+| `create track` | `epismo track create`      | `--input @item.json` or `--projects <ids>`             |
+| `update track` | `epismo track update <id>` | `--input @item.json` or `--projects <ids>`             |
 | `delete track` | `epismo track delete <id>` | —                                                      |
 
 ## Quick Reference
@@ -32,9 +32,9 @@ For reusable workflow discovery, see [Workflow Pack — Search & Discovery](../.
 
 1. `workspace` is the top-level access boundary for CLI and MCP calls.
 2. Each workspace can contain multiple projects.
-3. `search track` accepts `targets.projectIds[]` to limit private scope inside the active workspace. In CLI, pass `--project-ids <ids>`.
-4. Omitting `targets.projectIds` uses the default private scope for the current context; `targets.projectIds: []` explicitly disables project targets.
-5. `targets.self` controls whether search includes tracks that target the current user directly. In CLI, pass `--self false` to exclude them.
+3. `search track` accepts additive `scopes[]` to limit private scope inside the active workspace. In CLI, pass `--projects <ids>`, `--personal`, or both.
+4. Omitting `scopes` uses the default search scope for the current context.
+5. Project write scope is `scope:{type:"projects", ids:[...]}`. In CLI, pass `--projects <ids>`.
 6. `search track` requires `type`: `task` or `goal`.
 7. Keep `query` compact when searching related workflow packs through Workflow Pack: 2-6 domain keywords.
 
@@ -114,5 +114,5 @@ These are computed from entity data, not stored as status field values. Use them
 
 ### Release evidence — completed work in a period
 
-- Tasks: `status=["done"]` + `doneAtFrom=<iso8601>` + optional `targets.projectIds=["<project-id>"]`
-- Goals: `status=["completed"]` + `updatedAtFrom=<iso8601>` + optional `targets.projectIds=["<project-id>"]`
+- Tasks: `status=["done"]` + `doneAtFrom=<iso8601>` + optional `scopes=[{type:"projects", ids:["<project-id>"]}]`
+- Goals: `status=["completed"]` + `updatedAtFrom=<iso8601>` + optional `scopes=[{type:"projects", ids:["<project-id>"]}]`

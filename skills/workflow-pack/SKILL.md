@@ -88,7 +88,7 @@ Before materializing:
 
 ```bash
 epismo track apply --input '{
-  "projects": ["pj_123"],
+  "scope": { "type": "projects", "ids": ["pj_123"] },
   "updateDrafts": [
     { "id": "s001", "title": "Define scope", "task": { "status": "todo" } },
     { "id": "s002", "title": "Implement", "task": { "status": "todo", "dependsOn": ["s001"] } },
@@ -125,10 +125,11 @@ Default `private`. Use [RELEASE](#release) to publish publicly.
 }
 ```
 
-| Who needs it | `visibility` | Access target                   |
-| ------------ | ------------ | ------------------------------- |
-| Just me      | `"private"`  | omit `targets`                  |
-| My team      | `"private"`  | `targets.projectIds=["pj_xxx"]` |
+| Who needs it    | `visibility` | Scope / share                                    |
+| --------------- | ------------ | ------------------------------------------------ |
+| Just me         | `"private"`  | `scope: { type: "personal" }`                    |
+| My team         | `"private"`  | `scope: { type: "projects", ids: ["pj_xxx"] }`   |
+| Specific people | `"private"`  | any `scope` + `sharedWith: { userIds / emails }` |
 
 ```
 workflow  <workflow-id>  <workflow-title>

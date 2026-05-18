@@ -286,8 +286,9 @@ Use this as the smallest safe starting shape. Add optional fields only when need
   "content": "Summary of the Attention Is All You Need paper.",
   "type": "context",
   "visibility": "private",
-  "targets": {
-    "projectIds": ["pj_123"]
+  "scope": {
+    "type": "projects",
+    "ids": ["pj_123"]
   },
   "blocks": [
     {
@@ -336,12 +337,22 @@ Use `update pack` with explicit `op` fields. Omitting `"blocks"` keeps all exist
 {
   "id": "<pack-id>",
   "blocks": [
-    { "op": "update", "id": "b001", "title": "Source", "content": "<updated content>" },
-    { "op": "update", "id": "b002", "title": "Summary", "content": "<updated content>" },
+    {
+      "op": "update",
+      "id": "b001",
+      "title": "Source",
+      "content": "<updated content>"
+    },
+    {
+      "op": "update",
+      "id": "b002",
+      "title": "Summary",
+      "content": "<updated content>"
+    },
     { "op": "add", "title": "New Block", "content": "<new block content>" },
     { "op": "remove", "id": "b003" }
   ]
 }
 ```
 
-> Note: `targets.projectIds[]` is valid only when `visibility="private"`. Omit `targets` for public packs.
+> Note: `scope` is required on create and only applies when `visibility="private"`. Use `scope: { type: "personal" }` for personal packs or `scope: { type: "projects", ids: [...] }` for project-scoped packs. Add optional `sharedWith: { userIds, emails }` to grant access to specific people. Omit `scope`/`sharedWith` for public packs.

@@ -48,16 +48,23 @@ Set `category` on public packs to improve discoverability. On private packs it i
 
 Choose the most specific category that fits. If two apply equally, prefer the one the intended audience would search in.
 
-## Project Scoping
+## Scope & Sharing
 
-`targets.projectIds[]` attaches a private workflow pack to one or more workspace projects. This controls which project members can discover the pack in project-scoped searches.
+Private workflow packs use `scope` plus optional `sharedWith` to control who can find and write to them.
+
+- `scope: { type: "personal" }` — the pack lives in the caller's personal space.
+- `scope: { type: "projects", ids: [...] }` — attaches the pack to one or more workspace projects. Project members can discover it in project-scoped searches.
+- `sharedWith: { userIds?: [...], emails?: [...] }` — optional, grants access to specific people in addition to the chosen `scope`. Works with both `personal` and `projects` scope.
 
 **Rules:**
 
-- `targets.projectIds[]` is valid **only** when `visibility="private"`.
-- For public packs, omit `targets` — public packs are workspace-level and globally discoverable.
-- A pack can belong to multiple projects simultaneously.
-- Changing `targets.projectIds[]` on an existing pack is a safe partial update — it does not change content or visibility.
+- `scope` is required on create. There is no implicit personal fallback — omitting it returns a validation error.
+- On update, omit `scope`/`sharedWith` to preserve existing ACL bits; passing them replaces.
+- `scope.projects.ids` must be non-empty and a subset of the caller's accessible projects (`references.projects`).
+- `scope: { type: "projects" }` is only valid in a workspace context.
+- Switching an item with hidden project shares to `scope: { type: "personal" }` errors out.
+- `scope`/`sharedWith` apply only when `visibility="private"`. For public packs, omit them — public packs are workspace-level and globally discoverable.
+- CLI flags: `--personal`, `--projects <id...>`, `--share-with <userIdOrEmail...>` (values containing `@` are treated as emails).
 
 ## Sharing a Workflow Pack
 
@@ -95,14 +102,14 @@ Liked packs surface higher in community discovery and appear in `like="liked"` f
 
 Some actions require **explicit user approval** before writing. Do not proceed without it.
 
-| Action                                                | Approval required? | Why                                              |
-| ----------------------------------------------------- | ------------------ | ------------------------------------------------ |
-| First-time public release (`visibility="public"`)     | **Yes**            | Content becomes globally visible                 |
-| Changing existing workflow from `private` to `public` | **Yes**            | May expose internal patterns or team information |
-| Deprecating a workflow                                | **Yes**            | Affects existing users of the pattern            |
-| Overwriting another owner's workflow                  | **Yes**            | Affects content the current user does not own    |
-| Creating or updating a private workflow               | No                 | Low risk, reversible                             |
-| Changing `targets.projectIds[]` on a private workflow | No                 | Scoping change only                              |
-| Liking or un-liking                                   | No                 | Reversible signal, no content change             |
+| Action                                                 | Approval required? | Why                                              |
+| ------------------------------------------------------ | ------------------ | ------------------------------------------------ |
+| First-time public release (`visibility="public"`)      | **Yes**            | Content becomes globally visible                 |
+| Changing existing workflow from `private` to `public`  | **Yes**            | May expose internal patterns or team information |
+| Deprecating a workflow                                 | **Yes**            | Affects existing users of the pattern            |
+| Overwriting another owner's workflow                   | **Yes**            | Affects content the current user does not own    |
+| Creating or updating a private workflow                | No                 | Low risk, reversible                             |
+| Changing `scope` or `sharedWith` on a private workflow | No                 | Scoping change only                              |
+| Liking or un-liking                                    | No                 | Reversible signal, no content change             |
 
 **How to obtain approval:** state the intended action, the workflow title, and the visibility setting. Wait for an explicit "yes" or equivalent before writing.

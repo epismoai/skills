@@ -11,7 +11,7 @@ Surface conventions are defined in [Context Pack](../SKILL.md#operations-context
 
 | Operation     | CLI command                         | Key flags                                               |
 | ------------- | ----------------------------------- | ------------------------------------------------------- |
-| `search pack` | `epismo pack search --type context` | `--query <keywords>` `--filter '{...}'` `--project-ids` |
+| `search pack` | `epismo pack search --type context` | `--query <keywords>` `--filter '{...}'` `--projects`    |
 | `get pack`    | `epismo pack get <id>`              | `[--full]` `[--block-id <block-id>]`                    |
 | `like pack`   | `epismo pack like <id> --liked`     | `--no-liked` to remove                                  |
 
@@ -34,8 +34,8 @@ Surface conventions are defined in [Context Pack](../SKILL.md#operations-context
 2. `search pack --type context` returns both private (yours) and public packs unless filtered.
 3. `filter.visibility=["private"]` returns only your private packs.
 4. `filter.visibility=["public"]` returns all public packs discoverable from the active workspace.
-5. `targets.projectIds=["<project-id>"]` narrows private search scope to that project. In CLI, pass `--project-ids <ids>`.
-6. `targets.self` controls whether search includes packs that target the current user directly. In CLI, pass `--self false` to exclude them.
+5. `scopes=[{type:"projects", ids:["<project-id>"]}]` narrows private search scope to that project. In CLI, pass `--projects <ids>`.
+6. Add `{type:"personal"}` to `scopes` to include packs that target the current user directly. In CLI, pass `--personal`.
 7. `query` runs a semantic / keyword search on title and content. Keep it to 2–6 domain keywords.
 8. Omitting all filters returns the most recently updated packs in the active workspace.
 
@@ -158,9 +158,7 @@ Look for titles containing "Handoff" or your name in the results.
 ```json
 {
   "type": "context",
-  "targets": {
-    "projectIds": ["pj_123"]
-  },
+  "scopes": [{ "type": "projects", "ids": ["pj_123"] }],
   "filter": {
     "visibility": ["private"]
   }
