@@ -79,7 +79,7 @@ Use a non-UUID client label (e.g. `"t001"`) as `id` to create a new track. Use a
 
 ```json
 {
-  "projects": ["pj_123"],
+  "scope": { "type": "projects", "ids": ["pj_123"] },
   "updateDrafts": [
     {
       "id": "g001",

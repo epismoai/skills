@@ -88,7 +88,7 @@ Before materializing:
 
 ```bash
 epismo track apply --input '{
-  "projects": ["pj_123"],
+  "scope": { "type": "projects", "ids": ["pj_123"] },
   "updateDrafts": [
     { "id": "s001", "title": "Define scope", "task": { "status": "todo" } },
     { "id": "s002", "title": "Implement", "task": { "status": "todo", "dependsOn": ["s001"] } },

@@ -70,10 +70,11 @@ Workspace selection is CLI-only. All CLI commands resolve workspace automaticall
 ## Scope Model
 
 - `workspace` — top-level access boundary. All operations run within the active workspace.
-- **Search inputs** use `targets`:
-  - `targets.projectIds[]` — narrows private search to specific projects within the active workspace. Omit to use the default private scope; `targets.projectIds: []` explicitly disables project targets.
-  - `targets.self` — include private items that target the current user directly; defaults to `true`.
-  - CLI search flags `--project-ids` and `--self` build the `targets` object.
+- **Search inputs** use additive `scopes`:
+  - `scopes: [{ type: "personal" }]` — search items that target the current user directly.
+  - `scopes: [{ type: "projects", ids: [...] }]` — search items in specific projects.
+  - Combine both scopes to search personal and project items together. Omit `scopes` to use the default search scope.
+  - CLI search flags `--personal` and `--projects` build `scopes`.
 - **Mutation inputs** (pack/track create, update, apply) use `scope` plus optional `sharedWith`:
   - `scope: { type: "personal" }` — write to the caller's personal space.
   - `scope: { type: "projects", ids: [...] }` — write to specific projects. `ids` must be non-empty and a subset of the caller's accessible projects (see `references.projects`). `projects` scope is only valid in a workspace context.
