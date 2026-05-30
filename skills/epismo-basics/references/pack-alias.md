@@ -15,17 +15,17 @@ On **upsert / delete**, pick the namespace with `--namespace personal|workspace`
 
 ## Reference Format (get / `pack get`)
 
-| Format                | Resolves in                                                        |
-| --------------------- | ------------------------------------------------------------------ |
-| `<alias>` / `@<alias>`| personal namespace first, then the active workspace (fallback)     |
-| `@<handle>/<alias>`   | another account's alias, by public handle                          |
+| Format                 | Resolves in                                                    |
+| ---------------------- | -------------------------------------------------------------- |
+| `<alias>` / `@<alias>` | personal namespace first, then the active workspace (fallback) |
+| `@<handle>/<alias>`    | another account's alias, by public handle                      |
 
 - The bare form keeps daily use short while letting a personal alias shadow a shared team one.
 - The namespace is **not** encoded in the reference string (any `@me/`/`@team/`-style prefix would collide with real account handles, which are plain `[a-z0-9-]`). To pin resolution to one side when a personal alias shadows a workspace one, pass `--namespace personal|workspace` (CLI) / `namespace` (API/MCP) alongside the bare alias.
 
 ## Who can create an alias
 
-Only the pack's **owner** may create or repoint an alias to it (in either the personal or the workspace namespace). Everyone else simply *uses* the alias — resolution only checks that you can read the target. To bookmark someone else's pack for yourself, use `like`, not an alias.
+Only the pack's **owner** may create or repoint an alias to it (in either the personal or the workspace namespace). Everyone else simply _uses_ the alias — resolution only checks that you can read the target. To bookmark someone else's pack for yourself, use `like`, not an alias.
 
 ## Access Options
 
@@ -39,8 +39,8 @@ Only the pack's **owner** may create or repoint an alias to it (in either the pe
 #### Upsert (create or update)
 
 ```bash
-epismo alias upsert @myproject --type workflow --id <id>                        # personal
-epismo alias upsert @deploy --type workflow --id <id> --namespace workspace     # shared with the workspace
+epismo alias upsert @myproject --id <id>                        # personal
+epismo alias upsert @deploy --id <id> --namespace workspace     # shared with the workspace
 ```
 
 You can alias only packs you own; the `--namespace workspace` form shares the name with the active workspace.

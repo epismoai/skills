@@ -35,7 +35,7 @@ Discover, adapt, and release reusable workflow packs in Epismo — from finding 
 | `update pack`  | `epismo pack update <id> --input '<json>'`                                      | `epismo_pack_update` |
 | `delete pack`  | `epismo pack delete <id>`                                                       | `epismo_pack_delete` |
 | `like pack`    | `epismo pack like <id> --liked`                                                 | `epismo_pack_like`   |
-| `upsert alias` | `epismo alias upsert @<name> --type workflow --id <id>`                         | —                    |
+| `upsert alias` | `epismo alias upsert @<name> --id <id>`                                         | —                    |
 | `get alias`    | `epismo alias get @<name>`                                                      | —                    |
 | `list aliases` | `epismo alias list --type workflow`                                             | —                    |
 | `delete alias` | `epismo alias delete @<name>`                                                   | —                    |
