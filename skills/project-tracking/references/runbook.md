@@ -80,7 +80,7 @@ Use a non-UUID client label (e.g. `"t001"`) as `id` to create a new track. Use a
 ```json
 {
   "scope": { "type": "projects", "ids": ["pj_123"] },
-  "updateDrafts": [
+  "upserts": [
     {
       "id": "g001",
       "title": "Release agent task assignment",
@@ -97,7 +97,7 @@ Use a non-UUID client label (e.g. `"t001"`) as `id` to create a new track. Use a
       "task": { "status": "todo", "goalId": "g001", "dependsOn": ["t001"] }
     }
   ],
-  "deleteDrafts": []
+  "deletes": []
 }
 ```
 
@@ -170,7 +170,7 @@ Readiness checks:
 4. Obtain approval if required (see [Write Safety](#write-safety-and-approval-gate)).
 5. Materialize only after confirmation.
 
-Typical writes: one `apply track` call with `updateDrafts` containing all new items (use client labels as IDs to wire cross-references in a single request). Fall back to sequential `create track` calls only when items are independent and few. If the result should become a reusable workflow pack, hand off to [Workflow Pack](../../workflow-pack/SKILL.md).
+Typical writes: one `apply track` call with `upserts` containing all new items (use client labels as IDs to wire cross-references in a single request). Fall back to sequential `create track` calls only when items are independent and few. If the result should become a reusable workflow pack, hand off to [Workflow Pack](../../workflow-pack/SKILL.md).
 
 ### 4) Recovery and Backlog Hygiene
 

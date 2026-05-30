@@ -84,12 +84,12 @@ Before materializing:
 3. Reassign owners as appropriate for the new context.
 4. Confirm destination: private pack for future reuse, or project tracks for immediate execution.
 
-**To materialize steps as project tracks**, map each workflow step to an `updateDrafts` entry — use the step's `id` (e.g. `s001`) as a client label; the server resolves it to a UUID. Preserve `dependsOn` directly from the workflow steps:
+**To materialize steps as project tracks**, map each workflow step to an `upserts` entry — use the step's `id` (e.g. `s001`) as a client label; the server resolves it to a UUID. Preserve `dependsOn` directly from the workflow steps:
 
 ```bash
 epismo track apply --input '{
   "scope": { "type": "projects", "ids": ["pj_123"] },
-  "updateDrafts": [
+  "upserts": [
     { "id": "s001", "title": "Define scope", "task": { "status": "todo" } },
     { "id": "s002", "title": "Implement", "task": { "status": "todo", "dependsOn": ["s001"] } },
     { "id": "s003", "title": "Review and ship", "task": { "status": "todo", "dependsOn": ["s002"] } }
