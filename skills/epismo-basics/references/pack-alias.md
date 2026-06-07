@@ -2,7 +2,7 @@
 
 An alias is a short, human-readable name that resolves to a pack ID. Pass it as the positional `<reference>` to `pack get` (same slot as the ID) to avoid copying and pasting full UUIDs.
 
-`alias` is a top-level resource — managed via `epismo alias ...` (CLI) or `/v1/aliases` (API), separate from pack CRUD.
+`alias` is a top-level resource — managed via `epismo alias ...` (CLI) or `epismo_alias_*` (MCP), separate from pack CRUD. Both surfaces cover the full set: `upsert`, `get`, `list`, and `delete`.
 
 ## Namespaces
 
@@ -21,7 +21,7 @@ On **upsert / delete**, pick the namespace with `--namespace personal|workspace`
 | `@<handle>/<alias>`    | another account's alias, by public handle                      |
 
 - The bare form keeps daily use short while letting a personal alias shadow a shared team one.
-- The namespace is **not** encoded in the reference string (any `@me/`/`@team/`-style prefix would collide with real account handles, which are plain `[a-z0-9-]`). To pin resolution to one side when a personal alias shadows a workspace one, pass `--namespace personal|workspace` (CLI) / `namespace` (API/MCP) alongside the bare alias.
+- The namespace is **not** encoded in the reference string (any `@me/`/`@team/`-style prefix would collide with real account handles, which are plain `[a-z0-9-]`). To pin resolution to one side when a personal alias shadows a workspace one, pass `--namespace personal|workspace` (CLI) / `namespace` (MCP) alongside the bare alias.
 
 ## Who can create an alias
 
@@ -29,12 +29,12 @@ Only the pack's **owner** may create or repoint an alias to it (in either the pe
 
 ## Access Options
 
-- **CLI** — preferred when operating interactively. Credentials from `epismo login` are used automatically.
-- **API (curl / scripted)** — use when building an integration or when the CLI is not available. Requires an OAuth `access_token`; to obtain one, see [Auth Setup](../SKILL.md#auth-setup-cli) in Epismo Basics.
+- **CLI** — the full surface (`upsert`, `get`, `list`, `delete`). Credentials from `epismo login` are used automatically.
+- **MCP** — the same four operations as `epismo_alias_*` tools (derive names mechanically; see [surface conventions](../SKILL.md#surface-conventions)). To fetch the pack itself, pass the reference to `epismo_pack_get`.
+
+The CLI forms below apply to both surfaces.
 
 ---
-
-### CLI
 
 #### Upsert (create or update)
 
@@ -82,67 +82,7 @@ epismo pack get @handle/myproject
 epismo pack get @mycontext --block-id <block-id>
 ```
 
----
-
-### API (curl / scripted)
-
-`accountId` is never passed as a request parameter — the API resolves it from the auth token internally.
-
-#### Upsert
-
-`namespace` is optional (`personal` default, or `workspace`). The workspace is taken from the auth token / `workspaceId` query param.
-
-```bash
-curl -sX PUT https://api.epismo.ai/v1/aliases \
-  -H "Authorization: Bearer <ACCESS_TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{"type":"workflow","id":"<pack-id>","alias":"@myproject","namespace":"personal"}'
-```
-
-#### List
-
-```bash
-curl -sX GET https://api.epismo.ai/v1/aliases \
-  -H "Authorization: Bearer <ACCESS_TOKEN>"
-```
-
-#### Get (resolve a single alias)
-
-```bash
-# Own alias (personal, then workspace fallback)
-curl -sX GET "https://api.epismo.ai/v1/aliases?alias=%40myproject" \
-  -H "Authorization: Bearer <ACCESS_TOKEN>"
-
-# Pin to the workspace namespace
-curl -sX GET "https://api.epismo.ai/v1/aliases?alias=%40deploy&namespace=workspace" \
-  -H "Authorization: Bearer <ACCESS_TOKEN>"
-
-# Another user's alias
-curl -sX GET "https://api.epismo.ai/v1/aliases?alias=%40epismo%2Fmyproject" \
-  -H "Authorization: Bearer <ACCESS_TOKEN>"
-
-# With type filter
-curl -sX GET "https://api.epismo.ai/v1/aliases?alias=%40myproject&type=workflow" \
-  -H "Authorization: Bearer <ACCESS_TOKEN>"
-```
-
-#### Delete
-
-```bash
-curl -sX DELETE "https://api.epismo.ai/v1/aliases/%40myproject" \
-  -H "Authorization: Bearer <ACCESS_TOKEN>"
-
-# workspace-scoped alias
-curl -sX DELETE "https://api.epismo.ai/v1/aliases/%40deploy?namespace=workspace" \
-  -H "Authorization: Bearer <ACCESS_TOKEN>"
-```
-
-#### Use an alias to fetch a pack
-
-```bash
-curl -sX GET "https://api.epismo.ai/v1/packs?alias=%40myproject" \
-  -H "Authorization: Bearer <ACCESS_TOKEN>"
-```
+`get` resolves an alias to its pack metadata (`id`, `type`, `namespace`, `reference`); to fetch the pack's content, pass that reference straight to `pack get` — the same slot the alias goes in.
 
 ---
 

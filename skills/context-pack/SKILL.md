@@ -1,6 +1,6 @@
 ---
 name: context-pack
-description: "Pack, share, and load context using Epismo context packs. Trigger on: 'pack this', 'new pack', 'get <id>', 'read <alias>', 'load my context', 'what context do I have', 'restore session', 'save this context', 'share with my team', 'pack this up', 'hand this off', 'publish this guide', 'organize my packs', or any intent to persist or retrieve knowledge across tools or sessions."
+description: "Pack, share, and load context using Epismo context packs. Trigger on: 'pack this', 'new pack', 'get <id>', 'read <alias>', 'load my context', 'what context do I have', 'restore session', 'save this context', 'share with my team', 'pack this up', 'hand this off', 'publish this guide', 'organize my packs', 'suggest a change to a pack', 'review suggestions', 'resolve a suggestion', or any intent to persist or retrieve knowledge across tools or sessions."
 ---
 
 # Context Pack
@@ -11,35 +11,47 @@ The unit of organization is a **block** inside a pack. The goal is one well-stru
 
 > For Epismo connection setup, CLI/MCP surface conventions, scope model, share URL resolution, and error handling, see [Epismo Basics](../epismo-basics/SKILL.md).
 
+> For sending and resolving improvement suggestions, see [Suggestions](../epismo-basics/references/suggestions.md).
+
 > **Surface selection:** CLI and MCP connect to the same Epismo service. Use CLI if available; fall back to MCP if not. Never use both in the same session.
 
 ## Commands
 
-| Command                | Natural language triggers                                             | →                     |
-| ---------------------- | --------------------------------------------------------------------- | --------------------- |
-| `pack`                 | pack this, save this, summarize session                               | [PACK](#pack)         |
-| `new`                  | new pack, start fresh, hand off a task, share project status          | [NEW](#new)           |
-| `publish [<id>]`       | publish this, make this public, publish a guide, share with community | [PUBLISH](#publish)   |
-| `get <id\|alias>`      | get this ID, load this ID, restore from ID, read alias, open alias    | [GET](#get)           |
-| `find <query>`         | what context do I have, load my context, search                       | [FIND](#find)         |
-| `update [<id\|alias>]` | edit this pack, update my last pack                                   | [UPDATE](#update)     |
-| `organize`             | reorganize blocks, split this, clean up                               | [ORGANIZE](#organize) |
-| —                      | unclear intent                                                        | Ask once              |
+| Command                | Natural language triggers                                                   | →                     |
+| ---------------------- | --------------------------------------------------------------------------- | --------------------- |
+| `pack`                 | pack this, save this, summarize session                                     | [PACK](#pack)         |
+| `new`                  | new pack, start fresh, hand off a task, share project status                | [NEW](#new)           |
+| `publish [<id>]`       | publish this, make this public, publish a guide, share with community       | [PUBLISH](#publish)   |
+| `get <id\|alias>`      | get this ID, load this ID, restore from ID, read alias, open alias          | [GET](#get)           |
+| `find <query>`         | what context do I have, load my context, search                             | [FIND](#find)         |
+| `update [<id\|alias>]` | edit this pack, update my last pack                                         | [UPDATE](#update)     |
+| `organize`             | reorganize blocks, split this, clean up                                     | [ORGANIZE](#organize) |
+| `suggest`              | suggest a change, propose an edit, review suggestions, resolve a suggestion | [SUGGEST](#suggest)   |
+| —                      | unclear intent                                                              | Ask once              |
 
-## Operations (context packs)
+## Operations
 
-| Operation      | CLI                                                                             | MCP                  |
-| -------------- | ------------------------------------------------------------------------------- | -------------------- |
-| `search pack`  | `epismo pack search --type context [--query <keywords>] [--filter '{...}']`     | `epismo_pack_search` |
-| `get pack`     | `epismo pack get <id> [--full] [--block-id <id>]`<br>`epismo pack get @<alias>` | `epismo_pack_get`    |
-| `create pack`  | `epismo pack create --input '<json>'`                                           | `epismo_pack_create` |
-| `update pack`  | `epismo pack update <id> --input '<json>'`                                      | `epismo_pack_update` |
-| `delete pack`  | `epismo pack delete <id>`                                                       | `epismo_pack_delete` |
-| `like pack`    | `epismo pack like <id> --liked`                                                 | `epismo_pack_like`   |
-| `upsert alias` | `epismo alias upsert @<name> --id <id>`                                         | —                    |
-| `get alias`    | `epismo alias get @<name>`                                                      | —                    |
-| `list aliases` | `epismo alias list --type context`                                              | —                    |
-| `delete alias` | `epismo alias delete @<name>`                                                   | —                    |
+| Operation            | CLI                                                                         |
+| -------------------- | --------------------------------------------------------------------------- |
+| `search pack`        | `epismo pack search --type context [--query <keywords>] [--filter '{...}']` |
+| `get pack`           | `epismo pack get <reference> [--full] [--block-id <id>]`                    |
+| `create pack`        | `epismo pack create --input '<json>'`                                       |
+| `update pack`        | `epismo pack update <reference> --input '<json>'`                           |
+| `delete pack`        | `epismo pack delete <reference>`                                            |
+| `like pack`          | `epismo pack like <reference> --liked`                                      |
+| `upsert alias`       | `epismo alias upsert @<name> --id <id>`                                     |
+| `get alias`          | `epismo alias get @<name>`                                                  |
+| `list aliases`       | `epismo alias list --type context`                                          |
+| `delete alias`       | `epismo alias delete @<name>`                                               |
+| `create suggestion`  | `epismo suggestion create <reference> --title <t> --content <c>`            |
+| `get suggestion`     | `epismo suggestion get <id> [--include-snapshot]`                           |
+| `list suggestions`   | `epismo suggestion list [--owner] [--reference <ref>] [--status <s>]`       |
+| `update suggestion`  | `epismo suggestion update <id> --title <t> --content <c>`                   |
+| `resolve suggestion` | `epismo suggestion resolve <id> --status <applied\|declined\|archived>`     |
+
+CLI forms shown; on MCP, derive the tool name mechanically (`pack get` → `epismo_pack_get`). See [surface conventions](../epismo-basics/SKILL.md#surface-conventions).
+
+`<reference>` is any pack reference — an ID, `@alias`, share URL, or hub URL — resolved server-side. See [Pack References](../epismo-basics/SKILL.md#pack-references-resolving-share-urls).
 
 ---
 
@@ -214,7 +226,7 @@ Confirm with user, then `create pack`:
 }
 ```
 
-Return ID, title, and share URL. For share URL resolution, see [Epismo Basics — Resolving Share URLs](../epismo-basics/SKILL.md#resolving-share-urls).
+Return ID, title, and share URL. A share URL can be passed straight back to `pack get` as a `reference`; see [Epismo Basics — Pack References](../epismo-basics/SKILL.md#pack-references-resolving-share-urls).
 
 ```
 context  <context-id>  <context-title>
@@ -312,6 +324,29 @@ The most common need is not managing many packs — it's making the blocks insid
 | The whole pack is no longer needed                    | **Delete** — delete the pack (needs approval)                 |
 
 All changes are applied via `update pack` using `op` fields. Use `"op": "add"` for new blocks, `"op": "update"` for existing ones, `"op": "remove"` to delete a block by ID. `delete pack` requires explicit user approval.
+
+---
+
+## SUGGEST
+
+**Goal:** propose an improvement to a context pack you don't own, or review and resolve suggestions on a pack you do own. Suggestions are text-first — they never edit the pack directly.
+
+Full lifecycle, listing modes, and the CLI/MCP surface are in [Suggestions](../epismo-basics/references/suggestions.md). Decide direction first:
+
+| Intent                                  | Action                                                                                               |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Propose a change to someone else's pack | `create suggestion` with the pack reference, a short title, and content describing the proposed edit |
+| See suggestions I've received (inbox)   | `list suggestions --owner` (filter with `--status open`)                                             |
+| See suggestions for one pack            | `list suggestions --reference @<alias>`                                                              |
+| See suggestions I submitted             | `list suggestions` (no flags)                                                                        |
+| Revise my own suggestion                | `update suggestion <id>` (author only)                                                               |
+| Act on a suggestion I received          | `resolve suggestion <id> --status applied\|declined\|archived` (owner only)                          |
+
+When you **apply** a suggestion, make the actual change via [UPDATE](#update) or [ORGANIZE](#organize) first, then `resolve --status applied`. Resolving alone does not edit the pack.
+
+```
+suggestion  <suggestion-id>  <suggestion-title>  <status>
+```
 
 ---
 

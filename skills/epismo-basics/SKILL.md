@@ -1,6 +1,6 @@
 ---
 name: epismo-basics
-description: "Shared Epismo operating model: CLI/MCP surface conventions, workspace and project scope, share URL resolution, selective fetch and pack reuse patterns, pack aliases, credits/payment handling, and common auth or permission errors. Load this alongside any Epismo skill, or trigger on Epismo usage questions, alias/credit issues, share URLs, workspace scope, or setup/auth problems blocking another Epismo task."
+description: "Shared Epismo operating model: CLI/MCP surface conventions, workspace and project scope, share URL resolution, selective fetch and pack reuse patterns, pack aliases, pack suggestions, credits/payment handling, and common auth or permission errors. Load this alongside any Epismo skill, or trigger on Epismo usage questions, alias/credit issues, share URLs, workspace scope, or setup/auth problems blocking another Epismo task."
 ---
 
 # Epismo Basics
@@ -42,11 +42,17 @@ epismo whoami                           # verify
 | `cli`   | `epismo <resource> <action> [--flags]` | `epismo pack search --type context` |
 | `mcp`   | `epismo_<resource>_<action>` + JSON    | `epismo_pack_search`                |
 
-MCP tool name = CLI command with spaces and hyphens replaced by underscores. Conceptual payloads are the same across surfaces; CLI flags are mapped into the JSON shape used by API/MCP.
+MCP tool name = CLI command with spaces and hyphens replaced by underscores (e.g. `epismo pack get` → `epismo_pack_get`). Conceptual payloads are the same across surfaces; each `--kebab-flag` becomes a camelCase JSON key (`--include-snapshot` → `includeSnapshot`), and a repeatable / comma-separated flag becomes an array (`--status open,applied` → `statuses: ["open", "applied"]`). **Skill docs show CLI forms only** — derive the MCP tool and parameters from these rules rather than re-listing them per page.
+
+**CLI is the full surface; MCP is a subset.** Prefer MCP or CLI and ignore the HTTP API in normal use. Some surfaces are **CLI-only** (no `epismo_*` tool): `login` / `logout` / `whoami`, `workspace`, `project`, `agent`, `credit`, and `token` — use the CLI for these.
 
 ### Pack Aliases
 
 Packs can be fetched by a short alias instead of a full ID. On the CLI, pass the alias (with or without `@` prefix) as the positional `<reference>` to `pack get` — same slot the ID goes in. In MCP, pass it via the `reference` parameter. To create and manage aliases, see [Pack Alias](./references/pack-alias.md).
+
+### Suggestions
+
+Anyone who can read a workflow or context pack can send the owner a text-first improvement suggestion, and the owner reviews and resolves it (`open` → `applied` / `declined` / `archived`). Suggestions never edit the pack directly. The surface is shared across both pack skills — see [Suggestions](./references/suggestions.md) for the lifecycle, listing modes, and CLI/MCP operations.
 
 ### CLI Input Conventions
 
@@ -90,45 +96,21 @@ When the user refers to "my project", resolve both layers before writing:
 
 ---
 
-## Resolving Share URLs
+## Pack References (Resolving Share URLs)
 
-Share URLs resolve to a resource without credentials by following the HTTP redirect.
+Pack-level commands (`get`, `update`, `like`, `delete`) take a **single `reference`** — the server resolves it. You never follow redirects or extract IDs yourself; pass the user's value as-is.
 
-- Public packs typically use `https://epismo.ai/share/{token}`.
-- Internal/private workspace packs may use `https://{workspace}.epismo.ai/share/{token}`.
-- Do not assume the host is always the root domain; preserve the original host from the share URL.
+| Reference form | Example                                                                            |
+| -------------- | ---------------------------------------------------------------------------------- |
+| Artifact ID    | `abc-123-...`                                                                      |
+| Alias          | `@myproject`, `@handle/myproject`                                                  |
+| Share URL      | `https://epismo.ai/share/{token}` or `https://{workspace}.epismo.ai/share/{token}` |
+| Hub URL        | `https://epismo.ai/hub/workflows/{id}`, `https://epismo.ai/hub/contexts/{id}`      |
 
-```bash
-# curl
-curl -s -o /dev/null -w "%{redirect_url}" "https://epismo.ai/share/${TOKEN}"
-# → https://epismo.ai/hub/workflows/{id}
-# → https://epismo.ai/hub/contexts/{id}
+- **CLI** — positional `<reference>`: `epismo pack get <reference>`.
+- **MCP** — `reference` parameter on the `epismo_pack_*` tools.
 
-# internal/private packs may redirect from a workspace subdomain instead
-curl -s -o /dev/null -w "%{redirect_url}" "https://${WORKSPACE}.epismo.ai/share/${TOKEN}"
-# → https://${WORKSPACE}.epismo.ai/hub/workflows/{id}
-# → https://${WORKSPACE}.epismo.ai/hub/contexts/{id}
-```
-
-```typescript
-// fetch (Node.js)
-const shareUrl = new URL(process.argv[2]);
-const res = await fetch(shareUrl, {
-  redirect: "manual",
-});
-const location = res.headers.get("location") ?? "";
-
-const workflowMatch = location.match(/\/hub\/workflows\/([^/?#]+)/);
-const contextMatch = location.match(/\/hub\/contexts\/([^/?#]+)/);
-// use whichever matches; id = decodeURIComponent(match[1])
-```
-
-| Redirect path         | Resource type   |
-| --------------------- | --------------- |
-| `/hub/workflows/{id}` | `workflow` pack |
-| `/hub/contexts/{id}`  | `context` pack  |
-
-Use the resolved `id` with `get pack` on any surface. If the original share URL is on a workspace subdomain, keep using that host when handing the link back to the user.
+Share URLs resolve server-side by token, independent of host — a workspace-subdomain share URL works without special handling, and no credentials or redirect-following are needed. The resolved pack type (`workflow` / `context`) comes back in the response.
 
 ---
 
