@@ -72,14 +72,9 @@ After publishing, deliver to the intended audience via share URL.
 
 ### Share URL
 
-Obtain the share token from the create or update response or the Epismo UI. Resolve it to a pack ID:
+Obtain the share URL from the create or update response or the Epismo UI and hand it to the recipient. To open it yourself, pass the whole URL as the `reference` to `pack get` — it resolves server-side, no token extraction needed.
 
-```bash
-curl -s -o /dev/null -w "%{redirect_url}" "https://epismo.ai/share/${TOKEN}"
-# → https://epismo.ai/hub/workflows/{id}
-```
-
-See [Epismo Basics — Resolving Share URLs](../../epismo-basics/SKILL.md#resolving-share-urls) for the full algorithm.
+See [Epismo Basics — Pack References](../../epismo-basics/SKILL.md#pack-references-resolving-share-urls) for all accepted reference forms.
 
 ### Who Can Use a Share URL
 

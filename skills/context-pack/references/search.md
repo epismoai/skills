@@ -92,12 +92,6 @@ epismo pack get <pack-id> --block-id <block-id>
 
 `get pack` without `--full` returns outline only (`id`, `title`, `view`, `contentIndex`). Use `--full` to load all block content into the session.
 
-**MCP equivalent:**
-
-```
-epismo_pack_get  # with id parameter; pass full=true for full content
-```
-
 ### Loading into a new session
 
 When resuming work in a new tool or session:

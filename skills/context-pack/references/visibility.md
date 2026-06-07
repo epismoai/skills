@@ -96,7 +96,7 @@ Obtain the share token from the create/update response or from the Epismo UI. Th
 https://epismo.ai/hub/contexts/{pack-id}
 ```
 
-**Resolving a share URL to an pack ID:** see [Epismo Basics — Resolving Share URLs](../../epismo-basics/SKILL.md#resolving-share-urls).
+**Opening a share URL:** pass the whole URL as the `reference` to `pack get` — it resolves server-side. See [Epismo Basics — Pack References](../../epismo-basics/SKILL.md#pack-references-resolving-share-urls).
 
 ### Who Can Use a Share URL
 

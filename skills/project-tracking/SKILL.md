@@ -16,14 +16,16 @@ Operate on tasks and goals in Epismo projects — from a quick status update to 
 
 ## Operations
 
-| Operation      | CLI                                                      | MCP                   |
-| -------------- | -------------------------------------------------------- | --------------------- |
-| `search track` | `epismo track search --type task\|goal --filter '{...}'` | `epismo_track_search` |
-| `get track`    | `epismo track get <id>`                                  | `epismo_track_get`    |
-| `create track` | `epismo track create --input '<json>'`                   | `epismo_track_create` |
-| `update track` | `epismo track update <id> --input '<json>'`              | `epismo_track_update` |
-| `delete track` | `epismo track delete <id>`                               | `epismo_track_delete` |
-| `apply track`  | `epismo track apply --input '<json>'`                    | `epismo_track_apply`  |
+| Operation      | CLI                                                      |
+| -------------- | -------------------------------------------------------- |
+| `search track` | `epismo track search --type task\|goal --filter '{...}'` |
+| `get track`    | `epismo track get <id>`                                  |
+| `create track` | `epismo track create --input '<json>'`                   |
+| `update track` | `epismo track update <id> --input '<json>'`              |
+| `delete track` | `epismo track delete <id>`                               |
+| `apply track`  | `epismo track apply --input '<json>'`                    |
+
+CLI forms shown; on MCP, derive the tool name mechanically (`track get` → `epismo_track_get`). See [surface conventions](../epismo-basics/SKILL.md#surface-conventions).
 
 For filter keys, status values, entity relationships, and search recipes, see [Search & Filter](./references/search.md).
 

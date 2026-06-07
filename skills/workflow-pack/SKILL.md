@@ -1,6 +1,6 @@
 ---
 name: workflow-pack
-description: "Discover, reuse, and release workflow packs in Epismo. Trigger on: 'find a workflow', 'get <id>', 'read <alias>', 'new workflow', 'create workflow', 'capture pattern', 'adapt a workflow', 'reuse this pattern', 'update workflow', 'organize steps', 'release this as a workflow', 'publish a workflow', 'deprecate workflow', or any intent to search community workflows or capture a proven execution pattern for reuse."
+description: "Discover, reuse, and release workflow packs in Epismo. Trigger on: 'find a workflow', 'get <id>', 'read <alias>', 'new workflow', 'create workflow', 'capture pattern', 'adapt a workflow', 'reuse this pattern', 'update workflow', 'organize steps', 'release this as a workflow', 'publish a workflow', 'deprecate workflow', 'suggest a change to a workflow', 'review suggestions', 'resolve a suggestion', or any intent to search community workflows or capture a proven execution pattern for reuse."
 ---
 
 # Workflow Pack
@@ -12,6 +12,7 @@ Discover, adapt, and release reusable workflow packs in Epismo — from finding 
 > For connection setup, surface conventions, scope model, share URL resolution, and error handling, see [Epismo Basics](../epismo-basics/SKILL.md).
 > For task/goal tracking, see [Project Tracking](../project-tracking/SKILL.md).
 > For workflow query patterns and loading, see [Search & Discovery](./references/search.md).
+> For sending and resolving improvement suggestions, see [Suggestions](../epismo-basics/references/suggestions.md).
 
 ## Commands
 
@@ -23,22 +24,32 @@ Discover, adapt, and release reusable workflow packs in Epismo — from finding 
 | `update [<id\|alias>]`  | edit steps, update workflow, modify steps                             | [UPDATE](#update)     |
 | `organize`              | reorganize steps, reorder, clean up workflow                          | [ORGANIZE](#organize) |
 | `release [<id\|alias>]` | publish this, make public, release pattern, update release, deprecate | [RELEASE](#release)   |
+| `suggest`               | suggest a change, propose an edit, review suggestions, resolve a suggestion | [SUGGEST](#suggest) |
 | —                       | unclear intent                                                        | Ask once              |
 
 ## Operations
 
-| Operation      | CLI                                                                             | MCP                  |
-| -------------- | ------------------------------------------------------------------------------- | -------------------- |
-| `search pack`  | `epismo pack search --type workflow --filter '{...}'`                           | `epismo_pack_search` |
-| `get pack`     | `epismo pack get <id> [--full] [--step-id <ids>]`<br>`epismo pack get @<alias>` | `epismo_pack_get`    |
-| `create pack`  | `epismo pack create --input '<json>'`                                           | `epismo_pack_create` |
-| `update pack`  | `epismo pack update <id> --input '<json>'`                                      | `epismo_pack_update` |
-| `delete pack`  | `epismo pack delete <id>`                                                       | `epismo_pack_delete` |
-| `like pack`    | `epismo pack like <id> --liked`                                                 | `epismo_pack_like`   |
-| `upsert alias` | `epismo alias upsert @<name> --id <id>`                                         | —                    |
-| `get alias`    | `epismo alias get @<name>`                                                      | —                    |
-| `list aliases` | `epismo alias list --type workflow`                                             | —                    |
-| `delete alias` | `epismo alias delete @<name>`                                                   | —                    |
+| Operation      | CLI                                                                             |
+| -------------- | ------------------------------------------------------------------------------- |
+| `search pack`  | `epismo pack search --type workflow --filter '{...}'`                           |
+| `get pack`     | `epismo pack get <reference> [--full] [--step-id <ids>]`                        |
+| `create pack`  | `epismo pack create --input '<json>'`                                           |
+| `update pack`  | `epismo pack update <reference> --input '<json>'`                               |
+| `delete pack`  | `epismo pack delete <reference>`                                                |
+| `like pack`    | `epismo pack like <reference> --liked`                                          |
+| `upsert alias` | `epismo alias upsert @<name> --id <id>`                                         |
+| `get alias`    | `epismo alias get @<name>`                                                      |
+| `list aliases` | `epismo alias list --type workflow`                                             |
+| `delete alias` | `epismo alias delete @<name>`                                                   |
+| `create suggestion`  | `epismo suggestion create <reference> --title <t> --content <c>`          |
+| `get suggestion`     | `epismo suggestion get <id> [--include-snapshot]`                         |
+| `list suggestions`   | `epismo suggestion list [--owner] [--reference <ref>] [--status <s>]`     |
+| `update suggestion`  | `epismo suggestion update <id> --title <t> --content <c>`                 |
+| `resolve suggestion` | `epismo suggestion resolve <id> --status <applied\|declined\|archived>`   |
+
+CLI forms shown; on MCP, derive the tool name mechanically (`pack get` → `epismo_pack_get`). See [surface conventions](../epismo-basics/SKILL.md#surface-conventions).
+
+`<reference>` is any pack reference — an ID, `@alias`, share URL, or hub URL — resolved server-side. See [Pack References](../epismo-basics/SKILL.md#pack-references-resolving-share-urls).
 
 ---
 
@@ -294,6 +305,29 @@ See [Release](./references/release.md) for the approval boundary and required ou
 ```
 workflow  <workflow-id>  <workflow-title>
 share     https://epismo.ai/hub/workflows/<id>
+```
+
+---
+
+## SUGGEST
+
+**Goal:** propose an improvement to a workflow you don't own, or review and resolve suggestions on a workflow you do own. Suggestions are text-first — they never edit the workflow directly.
+
+Full lifecycle, listing modes, and the CLI/MCP surface are in [Suggestions](../epismo-basics/references/suggestions.md). Decide direction first:
+
+| Intent                                              | Action                                                                 |
+| --------------------------------------------------- | ---------------------------------------------------------------------- |
+| Propose a change to someone else's workflow         | `create suggestion` with the pack reference, a short title, and content describing the proposed edit |
+| See suggestions I've received (inbox)               | `list suggestions --owner` (filter with `--status open`)               |
+| See suggestions for one workflow                    | `list suggestions --reference @<alias>`                                |
+| See suggestions I submitted                         | `list suggestions` (no flags)                                          |
+| Revise my own suggestion                            | `update suggestion <id>` (author only)                                 |
+| Act on a suggestion I received                      | `resolve suggestion <id> --status applied\|declined\|archived` (owner only) |
+
+When you **apply** a suggestion, make the actual change via [UPDATE](#update) or [ORGANIZE](#organize) first, then `resolve --status applied`. Resolving alone does not edit the workflow.
+
+```
+suggestion  <suggestion-id>  <suggestion-title>  <status>
 ```
 
 ---
