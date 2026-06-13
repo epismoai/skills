@@ -10,7 +10,7 @@ This reference shows CLI forms. For surface conventions, see [Epismo Basics — 
 
 | Operation     | CLI command                          | Key flags                                               |
 | ------------- | ------------------------------------ | ------------------------------------------------------- |
-| `search pack` | `epismo pack search --type workflow` | `--query <keywords>` `--filter '{...}'` `--projects`    |
+| `search pack` | `epismo pack search --type workflow` | `--query <keywords>` `--filter '{...}'` `--projects` `--search-mode` |
 | `get pack`    | `epismo pack get <id>`               | `[--full]` `[--step-id <step-id-1>,<step-id-2>]`        |
 | `create pack` | `epismo pack create`                 | `--input @pack.json` or `--projects <ids>`              |
 | `update pack` | `epismo pack update <id>`            | `--input @changes.json` or `--projects <ids>`           |
@@ -38,6 +38,7 @@ This reference shows CLI forms. For surface conventions, see [Epismo Basics — 
 6. In search, pass `scopes:[{type:"personal"}, {type:"projects", ids:[...]}]` or use CLI `--personal --projects <ids>`.
 7. If `visibility` is omitted on pack create/update, default is `private`.
 8. Keep `query` compact: 2-6 domain keywords.
+9. `searchMode` defaults to `keyword`; pass `semantic` (CLI `--search-mode semantic`) to add vector similarity for intent-described queries. See [Epismo Basics — Search Ranking Mode](../../epismo-basics/SKILL.md#search-ranking-mode).
 
 ## Supported Filter Keys
 

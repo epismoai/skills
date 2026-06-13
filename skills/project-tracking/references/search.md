@@ -9,7 +9,7 @@ For reusable workflow discovery, see [Workflow Pack — Search & Discovery](../.
 
 | Operation      | CLI command                | Key flags                                              |
 | -------------- | -------------------------- | ------------------------------------------------------ |
-| `search track` | `epismo track search`      | `--type task\|goal` `--filter '{...}'` `--projects`    |
+| `search track` | `epismo track search`      | `--type task\|goal` `--filter '{...}'` `--projects` `--search-mode` |
 | `get track`    | `epismo track get <id>`    | —                                                      |
 | `create track` | `epismo track create`      | `--input @item.json` or `--projects <ids>`             |
 | `update track` | `epismo track update <id>` | `--input @item.json` or `--projects <ids>`             |
@@ -37,6 +37,7 @@ For reusable workflow discovery, see [Workflow Pack — Search & Discovery](../.
 5. Project write scope is `scope:{type:"projects", ids:[...]}`. In CLI, pass `--projects <ids>`.
 6. `search track` requires `type`: `task` or `goal`.
 7. Keep `query` compact when searching related workflow packs through Workflow Pack: 2-6 domain keywords.
+8. `searchMode` defaults to `keyword`; pass `semantic` (CLI `--search-mode semantic`) to add vector similarity for intent-described queries. See [Epismo Basics — Search Ranking Mode](../../epismo-basics/SKILL.md#search-ranking-mode).
 
 ## Entity Reference
 

@@ -11,7 +11,7 @@ Surface conventions are defined in [Context Pack](../SKILL.md#operations-context
 
 | Operation     | CLI command                         | Key flags                                               |
 | ------------- | ----------------------------------- | ------------------------------------------------------- |
-| `search pack` | `epismo pack search --type context` | `--query <keywords>` `--filter '{...}'` `--projects`    |
+| `search pack` | `epismo pack search --type context` | `--query <keywords>` `--filter '{...}'` `--projects` `--search-mode` |
 | `get pack`    | `epismo pack get <id>`              | `[--full]` `[--block-id <block-id>]`                    |
 | `like pack`   | `epismo pack like <id> --liked`     | `--no-liked` to remove                                  |
 
@@ -36,7 +36,7 @@ Surface conventions are defined in [Context Pack](../SKILL.md#operations-context
 4. `filter.visibility=["public"]` returns all public packs discoverable from the active workspace.
 5. `scopes=[{type:"projects", ids:["<project-id>"]}]` narrows private search scope to that project. In CLI, pass `--projects <ids>`.
 6. Add `{type:"personal"}` to `scopes` to include packs that target the current user directly. In CLI, pass `--personal`.
-7. `query` runs a semantic / keyword search on title and content. Keep it to 2–6 domain keywords.
+7. `query` searches title and content. Keep it to 2–6 domain keywords. `searchMode` defaults to `keyword`; pass `semantic` (CLI `--search-mode semantic`) to add vector similarity for paraphrased or cross-language queries. See [Epismo Basics — Search Ranking Mode](../../epismo-basics/SKILL.md#search-ranking-mode).
 8. Omitting all filters returns the most recently updated packs in the active workspace.
 
 ## Supported Filter Keys
