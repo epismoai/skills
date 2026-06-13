@@ -149,6 +149,15 @@ Before creating any new pack, scan private and public candidates for the same to
 
 If a close match is found, prefer `get pack` over creating new.
 
+## Search Ranking Mode
+
+`search pack` and `search track` accept `searchMode`: `keyword` (default) or `semantic`. Keyword matches terms in title and content; semantic adds vector similarity, so it also surfaces paraphrases and cross-language matches. Default to `keyword`; use `semantic` when the user describes intent in their own words rather than exact terms. In CLI, pass `--search-mode keyword|semantic`.
+
+```bash
+epismo pack search --type context --query "how onboarding works" --search-mode semantic
+epismo track search --type task --query "login is broken" --search-mode semantic
+```
+
 ## Pagination
 
 All `search` calls return page size 20. For large result sets, iterate `page=1, 2, 3...` and merge results.
