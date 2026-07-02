@@ -95,18 +95,21 @@ Before materializing:
 3. Reassign owners as appropriate for the new context.
 4. Confirm destination: private pack for future reuse, or project tracks for immediate execution.
 
-**To materialize steps as project tracks**, map each workflow step to an `upserts` entry — use the step's `id` (e.g. `s001`) as a client label; the server resolves it to a UUID. Preserve `dependsOn` directly from the workflow steps:
+**To materialize a workflow pack as project tracks**, use `pack run` — it converts the pack in one call (CLI `epismo pack run`, MCP `epismo_pack_run`). It creates a root goal (the run's objective and retrieval anchor) plus one `todo` task per step, resolves `dependsOn`/`parentId` step ids to track UUIDs, converts relative due dates to absolute dates from `--start-date` (default today), and stamps `workflow:<id>` provenance sources:
 
 ```bash
-epismo track apply --input '{
-  "scope": { "type": "projects", "ids": ["pj_123"] },
-  "upserts": [
-    { "id": "s001", "title": "Define scope", "task": { "status": "todo" } },
-    { "id": "s002", "title": "Implement", "task": { "status": "todo", "dependsOn": ["s001"] } },
-    { "id": "s003", "title": "Review and ship", "task": { "status": "todo", "dependsOn": ["s002"] } }
-  ]
-}'
+epismo pack run @release-review \
+  --title "Ship CSV export" \
+  --projects pj_123 \
+  --assignee human=<user-id> \
+  --context @repo-conventions
 ```
+
+- `--title` / `--content` set the goal's objective; omitted, they default to the pack's title/content.
+- `--assignee token=id` maps pack assignee tokens; map `human` to a user id (agent ids resolve as-is). Unmapped `human` steps are left unassigned and reported in `warnings` — always check them.
+- The response returns `goal.id` and a `stepMap` (step id → track UUID). Fetch the whole run later with `epismo track search --type task --filter '{"goalId":["<goal-id>"]}'`.
+
+Use `epismo track apply` directly only when building a task tree from scratch without a pack.
 
 Use [Workflow Patterns — Discovery](./templates/patterns.md#2-workflow-discovery) for structured adaptation reports.
 
