@@ -170,7 +170,7 @@ Readiness checks:
 4. Obtain approval if required (see [Write Safety](#write-safety-and-approval-gate)).
 5. Materialize only after confirmation.
 
-Typical writes: one `apply track` call with `upserts` containing all new items (use client labels as IDs to wire cross-references in a single request). Fall back to sequential `create track` calls only when items are independent and few. If the result should become a reusable workflow pack, hand off to [Workflow Pack](../../workflow-pack/SKILL.md).
+Typical writes: if the reuse check found a fitting workflow pack, materialize it with `epismo pack run` (see [Workflow Pack](../../workflow-pack/SKILL.md)) instead of hand-building upserts. Otherwise one `apply track` call with `upserts` containing all new items (use client labels as IDs to wire cross-references in a single request). Fall back to sequential `create track` calls only when items are independent and few. If the result should become a reusable workflow pack, hand off to [Workflow Pack](../../workflow-pack/SKILL.md).
 
 ### 4) Recovery and Backlog Hygiene
 
