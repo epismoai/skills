@@ -111,6 +111,22 @@ Use a non-UUID client label (e.g. `"t001"`) as `id` to create a new track. Use a
 }
 ```
 
+## Entry Logs
+
+Entry logs are an append-only comment/activity trail on a task or goal — separate from the track's own `title`/`content`/status fields. Use a log instead of a field edit when the information is a note *about* the track's history (evidence, a status-change rationale, an agent's progress update) rather than a change to its current state.
+
+- `log track` (`epismo track log <id> --content '<text>' [--kind comment|progress|evaluation|system]`) appends one immutable entry. `kind` defaults to `comment` — use `progress` for an agent's own activity updates and `evaluation` for a verdict or review result. Appending is free (no credit cost), so log liberally rather than saving everything for a final summary.
+- `list logs` (`epismo track logs <id> [--after <logId>]`) reads them back oldest first. Pass the previous response's `nextCursor` as `--after` to fetch only what's new since the last check.
+
+```json
+{
+  "kind": "progress",
+  "content": "Ran the migration against staging; 3 rows failed FK validation, investigating."
+}
+```
+
+Use a log to record *why* during [Operation Output](#operation-output) — e.g. append the **Evidence** line to the track itself when it should outlive the chat, in addition to reporting it. Do not use a log as a substitute for a real field update: if the track's status, assignee, or due date changed, that change belongs in `update track` / `apply track`, not buried in a log entry.
+
 ## Mode Playbooks
 
 ### 1) Partial Update

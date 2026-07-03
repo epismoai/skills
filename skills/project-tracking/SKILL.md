@@ -24,10 +24,13 @@ Operate on tasks and goals in Epismo projects — from a quick status update to 
 | `update track` | `epismo track update <id> --input '<json>'`              |
 | `delete track` | `epismo track delete <id>`                               |
 | `apply track`  | `epismo track apply --input '<json>'`                    |
+| `log track`    | `epismo track log <id> --content '<text>'`                |
+| `list logs`    | `epismo track logs <id>`                                  |
 
-CLI forms shown; on MCP, derive the tool name mechanically (`track get` → `epismo_track_get`). See [surface conventions](../epismo-basics/SKILL.md#surface-conventions).
+CLI forms shown; on MCP, derive the tool name mechanically (`track get` → `epismo_track_get`, `track log` → `epismo_track_log_create`, `track logs` → `epismo_track_log_list`). See [surface conventions](../epismo-basics/SKILL.md#surface-conventions).
 
 For filter keys, status values, entity relationships, and search recipes, see [Search & Filter](./references/search.md).
+For when to append an entry log versus editing a track's own fields, see [Runbook — Entry Logs](./references/runbook.md#entry-logs).
 
 ## Intent Router
 
