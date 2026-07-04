@@ -39,6 +39,7 @@ The unit of organization is a **block** inside a pack. The goal is one well-stru
 | `update pack`        | `epismo pack update <reference> --input '<json>'`                           |
 | `delete pack`        | `epismo pack delete <reference>`                                            |
 | `like pack`          | `epismo pack like <reference> --liked`                                      |
+| `report pack`        | `epismo pack report <reference> --outcome success\|failure`                 |
 | `upsert alias`       | `epismo alias upsert @<name> --id <id>`                                     |
 | `get alias`          | `epismo alias get @<name>`                                                  |
 | `list aliases`       | `epismo alias list --type context`                                          |

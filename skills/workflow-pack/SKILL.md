@@ -37,6 +37,7 @@ Discover, adapt, and release reusable workflow packs in Epismo — from finding 
 | `update pack`  | `epismo pack update <reference> --input '<json>'`                               |
 | `delete pack`  | `epismo pack delete <reference>`                                                |
 | `like pack`    | `epismo pack like <reference> --liked`                                          |
+| `report pack`  | `epismo pack report <reference> --outcome success\|failure`                     |
 | `upsert alias` | `epismo alias upsert @<name> --id <id>`                                         |
 | `get alias`    | `epismo alias get @<name>`                                                      |
 | `list aliases` | `epismo alias list --type workflow`                                             |
@@ -110,6 +111,8 @@ epismo pack run @release-review \
 - The response returns `goal.id` and a `stepMap` (step id → track UUID). Fetch the whole run later with `epismo track search --type task --filter '{"goalId":["<goal-id>"]}'`.
 
 Use `epismo track apply` directly only when building a task tree from scratch without a pack.
+
+**After executing a pack** (via `pack run` or by following its steps inline), report the outcome: `epismo pack report <reference> --outcome success|failure`. Report `success` when the run achieved its objective, `failure` when it did not; do not report after merely reading a pack. One report per account — repeat reports overwrite the previous one (latest wins), so re-report after re-running. Reports power the hub's success counts and trending, and a `failure` is a good moment to file an improvement suggestion.
 
 Use [Workflow Patterns — Discovery](./templates/patterns.md#2-workflow-discovery) for structured adaptation reports.
 
