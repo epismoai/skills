@@ -45,7 +45,7 @@ This reference shows CLI forms. For surface conventions, see [Epismo Basics — 
 ### Workflows (`search pack`, type `workflow`)
 
 `category[]`, `visibility[]`, `like`, `ownerId[]`,
-`minLikeCount`, `minDownloadCount`, `updatedAtFrom`, `updatedAtTo`
+`minLikeCount`, `minSuccessCount`, `updatedAtFrom`, `updatedAtTo`
 
 ## Loading a Workflow
 
