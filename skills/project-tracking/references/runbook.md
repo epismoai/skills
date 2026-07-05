@@ -111,16 +111,17 @@ Use a non-UUID client label (e.g. `"t001"`) as `id` to create a new track. Use a
 }
 ```
 
-## Entry Logs
+## Logs
 
-Entry logs are an append-only comment/activity trail on a task or goal — separate from the track's own `title`/`content`/status fields. Use a log instead of a field edit when the information is a note *about* the track's history (evidence, a status-change rationale, an agent's progress update) rather than a change to its current state.
+Logs are a comment/activity trail on a task or goal — separate from the track's own `title`/`content`/status fields. Use a log instead of a field edit when the information is a note *about* the track's history (evidence, a status-change rationale, an agent's progress update) rather than a change to its current state.
 
-- `log track` (`epismo track log <id> --content '<text>' [--kind comment|progress|evaluation|system]`) appends one immutable entry. `kind` defaults to `comment` — use `progress` for an agent's own activity updates and `evaluation` for a verdict or review result. Appending is free (no credit cost), so log liberally rather than saving everything for a final summary.
-- `list logs` (`epismo track logs <id> [--after <logId>]`) reads them back oldest first. Pass the previous response's `nextCursor` as `--after` to fetch only what's new since the last check.
+- `create log` (`epismo log create <track-id> --content '<text>' [--kind comment|update|review] [--idempotency-key <uuid>]`) appends one entry. `kind` defaults to `comment` — use `update` for activity/status updates and `review` for a verdict or review result. Appending is free (no credit cost), so log liberally rather than saving everything for a final summary.
+- `list logs` (`epismo log list [track-id] [--author-id <userId>] [--order desc|asc] [--cursor <logId>]`) reads logs newest first by default. Pass `track-id` to read one track's logs; omit it for a separate activity feed across *every* track you can currently access instead — `--author-id` narrows either way, e.g. to see "what's been happening" or "what has this user written." Pass the previous response's `nextCursor` back as `--cursor` with the same `--order` to fetch the next page; use `--order asc` for chronological replay. The cross-track feed (no `track-id`) reflects an ACL snapshot taken when each log was written, not a live re-check — a log you could see when it was written can still appear here after you lose access to that track, unlike a `track-id`-scoped read, which always reflects the track's live ACL.
+- `delete log` (`epismo log delete <log-id>`) deletes one log. Authors can delete their own logs; a track's creator can delete any log on that track. Deleted logs are omitted from future list results.
 
 ```json
 {
-  "kind": "progress",
+  "kind": "update",
   "content": "Ran the migration against staging; 3 rows failed FK validation, investigating."
 }
 ```
