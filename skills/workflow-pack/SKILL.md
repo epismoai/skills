@@ -16,37 +16,37 @@ Discover, adapt, and release reusable workflow packs in Epismo — from finding 
 
 ## Commands
 
-| Command                 | Natural language triggers                                             | →                     |
-| ----------------------- | --------------------------------------------------------------------- | --------------------- |
-| `new`                   | create workflow, capture pattern, adapt a pattern, new workflow       | [NEW](#new)           |
-| `get <id\|alias>`       | get this ID, load this ID, read alias, open alias, load workflow      | [GET](#get)           |
-| `find <query>`          | find a workflow, search workflows, what workflows do I have           | [FIND](#find)         |
-| `update [<id\|alias>]`  | edit steps, update workflow, modify steps                             | [UPDATE](#update)     |
-| `organize`              | reorganize steps, reorder, clean up workflow                          | [ORGANIZE](#organize) |
-| `release [<id\|alias>]` | publish this, make public, release pattern, update release, deprecate | [RELEASE](#release)   |
-| `suggest`               | suggest a change, propose an edit, review suggestions, resolve a suggestion | [SUGGEST](#suggest) |
-| —                       | unclear intent                                                        | Ask once              |
+| Command                 | Natural language triggers                                                   | →                     |
+| ----------------------- | --------------------------------------------------------------------------- | --------------------- |
+| `new`                   | create workflow, capture pattern, adapt a pattern, new workflow             | [NEW](#new)           |
+| `get <id\|alias>`       | get this ID, load this ID, read alias, open alias, load workflow            | [GET](#get)           |
+| `find <query>`          | find a workflow, search workflows, what workflows do I have                 | [FIND](#find)         |
+| `update [<id\|alias>]`  | edit steps, update workflow, modify steps                                   | [UPDATE](#update)     |
+| `organize`              | reorganize steps, reorder, clean up workflow                                | [ORGANIZE](#organize) |
+| `release [<id\|alias>]` | publish this, make public, release pattern, update release, deprecate       | [RELEASE](#release)   |
+| `suggest`               | suggest a change, propose an edit, review suggestions, resolve a suggestion | [SUGGEST](#suggest)   |
+| —                       | unclear intent                                                              | Ask once              |
 
 ## Operations
 
-| Operation      | CLI                                                                             |
-| -------------- | ------------------------------------------------------------------------------- |
-| `search pack`  | `epismo pack search --type workflow --filter '{...}'`                           |
-| `get pack`     | `epismo pack get <reference> [--full] [--step-id <ids>]`                        |
-| `create pack`  | `epismo pack create --input '<json>'`                                           |
-| `update pack`  | `epismo pack update <reference> --input '<json>'`                               |
-| `delete pack`  | `epismo pack delete <reference>`                                                |
-| `like pack`    | `epismo pack like <reference> --liked`                                          |
-| `report pack`  | `epismo pack report <reference> --outcome success\|failure`                     |
-| `upsert alias` | `epismo alias upsert @<name> --id <id>`                                         |
-| `get alias`    | `epismo alias get @<name>`                                                      |
-| `list aliases` | `epismo alias list --type workflow`                                             |
-| `delete alias` | `epismo alias delete @<name>`                                                   |
-| `create suggestion`  | `epismo suggestion create <reference> --title <t> --content <c>`          |
-| `get suggestion`     | `epismo suggestion get <id> [--include-snapshot]`                         |
-| `list suggestions`   | `epismo suggestion list [--owner] [--reference <ref>] [--status <s>]`     |
-| `update suggestion`  | `epismo suggestion update <id> --title <t> --content <c>`                 |
-| `resolve suggestion` | `epismo suggestion resolve <id> --status <applied\|declined\|archived>`   |
+| Operation            | CLI                                                                     |
+| -------------------- | ----------------------------------------------------------------------- |
+| `search pack`        | `epismo pack search --type workflow --filter '{...}'`                   |
+| `get pack`           | `epismo pack get <reference> [--full] [--step-id <ids>]`                |
+| `create pack`        | `epismo pack create --input '<json>'`                                   |
+| `update pack`        | `epismo pack update <reference> --input '<json>'`                       |
+| `delete pack`        | `epismo pack delete <reference>`                                        |
+| `like pack`          | `epismo pack like <reference> --liked`                                  |
+| `report pack`        | `epismo pack report <reference> --outcome success\|failure`             |
+| `upsert alias`       | `epismo alias upsert @<name> --reference <pack-reference>`              |
+| `get alias`          | `epismo alias get @<name>`                                              |
+| `list aliases`       | `epismo alias list --type workflow`                                     |
+| `delete alias`       | `epismo alias delete @<name>`                                           |
+| `create suggestion`  | `epismo suggestion create <reference> --title <t> --content <c>`        |
+| `get suggestion`     | `epismo suggestion get <id> [--include-snapshot]`                       |
+| `list suggestions`   | `epismo suggestion list [--owner] [--reference <ref>] [--status <s>]`   |
+| `update suggestion`  | `epismo suggestion update <id> --title <t> --content <c>`               |
+| `resolve suggestion` | `epismo suggestion resolve <id> --status <applied\|declined\|archived>` |
 
 CLI forms are terminal commands (`epismo ...`). On MCP, derive the tool name mechanically from the full command name (`epismo pack get` → `epismo_pack_get`). See [surface conventions](../epismo-basics/SKILL.md#surface-conventions).
 
@@ -321,14 +321,14 @@ share     https://epismo.ai/hub/workflows/<id>
 
 Full lifecycle, listing modes, and the CLI/MCP surface are in [Suggestions](../epismo-basics/references/suggestions.md). Decide direction first:
 
-| Intent                                              | Action                                                                 |
-| --------------------------------------------------- | ---------------------------------------------------------------------- |
-| Propose a change to someone else's workflow         | `create suggestion` with the pack reference, a short title, and content describing the proposed edit |
-| See suggestions I've received (inbox)               | `list suggestions --owner` (filter with `--status open`)               |
-| See suggestions for one workflow                    | `list suggestions --reference @<alias>`                                |
-| See suggestions I submitted                         | `list suggestions` (no flags)                                          |
-| Revise my own suggestion                            | `update suggestion <id>` (author only)                                 |
-| Act on a suggestion I received                      | `resolve suggestion <id> --status applied\|declined\|archived` (owner only) |
+| Intent                                      | Action                                                                                               |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Propose a change to someone else's workflow | `create suggestion` with the pack reference, a short title, and content describing the proposed edit |
+| See suggestions I've received (inbox)       | `list suggestions --owner` (filter with `--status open`)                                             |
+| See suggestions for one workflow            | `list suggestions --reference @<alias>`                                                              |
+| See suggestions I submitted                 | `list suggestions` (no flags)                                                                        |
+| Revise my own suggestion                    | `update suggestion <id>` (author only)                                                               |
+| Act on a suggestion I received              | `resolve suggestion <id> --status applied\|declined\|archived` (owner only)                          |
 
 When you **apply** a suggestion, make the actual change via [UPDATE](#update) or [ORGANIZE](#organize) first, then `resolve --status applied`. Resolving alone does not edit the workflow.
 

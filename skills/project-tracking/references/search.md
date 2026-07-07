@@ -10,10 +10,10 @@ For reusable workflow discovery, see [Workflow Pack — Search & Discovery](../.
 | Operation      | CLI command                | Key flags                                              |
 | -------------- | -------------------------- | ------------------------------------------------------ |
 | `search track` | `epismo track search`      | `--type task\|goal` `--filter '{...}'` `--projects` `--search-mode` |
-| `get track`    | `epismo track get <id>`    | —                                                      |
+| `get track`    | `epismo track get <track-reference>` | —                                                      |
 | `create track` | `epismo track create`      | `--input @item.json` or `--projects <ids>`             |
-| `update track` | `epismo track update <id>` | `--input @item.json` or `--projects <ids>`             |
-| `delete track` | `epismo track delete <id>` | —                                                      |
+| `update track` | `epismo track update <track-reference>` | `--input @item.json` or `--projects <ids>`             |
+| `delete track` | `epismo track delete <track-reference>` | —                                                      |
 
 ## Quick Reference
 
