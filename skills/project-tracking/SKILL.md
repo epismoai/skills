@@ -19,13 +19,13 @@ Operate on tasks and goals in Epismo projects — from a quick status update to 
 | Operation      | CLI                                                      |
 | -------------- | -------------------------------------------------------- |
 | `search track` | `epismo track search --type task\|goal --filter '{...}'` |
-| `get track`    | `epismo track get <id>`                                  |
+| `get track`    | `epismo track get <track-reference>`                     |
 | `create track` | `epismo track create --input '<json>'`                   |
-| `update track` | `epismo track update <id> --input '<json>'`              |
-| `delete track` | `epismo track delete <id>`                               |
+| `update track` | `epismo track update <track-reference> --input '<json>'` |
+| `delete track` | `epismo track delete <track-reference>`                  |
 | `apply track`  | `epismo track apply --input '<json>'`                    |
-| `create log`   | `epismo log create <track-id> --content '<text>'`        |
-| `list logs`    | `epismo log list [track-id] [--author-id <userId>]`      |
+| `create log`   | `epismo log create <track-reference> --content '<text>'` |
+| `list logs`    | `epismo log list [track-reference] [--author-id <userId>]` |
 | `delete log`   | `epismo log delete <log-id>`                             |
 
 CLI forms are terminal commands (`epismo ...`). On MCP, derive the tool name mechanically from the full command name (`epismo track get` → `epismo_track_get`). See [surface conventions](../epismo-basics/SKILL.md#surface-conventions).

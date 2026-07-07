@@ -39,8 +39,8 @@ The operations below are shown as CLI commands; use the surface conventions abov
 #### Upsert (create or update)
 
 ```bash
-epismo alias upsert @myproject --id <id>                        # personal
-epismo alias upsert @deploy --id <id> --namespace workspace     # shared with the workspace
+epismo alias upsert @myproject --reference <pack-reference>                        # personal
+epismo alias upsert @deploy --reference <pack-reference> --namespace workspace     # shared with the workspace
 ```
 
 You can alias only packs you own; the `--namespace workspace` form shares the name with the active workspace.
