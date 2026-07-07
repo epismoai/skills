@@ -42,7 +42,7 @@ epismo whoami                           # verify
 | `cli`   | `epismo <resource> <action> [--flags]` | `epismo pack search --type context` |
 | `mcp`   | `epismo_<resource>_<action>` + JSON    | `epismo_pack_search`                |
 
-MCP tool name = CLI command with spaces and hyphens replaced by underscores (e.g. `epismo pack get` → `epismo_pack_get`). Conceptual payloads are the same across surfaces; each `--kebab-flag` becomes a camelCase JSON key (`--include-snapshot` → `includeSnapshot`), and a repeatable / comma-separated flag becomes an array (`--status open,applied` → `statuses: ["open", "applied"]`). **Skill docs show CLI forms only** — derive the MCP tool and parameters from these rules rather than re-listing them per page.
+MCP tool name = the terminal CLI command name, including `epismo`, with spaces and hyphens replaced by underscores (e.g. `epismo pack get` → `epismo_pack_get`). Conceptual payloads are the same across surfaces; each `--kebab-flag` becomes a camelCase JSON key (`--include-snapshot` → `includeSnapshot`), and a repeatable / comma-separated flag becomes an array (`--status open,applied` → `statuses: ["open", "applied"]`). **Skill docs show CLI forms only** — derive the MCP tool and parameters from these rules rather than re-listing them per page.
 
 **CLI is the full surface; MCP is a subset.** Prefer MCP or CLI and ignore the HTTP API in normal use. Some surfaces are **CLI-only** (no `epismo_*` tool): `login` / `logout` / `whoami`, `workspace`, `project`, `agent`, `credit`, and `token` — use the CLI for these.
 

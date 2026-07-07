@@ -30,9 +30,9 @@ Only the pack's **owner** may create or repoint an alias to it (in either the pe
 ## Access Options
 
 - **CLI** — the full surface (`upsert`, `get`, `list`, `delete`). Credentials from `epismo login` are used automatically.
-- **MCP** — the same four operations as `epismo_alias_*` tools (derive names mechanically; see [surface conventions](../SKILL.md#surface-conventions)). To fetch the pack itself, pass the reference to `epismo_pack_get`.
+- **MCP** — the same four operations as `epismo_alias_*` tools (derive names mechanically from the full CLI command name; see [surface conventions](../SKILL.md#surface-conventions)). To fetch the pack itself, pass the reference to `epismo_pack_get`.
 
-The CLI forms below apply to both surfaces.
+The operations below are shown as CLI commands; use the surface conventions above to call the same operations on MCP.
 
 ---
 

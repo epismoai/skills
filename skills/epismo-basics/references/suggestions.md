@@ -80,4 +80,4 @@ epismo suggestion resolve <suggestion-id> --status applied
 
 `--status` accepts `open`, `applied`, `declined`, or `archived`.
 
-On MCP, derive the tool name mechanically (`suggestion list` → `epismo_suggestion_list`); flags become camelCase parameters and `--status open,applied` becomes `statuses: ["open", "applied"]`. See [surface conventions](../SKILL.md#surface-conventions).
+On MCP, derive the tool name mechanically from the full CLI command name (`epismo suggestion list` → `epismo_suggestion_list`); flags become camelCase parameters and `--status open,applied` becomes `statuses: ["open", "applied"]`. See [surface conventions](../SKILL.md#surface-conventions).

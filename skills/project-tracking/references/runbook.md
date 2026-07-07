@@ -111,6 +111,23 @@ Use a non-UUID client label (e.g. `"t001"`) as `id` to create a new track. Use a
 }
 ```
 
+## Logs
+
+Logs are a comment/activity trail on a task or goal — separate from the track's own `title`/`content`/status fields. Use a log instead of a field edit when the information is a note *about* the track's history (evidence, a status-change rationale, an agent's progress update) rather than a change to its current state.
+
+- `create log` (`epismo log create <track-id> --content '<text>' [--kind comment|update|review] [--idempotency-key <uuid>]`) appends one entry. `kind` defaults to `comment` — use `update` for activity/status updates and `review` for a verdict or review result. Appending is free (no credit cost), so log liberally rather than saving everything for a final summary.
+- `list logs` (`epismo log list [track-id] [--author-id <userId>] [--order desc|asc] [--cursor <logId>]`) reads logs newest first by default. Pass `track-id` to read one track's logs; omit it for a separate activity feed across *every* track you can currently access instead — `--author-id` narrows either way, e.g. to see "what's been happening" or "what has this user written." Pass the previous response's `nextCursor` back as `--cursor` with the same `--order` to fetch the next page; use `--order asc` for chronological replay. The cross-track feed (no `track-id`) reflects an ACL snapshot taken when each log was written, not a live re-check — a log you could see when it was written can still appear here after you lose access to that track, unlike a `track-id`-scoped read, which always reflects the track's live ACL.
+- `delete log` (`epismo log delete <log-id>`) deletes one log. Authors can delete their own logs; a track's creator can delete any log on that track. Deleted logs are omitted from future list results.
+
+```json
+{
+  "kind": "update",
+  "content": "Ran the migration against staging; 3 rows failed FK validation, investigating."
+}
+```
+
+Use a log to record *why* during [Operation Output](#operation-output) — e.g. append the **Evidence** line to the track itself when it should outlive the chat, in addition to reporting it. Do not use a log as a substitute for a real field update: if the track's status, assignee, or due date changed, that change belongs in `update track` / `apply track`, not buried in a log entry.
+
 ## Mode Playbooks
 
 ### 1) Partial Update

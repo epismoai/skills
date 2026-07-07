@@ -4,7 +4,7 @@ Discovery and loading patterns for workflow packs.
 For release and update decisions, see [Release](./release.md).
 For visibility and sharing, see [Visibility & Sharing](./visibility.md).
 
-This reference shows CLI forms. For surface conventions, see [Epismo Basics — Surface Conventions](../../epismo-basics/SKILL.md#surface-conventions).
+This reference shows terminal CLI forms (`epismo ...`). For MCP naming and parameters, see [Epismo Basics — Surface Conventions](../../epismo-basics/SKILL.md#surface-conventions).
 
 ## Operations
 

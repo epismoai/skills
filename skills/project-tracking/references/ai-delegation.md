@@ -52,6 +52,8 @@ All six must pass before assigning AI-owned work. If any item fails, fix the gap
 3. **Create or update task** — write the task with all six checklist items satisfied. Include the expected output description in the task content.
 4. **Report** — confirm: title, assignee, expected output, done condition, and review timing.
 
+When the delegate finishes (or checks in partway through), append a `log create` entry on the task with `kind: "update"` for a status check-in or `kind: "review"` for a completion verdict against the done condition — see [Runbook — Logs](./runbook.md#logs). This keeps the acceptance-criteria trail on the task itself instead of only in chat, so a human reviewer can audit it later without re-deriving it.
+
 ## Failure Modes
 
 | Failure                           | Effect                                  | Prevention                                         |
