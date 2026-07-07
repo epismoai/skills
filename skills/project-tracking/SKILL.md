@@ -24,11 +24,11 @@ Operate on tasks and goals in Epismo projects — from a quick status update to 
 | `update track` | `epismo track update <id> --input '<json>'`              |
 | `delete track` | `epismo track delete <id>`                               |
 | `apply track`  | `epismo track apply --input '<json>'`                    |
-| `create log`   | `epismo log create <track-id> --content '<text>'`   |
-| `list logs`    | `epismo log list [track-id] [--author-id <userId>]` |
-| `delete log`   | `epismo log delete <log-id>`                        |
+| `create log`   | `epismo log create <track-id> --content '<text>'`        |
+| `list logs`    | `epismo log list [track-id] [--author-id <userId>]`      |
+| `delete log`   | `epismo log delete <log-id>`                             |
 
-CLI forms shown; on MCP, derive the tool name mechanically (`track get` → `epismo_track_get`, `log create` → `epismo_log_create`, `log list` → `epismo_log_list`, `log delete` → `epismo_log_delete`). See [surface conventions](../epismo-basics/SKILL.md#surface-conventions).
+CLI forms are terminal commands (`epismo ...`). On MCP, derive the tool name mechanically from the full command name (`epismo track get` → `epismo_track_get`). See [surface conventions](../epismo-basics/SKILL.md#surface-conventions).
 
 For filter keys, status values, entity relationships, and search recipes, see [Search & Filter](./references/search.md).
 For when to append a log versus editing a track's own fields, see [Runbook — Logs](./references/runbook.md#logs).

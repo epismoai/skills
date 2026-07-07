@@ -49,7 +49,7 @@ The unit of organization is a **block** inside a pack. The goal is one well-stru
 | `update suggestion`  | `epismo suggestion update <id> --title <t> --content <c>`                   |
 | `resolve suggestion` | `epismo suggestion resolve <id> --status <applied\|declined\|archived>`     |
 
-CLI forms shown; on MCP, derive the tool name mechanically (`pack get` → `epismo_pack_get`). See [surface conventions](../epismo-basics/SKILL.md#surface-conventions).
+CLI forms are terminal commands (`epismo ...`). On MCP, derive the tool name mechanically from the full command name (`epismo pack get` → `epismo_pack_get`). See [surface conventions](../epismo-basics/SKILL.md#surface-conventions).
 
 `<reference>` is any pack reference — an ID, `@alias`, share URL, or hub URL — resolved server-side. See [Pack References](../epismo-basics/SKILL.md#pack-references-resolving-share-urls).
 

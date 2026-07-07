@@ -4,7 +4,7 @@ Discovery and loading patterns for context packs.
 For content templates, see [Content Templates](../templates/content.md).
 For visibility and sharing, see [Visibility & Sharing](./visibility.md).
 
-This reference shows CLI forms. Derive MCP tool names mechanically: spaces → underscores.
+This reference shows terminal CLI forms (`epismo ...`). Derive MCP tool names mechanically from the full command name: spaces and hyphens → underscores.
 Surface conventions are defined in [Context Pack](../SKILL.md#operations-context-packs).
 
 ## Surface Resolution
