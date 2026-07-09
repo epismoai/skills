@@ -128,6 +128,35 @@ Logs are a comment/activity trail on a task or goal — separate from the track'
 
 Use a log to record *why* during [Operation Output](#operation-output) — e.g. append the **Evidence** line to the track itself when it should outlive the chat, in addition to reporting it. Do not use a log as a substitute for a real field update: if the track's status, assignee, or due date changed, that change belongs in `update track` / `apply track`, not buried in a log entry.
 
+## Learning Reviews
+
+Learning Reviews turn completed or postponed work into reusable learning without saving anything automatically.
+
+Use `review track` when:
+
+- a task changed to `done` and the user wants to know what should be reused;
+- a goal changed to `completed` and the work may reveal a repeatable process;
+- a goal changed to `postponed` and the blocked assumptions, missing prerequisites, or warnings should be captured;
+- the user asks for a review, retrospective, or lessons learned for a task/goal.
+
+```bash
+epismo track review <track-reference>
+epismo track review <track-reference> <another-track-reference> --instruction "Focus on cross-target patterns and what should change in the source workflow pack."
+```
+
+The command reads one or more target tasks/goals, related tracks, logs, and source packs. Pass multiple references when several completed/postponed items contributed to the same outcome or should be compared. It returns stats and, for detailed reviews, Markdown `content` for people or agents to use as follow-up context. It does **not** create or update packs, create suggestions, or append logs.
+
+Decision guide:
+
+| Review output says...                    | Follow-up operation                                                       |
+| ---------------------------------------- | ------------------------------------------------------------------------- |
+| New reusable pattern                     | Hand off to Workflow Pack or Context Pack creation                        |
+| User-owned source pack should change     | Use `update pack` through the relevant pack skill                         |
+| Someone else's source pack should change | Use `create suggestion` through the relevant pack skill                   |
+| Useful note but not reusable yet         | Report it; optionally append a `review` log if it should stay on the track |
+
+Review output should use the primary language of the seed knowledge base content and logs. If mixed, it follows the target task/goal language.
+
 ## Mode Playbooks
 
 ### 1) Partial Update
