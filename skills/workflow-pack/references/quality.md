@@ -9,7 +9,7 @@ For visibility and approval rules, see [Visibility & Sharing](./visibility.md).
 
 All criteria must pass. A single fail means: fix the issue or keep the workflow private.
 
-1. **Proven execution** — at least one real execution path with observable outcome (tracks or linked records with identifiers), OR seed-source evidence (blog/docs/design rationale) with explicit assumptions and limits.
+1. **Proven execution** — at least one real execution path with observable outcome (tracks or linked records with identifiers), OR seed-source evidence (blog/docs/design rationale) with explicit assumptions and limits. Prefer including a Learning Review from the completed/postponed task or goal when available; pass multiple related targets together when they represent one execution outcome.
    Fail: outcome claimed but no records, links, or rationale provided.
 2. **Reusability** — steps avoid project-specific names, IDs, and one-off constraints.
    Fail: steps reference specific team members, internal URLs, or non-generalizable configurations.
