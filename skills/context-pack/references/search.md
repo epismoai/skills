@@ -50,7 +50,7 @@ Surface conventions are defined in [Context Pack](../SKILL.md#operations-context
 | `ownerId[]`        | string array      | Filter by owner user ID                                                                                      |
 | `category[]`       | enum array        | One or more categories — see [Visibility & Sharing — Category Reference](./visibility.md#category-reference) |
 | `minLikeCount`     | integer           | Minimum number of likes (useful for finding popular public guides)                                           |
-| `minSuccessCount`  | integer           | Minimum number of accounts reporting a successful run                                                        |
+| `minSuccessCount`  | integer           | Minimum number of accounts whose latest outcome for the pack is success                                       |
 | `updatedAtFrom`    | ISO-8601 datetime | Lower bound on last-updated timestamp                                                                        |
 | `updatedAtTo`      | ISO-8601 datetime | Upper bound on last-updated timestamp                                                                        |
 
