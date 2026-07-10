@@ -114,7 +114,7 @@ Use `epismo track apply` directly only when building a task tree from scratch wi
 
 **After using a pack** (via `pack run` or by following its steps inline), rate its outcome with `epismo pack rate <reference> success|failure`. Use `success` when the pack helped achieve the objective and `failure` when it did not; do not rate after merely reading a pack. One outcome per account — repeating the command updates the previous outcome (latest wins). Rated outcomes power the hub's success/failure counts and trending, and `failure` is a good moment to file an improvement suggestion.
 
-If execution produced tasks/goals, run a Learning Review from [Project Tracking](../project-tracking/references/runbook.md#learning-reviews) before creating or updating a workflow pack. Pass related completed/postponed tasks or goals together when they belong to the same execution outcome. Review output is read-only; use it as evidence for `create pack`, `update pack`, or `create suggestion`, not as an automatic write.
+If execution produced tasks/goals, run a review from [Project Tracking](../project-tracking/references/runbook.md#reviews) before creating or updating a workflow pack. Pass related completed/postponed tasks or goals together when they belong to the same execution outcome. Review output is read-only; use it as evidence for `create pack`, `update pack`, or `create suggestion`, not as an automatic write.
 
 Use [Workflow Patterns — Discovery](./templates/patterns.md#2-workflow-discovery) for structured adaptation reports.
 

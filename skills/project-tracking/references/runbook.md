@@ -113,10 +113,10 @@ Use a non-UUID client label (e.g. `"t001"`) as `id` to create a new track. Use a
 
 ## Logs
 
-Logs are a comment/activity trail on a task or goal — separate from the track's own `title`/`content`/status fields. Use a log instead of a field edit when the information is a note *about* the track's history (evidence, a status-change rationale, an agent's progress update) rather than a change to its current state.
+Logs are a comment/activity trail on a task or goal — separate from the track's own `title`/`content`/status fields. Use a log instead of a field edit when the information is a note _about_ the track's history (evidence, a status-change rationale, an agent's progress update) rather than a change to its current state.
 
 - `create log` (`epismo log create <track-reference> --content '<text>' [--kind comment|update|review] [--idempotency-key <uuid>]`) appends one entry. `kind` defaults to `comment` — use `update` for activity/status updates and `review` for a verdict or review result. Appending is free (no credit cost), so log liberally rather than saving everything for a final summary.
-- `list logs` (`epismo log list [track-reference] [--author-id <userId>] [--order desc|asc] [--cursor <logId>]`) reads logs newest first by default. Pass `track-reference` to read one track's logs; omit it for a separate activity feed across *every* track you can currently access instead — `--author-id` narrows either way, e.g. to see "what's been happening" or "what has this user written." Pass the previous response's `nextCursor` back as `--cursor` with the same `--order` to fetch the next page; use `--order asc` for chronological replay. The cross-track feed (no `track-reference`) reflects an ACL snapshot taken when each log was written, not a live re-check — a log you could see when it was written can still appear here after you lose access to that track, unlike a `track-reference`-scoped read, which always reflects the track's live ACL.
+- `list logs` (`epismo log list [track-reference] [--author-id <userId>] [--order desc|asc] [--cursor <logId>]`) reads logs newest first by default. Pass `track-reference` to read one track's logs; omit it for a separate activity feed across _every_ track you can currently access instead — `--author-id` narrows either way, e.g. to see "what's been happening" or "what has this user written." Pass the previous response's `nextCursor` back as `--cursor` with the same `--order` to fetch the next page; use `--order asc` for chronological replay. The cross-track feed (no `track-reference`) reflects an ACL snapshot taken when each log was written, not a live re-check — a log you could see when it was written can still appear here after you lose access to that track, unlike a `track-reference`-scoped read, which always reflects the track's live ACL.
 - `delete log` (`epismo log delete <log-id>`) deletes one log. Authors can delete their own logs; a track's creator can delete any log on that track. Deleted logs are omitted from future list results.
 
 ```json
@@ -126,11 +126,11 @@ Logs are a comment/activity trail on a task or goal — separate from the track'
 }
 ```
 
-Use a log to record *why* during [Operation Output](#operation-output) — e.g. append the **Evidence** line to the track itself when it should outlive the chat, in addition to reporting it. Do not use a log as a substitute for a real field update: if the track's status, assignee, or due date changed, that change belongs in `update track` / `apply track`, not buried in a log entry.
+Use a log to record _why_ during [Operation Output](#operation-output) — e.g. append the **Evidence** line to the track itself when it should outlive the chat, in addition to reporting it. Do not use a log as a substitute for a real field update: if the track's status, assignee, or due date changed, that change belongs in `update track` / `apply track`, not buried in a log entry.
 
-## Learning Reviews
+## Reviews
 
-Learning Reviews turn completed or postponed work into reusable learning without saving anything automatically.
+Reviews turn completed or postponed work into reusable learning without saving anything automatically.
 
 Use `review track` when:
 
@@ -148,11 +148,11 @@ The command reads one or more target tasks/goals, related tracks, logs, and sour
 
 Decision guide:
 
-| Review output says...                    | Follow-up operation                                                       |
-| ---------------------------------------- | ------------------------------------------------------------------------- |
-| New reusable pattern                     | Hand off to Workflow Pack or Context Pack creation                        |
-| User-owned source pack should change     | Use `update pack` through the relevant pack skill                         |
-| Someone else's source pack should change | Use `create suggestion` through the relevant pack skill                   |
+| Review output says...                    | Follow-up operation                                                        |
+| ---------------------------------------- | -------------------------------------------------------------------------- |
+| New reusable pattern                     | Hand off to Workflow Pack or Context Pack creation                         |
+| User-owned source pack should change     | Use `update pack` through the relevant pack skill                          |
+| Someone else's source pack should change | Use `create suggestion` through the relevant pack skill                    |
 | Useful note but not reusable yet         | Report it; optionally append a `review` log if it should stay on the track |
 
 Review output should use the primary language of the seed knowledge base content and logs. If mixed, it follows the target task/goal language.
