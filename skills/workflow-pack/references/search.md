@@ -11,7 +11,7 @@ This reference shows terminal CLI forms (`epismo ...`). For MCP naming and param
 | Operation     | CLI command                          | Key flags                                               |
 | ------------- | ------------------------------------ | ------------------------------------------------------- |
 | `search pack` | `epismo pack search --type workflow` | `--query <keywords>` `--filter '{...}'` `--projects` `--search-mode` |
-| `get pack`    | `epismo pack get <id>`               | `[--full]` `[--step-id <step-id-1>,<step-id-2>]`        |
+| `get pack`    | `epismo pack get <id>`               | `[--full]` `[--step-id <step-id-1>,<step-id-2>]` `[--share-url]` |
 | `create pack` | `epismo pack create`                 | `--input @pack.json` or `--projects <ids>`              |
 | `update pack` | `epismo pack update <id>`            | `--input @changes.json` or `--projects <ids>`           |
 | `delete pack` | `epismo pack delete <id>`            | —                                                       |

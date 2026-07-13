@@ -1,6 +1,6 @@
 ---
 name: context-pack
-description: "Pack, share, and load context using Epismo context packs. Trigger on: 'pack this', 'new pack', 'get <id>', 'read <alias>', 'load my context', 'what context do I have', 'restore session', 'save this context', 'share with my team', 'pack this up', 'hand this off', 'publish this guide', 'organize my packs', 'suggest a change to a pack', 'review suggestions', 'resolve a suggestion', or any intent to persist or retrieve knowledge across tools or sessions."
+description: "Pack, share, and load context using Epismo context packs. Trigger on: 'pack this', 'new pack', 'get by ID', 'read an alias', 'load my context', 'what context do I have', 'restore session', 'save this context', 'share with my team', 'pack this up', 'hand this off', 'publish this guide', 'organize my packs', 'suggest a change to a pack', 'review suggestions', 'resolve a suggestion', or any intent to persist or retrieve knowledge across tools or sessions."
 ---
 
 # Context Pack
@@ -34,7 +34,7 @@ The unit of organization is a **block** inside a pack. The goal is one well-stru
 | Operation            | CLI                                                                         |
 | -------------------- | --------------------------------------------------------------------------- |
 | `search pack`        | `epismo pack search --type context [--query <keywords>] [--filter '{...}']` |
-| `get pack`           | `epismo pack get <reference> [--full] [--block-id <id>]`                    |
+| `get pack`           | `epismo pack get <reference> [--full] [--block-id <id>] [--share-url]`      |
 | `create pack`        | `epismo pack create --input '<json>'`                                       |
 | `update pack`        | `epismo pack update <reference> --input '<json>'`                           |
 | `delete pack`        | `epismo pack delete <reference>`                                            |
@@ -227,11 +227,11 @@ Confirm with user, then `create pack`:
 }
 ```
 
-Return ID, title, and share URL. A share URL can be passed straight back to `pack get` as a `reference`; see [Epismo Basics — Pack References](../epismo-basics/SKILL.md#pack-references-resolving-share-urls).
+After creation succeeds, request the share URL explicitly with `epismo pack get <context-id> --share-url`, then return ID, title, and the returned `shareUrl`. On MCP, call `epismo_pack_get` with `shareUrl: true`. A share URL can be passed straight back to `pack get` as a `reference`; see [Epismo Basics — Pack References](../epismo-basics/SKILL.md#pack-references-resolving-share-urls).
 
 ```
 context  <context-id>  <context-title>
-share    https://epismo.ai/hub/contexts/<id>
+share    https://epismo.ai/share/<token>
 ```
 
 ---

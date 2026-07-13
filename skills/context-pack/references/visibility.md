@@ -90,7 +90,13 @@ The Epismo share URL format is:
 https://epismo.ai/share/{token}
 ```
 
-Obtain the share token from the create/update response or from the Epismo UI. The token resolves to a redirect at:
+After creating or updating the pack, create or retrieve its share URL explicitly:
+
+```bash
+epismo pack get <reference> --share-url
+```
+
+The response includes `shareUrl`. On MCP, call `epismo_pack_get` with `shareUrl: true`. Pack create/update responses do not generate a share link automatically. Requesting a link does not make a private pack public; recipients still need access. The share token resolves to a redirect at:
 
 ```
 https://epismo.ai/hub/contexts/{pack-id}

@@ -72,7 +72,13 @@ After publishing, deliver to the intended audience via share URL.
 
 ### Share URL
 
-Obtain the share URL from the create or update response or the Epismo UI and hand it to the recipient. To open it yourself, pass the whole URL as the `reference` to `pack get` — it resolves server-side, no token extraction needed.
+After creating or updating the pack, create or retrieve its share URL explicitly:
+
+```bash
+epismo pack get <reference> --share-url
+```
+
+The response includes `shareUrl`. On MCP, call `epismo_pack_get` with `shareUrl: true`. Requesting a link does not make a private pack public; recipients still need access. To open the link yourself, pass the whole URL as the `reference` to `pack get` — it resolves server-side, no token extraction needed.
 
 See [Epismo Basics — Pack References](../../epismo-basics/SKILL.md#pack-references-resolving-share-urls) for all accepted reference forms.
 

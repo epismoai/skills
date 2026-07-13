@@ -1,6 +1,6 @@
 ---
 name: workflow-pack
-description: "Discover, reuse, and release workflow packs in Epismo. Trigger on: 'find a workflow', 'get <id>', 'read <alias>', 'new workflow', 'create workflow', 'capture pattern', 'adapt a workflow', 'reuse this pattern', 'update workflow', 'organize steps', 'release this as a workflow', 'publish a workflow', 'deprecate workflow', 'suggest a change to a workflow', 'review suggestions', 'resolve a suggestion', or any intent to search community workflows or capture a proven execution pattern for reuse."
+description: "Discover, reuse, and release workflow packs in Epismo. Trigger on: 'find a workflow', 'get by ID', 'read an alias', 'new workflow', 'create workflow', 'capture pattern', 'adapt a workflow', 'reuse this pattern', 'update workflow', 'organize steps', 'release this as a workflow', 'publish a workflow', 'deprecate workflow', 'suggest a change to a workflow', 'review suggestions', 'resolve a suggestion', or any intent to search community workflows or capture a proven execution pattern for reuse."
 ---
 
 # Workflow Pack
@@ -32,7 +32,7 @@ Discover, adapt, and release reusable workflow packs in Epismo — from finding 
 | Operation            | CLI                                                                     |
 | -------------------- | ----------------------------------------------------------------------- |
 | `search pack`        | `epismo pack search --type workflow --filter '{...}'`                   |
-| `get pack`           | `epismo pack get <reference> [--full] [--step-id <ids>]`                |
+| `get pack`           | `epismo pack get <reference> [--full] [--step-id <ids>] [--share-url]`  |
 | `create pack`        | `epismo pack create --input '<json>'`                                   |
 | `update pack`        | `epismo pack update <reference> --input '<json>'`                       |
 | `delete pack`        | `epismo pack delete <reference>`                                        |
@@ -310,9 +310,15 @@ Run the pre-decision checks in [Release](./references/release.md) before choosin
 
 See [Release](./references/release.md) for the approval boundary and required output format.
 
+After the create/update succeeds, request the share URL explicitly:
+
+```bash
+epismo pack get <workflow-id> --share-url
+```
+
 ```
 workflow  <workflow-id>  <workflow-title>
-share     https://epismo.ai/hub/workflows/<id>
+share     https://epismo.ai/share/<token>
 ```
 
 ---
