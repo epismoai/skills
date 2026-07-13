@@ -12,7 +12,7 @@ Surface conventions are defined in [Context Pack](../SKILL.md#operations-context
 | Operation     | CLI command                         | Key flags                                               |
 | ------------- | ----------------------------------- | ------------------------------------------------------- |
 | `search pack` | `epismo pack search --type context` | `--query <keywords>` `--filter '{...}'` `--projects` `--search-mode` |
-| `get pack`    | `epismo pack get <id>`              | `[--full]` `[--block-id <block-id>]`                    |
+| `get pack`    | `epismo pack get <id>`              | `[--full]` `[--block-id <block-id>]` `[--share-url]`    |
 | `like pack`   | `epismo pack like <id> --liked`     | `--no-liked` to remove                                  |
 
 ## Quick Reference

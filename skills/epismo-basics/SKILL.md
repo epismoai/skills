@@ -46,6 +46,8 @@ MCP tool name = the terminal CLI command name, including `epismo`, with spaces a
 
 **CLI is the full surface; MCP is a subset.** Prefer MCP or CLI and ignore the HTTP API in normal use. Some surfaces are **CLI-only** (no `epismo_*` tool): `login` / `logout` / `whoami`, `workspace`, `project`, `agent`, `credit`, and `token` — use the CLI for these.
 
+Project containers can be listed, created, and updated through the CLI and HTTP API. Project deletion or deactivation is not available on either surface; use the web app for project lifecycle management.
+
 ### Pack Aliases
 
 Packs can be fetched by a short alias instead of a full ID. On the CLI, pass the alias (with or without `@` prefix) as the positional `<reference>` to `pack get` — same slot the ID goes in. In MCP, pass it via the `reference` parameter. To create and manage aliases, see [Pack Alias](./references/pack-alias.md).
@@ -70,6 +72,16 @@ epismo workspace current                              # show saved default (no n
 ```
 
 Workspace selection is CLI-only. All CLI commands resolve workspace automatically from `EPISMO_TOKEN`, saved default, then personal space. In MCP, workspace scope is implicit in the OAuth token.
+
+### Member Mutation Results
+
+`epismo workspace member upsert/delete` and `epismo project member add/delete` return one result per input position plus an authoritative `memberCount`. Single-target deletes use the same transactional bulk operation. Always inspect every result; command success does not mean every target changed.
+
+- Workspace upsert statuses: `added`, `updated`, `unchanged`, `skipped`, `failed`.
+- Project add statuses: `added`, `unchanged`, `skipped`, `failed`.
+- Workspace member/project member delete statuses: `deleted`, `skipped`, `failed`.
+- Use `code` to explain non-changing outcomes such as `ALREADY_MEMBER`, `DUPLICATE_INPUT`, `USER_NOT_FOUND`, `MEMBER_NOT_FOUND`, `ROLE_NOT_ALLOWED`, or `NOT_WORKSPACE_MEMBER`.
+- Treat `inputIndex` as the mapping back to the original user ID list, including duplicate positions.
 
 ---
 
@@ -109,6 +121,14 @@ Pack-level commands (`get`, `update`, `like`, `delete`) take a **single `referen
 
 - **CLI** — positional `<reference>`: `epismo pack get <reference>`.
 - **MCP** — `reference` parameter on the `epismo_pack_*` tools.
+
+Create or retrieve a share URL only when it is needed:
+
+```bash
+epismo pack get <reference> --share-url
+```
+
+On MCP, call `epismo_pack_get` with `shareUrl: true`. A successful response includes `shareUrl`. Pack create/update responses do not generate share links automatically. Requesting a share URL does not make a private pack public; recipients still need access to private packs.
 
 Share URLs resolve server-side by token, independent of host — a workspace-subdomain share URL works without special handling, and no credentials or redirect-following are needed. The resolved pack type (`workflow` / `context`) comes back in the response.
 

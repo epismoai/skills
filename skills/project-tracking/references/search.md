@@ -23,7 +23,7 @@ For reusable workflow discovery, see [Workflow Pack — Search & Discovery](../.
 | Tasks in progress             | `status=["in_progress"]`                                                                |
 | Tasks due soon                | `status=["backlog","todo","in_progress"]` + `dueDateTo=<date>`                          |
 | Blocked tasks                 | `status=["backlog","todo","in_progress"]` → check each `dependsOn[]` for non-`done`     |
-| Recently completed tasks      | `status=["done"]` + `doneAtFrom=<now-7d>`                                               |
+| Recently completed tasks      | `status=["done"]` + `updatedAtFrom=<now-7d>`                                            |
 | Tasks under a goal            | `goalId=["<goal-id>"]`                                                                  |
 | Downstream dependents         | `dependsOn=["<task-id>"]` — finds what unblocks when this task completes                |
 | Post-completion unblock check | Set task to `done` → query `dependsOn=["<task-id>"]` → re-check remaining prerequisites |
@@ -53,15 +53,15 @@ For reusable workflow discovery, see [Workflow Pack — Search & Discovery](../.
 ## Date/Time Semantics
 
 1. `dueDateFrom` / `dueDateTo` — date-only, normalized to UTC midnight.
-2. All other datetime filters (`updatedAtFrom/To`, `doneAtFrom/To`) — keep provided ISO-8601 precision.
-3. `task.doneAt` is read-only (system-managed) but searchable via `doneAtFrom/To`.
+2. `updatedAtFrom` / `updatedAtTo` — keep provided ISO-8601 precision.
+3. Completed-task period queries use `status=["done"]` with `updatedAtFrom` / `updatedAtTo`.
 
 ## Supported Filter Keys
 
 ### Tasks (`search track`, type `task`)
 
 `status[]`, `assignee[]`, `goalId[]`, `parentId[]`, `dependsOn[]`,
-`dueDateFrom`, `dueDateTo`, `updatedAtFrom`, `updatedAtTo`, `doneAtFrom`, `doneAtTo`
+`dueDateFrom`, `dueDateTo`, `updatedAtFrom`, `updatedAtTo`
 
 ### Goals (`search track`, type `goal`)
 
@@ -111,9 +111,9 @@ These are computed from entity data, not stored as status field values. Use them
 
 ### Throughput — completed in last 7 days
 
-- `status=["done"]` + `doneAtFrom=<now-7d>` + `doneAtTo=<now>`
+- `status=["done"]` + `updatedAtFrom=<now-7d>` + `updatedAtTo=<now>`
 
 ### Release evidence — completed work in a period
 
-- Tasks: `status=["done"]` + `doneAtFrom=<iso8601>` + optional `scopes=[{type:"projects", ids:["<project-id>"]}]`
+- Tasks: `status=["done"]` + `updatedAtFrom=<iso8601>` + optional `scopes=[{type:"projects", ids:["<project-id>"]}]`
 - Goals: `status=["completed"]` + `updatedAtFrom=<iso8601>` + optional `scopes=[{type:"projects", ids:["<project-id>"]}]`

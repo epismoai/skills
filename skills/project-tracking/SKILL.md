@@ -42,7 +42,7 @@ For when to append a log versus editing a track's own fields, see [Runbook — L
 | Add one new item                  | Exactly one task or goal; existing structure is valid                                     | 3 Coordinate — New Item             | [Runbook](./references/runbook.md#2-new-item-creation)            |
 | Plan multiple items or a new goal | New goal structure, multi-step plan, or batch creation                                    | 2 Plan → 3 Coordinate — Large-Scale | [Runbook](./references/runbook.md#3-large-scale-planning)         |
 | Unblock or rebalance              | Stalled queue, overloaded assignee, dependency bottleneck, noisy backlog                  | 4 Risk → 3 Coordinate — Recovery    | [Runbook](./references/runbook.md#4-recovery-and-backlog-hygiene) |
-| Extract learning                  | Task is done, goal is completed/postponed, or user asks what should become reusable       | 3 Coordinate — Review               | [Runbook](./references/runbook.md#learning-reviews)               |
+| Extract learning                  | Task is done, goal is completed/postponed, or user asks what should become reusable       | 3 Coordinate — Review               | [Runbook](./references/runbook.md#reviews)                        |
 | Design an AI-owned task           | Delegating work to an AI agent with clear acceptance criteria                             | 3 Coordinate + AI Delegation        | [AI Delegation](./references/ai-delegation.md)                    |
 | Unclear intent                    | Cannot confidently match any row above                                                    | 1 Intake — ask once                 | —                                                                 |
 
@@ -70,7 +70,7 @@ Pick one execution mode from [Runbook — Mode Selector](./references/runbook.md
 
 When a task status changes to `done`, run a downstream dependents check: query `dependsOn=["<task-id>"]` and report what is now unblocked.
 
-When a task reaches `done` or a goal reaches `completed` / `postponed`, check the update response for `learningReview`. If the user asks for deeper learning or the lightweight review suggests reusable guidance, run `review track` for the relevant task or goal. If several completed/postponed items belong to the same outcome, pass them together so the review can compare cross-target patterns. Treat the result as read-only: create/update packs or create suggestions only through explicit follow-up operations.
+When a task reaches `done` or a goal reaches `completed` / `postponed`, check the update response for `review`. If the user asks for deeper learning or the lightweight review suggests reusable guidance, run `review track` for the relevant task or goal. If several completed/postponed items belong to the same outcome, pass them together so the review can compare cross-target patterns. Treat the result as read-only: create/update packs or create suggestions only through explicit follow-up operations.
 
 Operational state lives in tracks. Use workflow packs only when the structure should be reused beyond the current execution context — see [Workflow Pack](../workflow-pack/SKILL.md).
 

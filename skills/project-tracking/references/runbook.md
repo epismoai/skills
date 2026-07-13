@@ -155,7 +155,7 @@ Decision guide:
 | Someone else's source pack should change | Use `create suggestion` through the relevant pack skill                    |
 | Useful note but not reusable yet         | Report it; optionally append a `review` log if it should stay on the track |
 
-Review output should use the primary language of the seed knowledge base content and logs. If mixed, it follows the target task/goal language.
+Review output should use the primary language of the seed entry content and logs. If mixed, it follows the target task/goal language.
 
 ## Mode Playbooks
 
