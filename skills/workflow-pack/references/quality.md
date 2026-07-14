@@ -13,7 +13,7 @@ All criteria must pass. A single fail means: fix the issue or keep the workflow 
    Fail: outcome claimed but no records, links, or rationale provided.
 2. **Reusability** — steps avoid project-specific names, IDs, and one-off constraints.
    Fail: steps reference specific team members, internal URLs, or non-generalizable configurations.
-3. **Structural integrity** — step IDs are unique; `dependsOn` and `parentId` references resolve correctly; no self-dependency or circular references; each step lists only direct predecessors (no transitive edges).
+3. **Structural integrity** — step IDs are unique; `dependsOn` references resolve correctly; no self-dependency or circular references; each step lists only direct predecessors (no transitive edges).
    Fail: circular references, broken IDs, unnecessary serialization, or redundant edges that are already implied by another step's `dependsOn`.
 4. **Actionability** — each step has a clear verb and deliverable; another team can follow the sequence without hidden assumptions.
    Fail: vague steps ("research X", "improve Y") with no concrete deliverable.
@@ -44,12 +44,12 @@ Apply these rules when designing workflow steps. They balance reproducibility wi
 3. Right-size step granularity
    - Design step boundaries around ownership handoffs: create a new step when the responsible party changes (human → AI, AI → human, or role to role).
    - Work that stays with the same owner is one step, unless it produces a distinct deliverable that the next step depends on.
-   - A workflow with 3–8 top-level steps is typical. Exceed this only when a genuine ownership change or hard dependency boundary requires it.
+   - A workflow with 3–8 steps is typical. Exceed this only when a genuine ownership change or hard dependency boundary requires it.
 4. Keep `dependsOn` direct — no transitive edges
    - List only the immediate predecessor(s) a step is waiting for.
    - If C must follow B, and B must follow A, write `C.dependsOn = ["B"]` — not `["A", "B"]`. Adding A is redundant: it is already implied by the B→A edge.
    - Redundant edges create a tangled graph without adding scheduling information.
-   - A well-formed workflow graph looks like a chain or tree, not a web.
+   - A well-formed workflow uses a simple dependency graph, not a tangled web.
 
 ## Release Decision
 
@@ -76,4 +76,3 @@ Use as a flexible review guide when preparing workflow content for publication. 
 1. `visibility`: `public` or `private`.
 2. `category`: `""` (empty), `productivity`, `learning`, `programming`, `design`, `marketing`, `operations`, `life`. For descriptions, see [Visibility & Sharing — Category Reference](./visibility.md#category-reference).
 3. `content` / `steps[].content`: Markdown text.
-4. `steps[].dueDate`: day-offset numeric string (digits only, e.g. `"3"` means 3 days after start) or empty string.

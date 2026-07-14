@@ -96,7 +96,7 @@ Before materializing:
 3. Reassign owners as appropriate for the new context.
 4. Confirm destination: private pack for future reuse, or project tracks for immediate execution.
 
-**To materialize a workflow pack as project tracks**, use `pack run` — it converts the pack in one call (CLI `epismo pack run`, MCP `epismo_pack_run`). It creates a root goal (the run's objective and retrieval anchor) plus one `todo` task per step, resolves `dependsOn`/`parentId` step ids to track UUIDs, converts relative due dates to absolute dates from `--start-date` (default today), and stamps `workflow:<id>` provenance sources:
+**To materialize a workflow pack as project tracks**, use `pack run` — it converts the pack in one call (CLI `epismo pack run`, MCP `epismo_pack_run`). It creates a root goal (the run's objective and retrieval anchor) plus one `todo` task per step, resolves `dependsOn` step ids to track UUIDs, and stamps `workflow:<id>` provenance sources:
 
 ```bash
 epismo pack run @release-review \
@@ -135,9 +135,7 @@ Default `private`. Use [RELEASE](#release) to publish publicly.
       "id": "s001",
       "title": "<step title>",
       "content": "<step instructions>",
-      "dueDate": "",
       "dependsOn": [],
-      "parentId": "",
       "assignee": "human"
     }
   ]
@@ -246,15 +244,15 @@ step      <step-id>      <step-title>    # when a specific step was updated
 
 `get pack --full` → review all steps → apply changes → `update pack`.
 
-| Situation                                       | Action                                                              |
-| ----------------------------------------------- | ------------------------------------------------------------------- |
-| A step is too broad or covers multiple concerns | **Split** — divide into two focused steps                           |
-| Two steps overlap or one has become redundant   | **Merge** — combine into one coherent step, remove the other        |
-| A step is no longer relevant                    | **Remove** — delete the step from the workflow                      |
-| Steps are out of execution order                | **Reorder** — update `dependsOn` chains to reflect correct sequence |
-| The whole workflow is obsolete                  | **Delete** — requires explicit user approval                        |
+| Situation                                       | Action                                                                                                       |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| A step is too broad or covers multiple concerns | **Split** — divide into two focused steps                                                                    |
+| Two steps overlap or one has become redundant   | **Merge** — combine into one coherent step, remove the other                                                 |
+| A step is no longer relevant                    | **Remove** — delete the step from the workflow                                                               |
+| Steps appear in the wrong order                 | **Reorder** — move with `beforeId` or `afterId`; keep `dependsOn` unless the execution flow also changes     |
+| The whole workflow is obsolete                  | **Delete** — requires explicit user approval                                                                 |
 
-All changes are applied via `update pack` using `op` fields. Use `"op": "add"` for new steps, `"op": "update"` for existing ones, `"op": "remove"` to delete a step by ID. `delete pack` requires explicit user approval.
+All changes are applied via `update pack` using `op` fields. Use `"op": "add"` for new steps, `"op": "update"` for existing ones, `"op": "move"` with `beforeId` or `afterId` to reorder, and `"op": "remove"` to delete a step by ID. `delete pack` requires explicit user approval.
 
 ---
 
