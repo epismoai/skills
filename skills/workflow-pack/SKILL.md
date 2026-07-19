@@ -142,6 +142,11 @@ Default `private`. Use [RELEASE](#release) to publish publicly.
 }
 ```
 
+**Field notes:**
+
+- `dueDate` — days offset from today as a numeric string. `"0"` = today, `"1"` = in 1 day, `"7"` = in 1 week. Leave empty (`""`) for no due date.
+- `assignee` — use `"human"` for human steps, or an agent name (case-insensitive) such as `"Claude"`, `"Claude Code"`, `"ChatGPT"`, `"Gemini"`. Agent names are resolved to IDs at write time; unknown names silently clear the field.
+
 | Who needs it    | `visibility` | Scope / share                                    |
 | --------------- | ------------ | ------------------------------------------------ |
 | Just me         | `"private"`  | `scope: { type: "personal" }`                    |
@@ -201,6 +206,8 @@ epismo pack get <pack-id> --step-id <step-id-1>,<step-id-2>
 3. `type: workflow`, `query: <topic>`, `filter: { like: "liked" }`
 
 Present the title list; if the match is clear, `get pack` immediately.
+
+> **Scope note:** The `projects` parameter in search scopes results to specific projects. Outside a workspace, this is always the current user — omit `projects` or it will be overridden. Inside a workspace, pass project IDs from `references.projects` to narrow scope.
 
 For filter keys and search recipes, see [Search & Discovery](./references/search.md).
 
