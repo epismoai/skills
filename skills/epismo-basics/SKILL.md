@@ -83,6 +83,14 @@ Workspace selection is CLI-only. All CLI commands resolve workspace automaticall
 - Use `code` to explain non-changing outcomes such as `ALREADY_MEMBER`, `DUPLICATE_INPUT`, `USER_NOT_FOUND`, `MEMBER_NOT_FOUND`, `ROLE_NOT_ALLOWED`, or `NOT_WORKSPACE_MEMBER`.
 - Treat `inputIndex` as the mapping back to the original user ID list, including duplicate positions.
 
+### Credit Ownership
+
+- Free is personal: included and purchased credits belong to the user.
+- Workspace credits are shared by every member; member-level allocation does not exist.
+- Each workspace includes 50,000 credits per month and costs $300 per month, independent of member count.
+- Only workspace owners can buy workspace credits or change billing. Usage history still attributes consumption to the acting user.
+- Additional credits cost $0.01 each, require a minimum purchase of 500 credits, and go directly to the active personal or workspace balance.
+
 ---
 
 ## Scope Model
