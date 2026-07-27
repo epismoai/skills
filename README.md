@@ -1,8 +1,8 @@
-# Epismo Skills
+# Epismo Skill
 
-Reusable skill packages that give AI agents structured capabilities through Epismo MCP or CLI.
+One portable skill that teaches AI agents how to use Epismo's available tools well.
 
-## Why Skills
+## Why a Skill
 
 AI agents hit the same problems across teams and tools:
 
@@ -10,47 +10,50 @@ AI agents hit the same problems across teams and tools:
 - Multi-step processes don't transfer when you switch tools.
 - Every new project restarts from scratch.
 
-Skills solve this by packaging proven operational patterns into portable instruction sets that any agent with Epismo access can follow.
+The Epismo skill provides a small operating model for deciding where work belongs and how to handle it safely. Live tool schemas or CLI help remain the source of truth for commands and arguments.
 
-## Skills
+## Structure
 
-| Skill                                                  | What it does                                                                                  |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| [Epismo Basics](./skills/epismo-basics/SKILL.md)       | Platform fundamentals: auth, CLI/MCP conventions, scope, share URL resolution, error handling |
-| [Project Tracking](./skills/project-tracking/SKILL.md) | Create and update tasks and goals; plan multi-step work; unblock stalled queues               |
-| [Workflow Pack](./skills/workflow-pack/SKILL.md)       | Discover, adapt, and release reusable workflows                                               |
-| [Context Pack](./skills/context-pack/SKILL.md)         | Save session context, hand off tasks, load saved context from any tool                        |
+```text
+skills/epismo/
+  SKILL.md
+  references/
+    execute.md
+    reuse.md
+    capture.md
+    evolve.md
+    share.md
+```
 
-**Epismo Basics** is a shared foundation — load it alongside any other skill.
+The main [Epismo skill](./skills/epismo/SKILL.md) routes each request to one of three durable state types:
 
-## Use Cases
+- **Track** — work being planned or executed now.
+- **Workflow pack** — a procedure worth reusing.
+- **Context pack** — knowledge worth carrying across sessions, tools, or people.
 
-| Goal                                             | Skills to load                                   |
-| ------------------------------------------------ | ------------------------------------------------ |
-| Resume work after switching tools                | Context Pack                                     |
-| Hand off a task to a teammate                    | Context Pack                                     |
-| Add tasks, update status, plan a sprint          | Epismo Basics + Project Tracking                 |
-| Find and reuse a community workflow              | Epismo Basics + Workflow Pack                    |
-| Capture a proven process and publish it          | Epismo Basics + Workflow Pack                    |
-| Delegate work to an AI agent with clear criteria | Epismo Basics + Project Tracking                 |
-| Publish a best-practice guide for the community  | Context Pack                                     |
-| Full project operations                          | Epismo Basics + Project Tracking + Workflow Pack |
+Detailed guidance is organized by user action rather than by storage type:
+
+- execute current work;
+- reuse an existing procedure;
+- capture learning;
+- evolve durable knowledge;
+- share or publish.
 
 ## Quick Start
 
 Tell your agent:
 
 ```
-Set up Epismo access and load the Skills from github.com/epismoai/skills.
+Set up Epismo access and load the skill from github.com/epismoai/skills.
 ```
 
-The agent will read this page and complete the steps. Or follow manually:
+The agent will read this page and complete the steps. Or connect manually:
 
 ### 1. Connect
 
-CLI and MCP connect to the same Epismo service. Use CLI if available; MCP otherwise.
+CLI and MCP connect to the same Epismo service. Use the surface available in the current environment.
 
-**CLI** (preferred):
+**CLI**:
 
 ```bash
 npm install -g epismo
@@ -60,20 +63,6 @@ epismo whoami
 
 **MCP**: add `https://mcp.epismo.ai` as an MCP server in your client. Authentication is handled automatically via OAuth.
 
-### 2. Select a workspace
+### 2. Load the skill
 
-```bash
-epismo workspace list
-epismo workspace use --workspace-id <workspace-id>
-```
-
-### 3. Load skills
-
-Get the skill files from this repository (clone, download, or copy) and load the relevant `SKILL.md` files into your agent's context. Each skill follows this structure:
-
-```
-<skill-name>/
-  SKILL.md          ← load this
-  references/       ← loaded on demand
-  templates/        ← structured output templates
-```
+Clone, download, or copy `skills/epismo` into your agent's skills directory. Load `SKILL.md`; its references are read only when relevant.
