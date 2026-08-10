@@ -8,6 +8,7 @@ Use this guide for ACLs, aliases, share tokens, public access, and archival.
 - **Alias:** stable human-readable reference to a logical Playbook; it grants no access.
 - **Share token:** bearer read access to one Playbook without changing its ACL.
 - **Star:** personal saving and a discovery signal, not access.
+- **Draft:** unpublished, mutable Playbook content, visible to whoever is already in the Playbook's ACL — nothing extra to grant, and a share token does not extend to it.
 
 Cases have independent ACLs and cannot be public. Tasks and Records carry no ACL of their own and are authorized through the current parent Case ACL. A cross-Case Record list checks those live Case ACLs before applying optional filters; an ACL filter only narrows results and never grants access.
 
@@ -27,7 +28,7 @@ An ACL update replaces the whole list; it is not an incremental add. Read the cu
 
 Use aliases when repeated human-readable lookup matters. Write aliases only in an owner namespace you manage. Resolve the alias, then enforce the live Playbook ACL. Before deleting or repointing an alias, distinguish changing the name, the target, and the underlying Playbook.
 
-Treat share tokens as credentials: anyone holding one can read that Playbook, and the token holder gets read access only — not the Playbook's Cases, and not the ability to start one. Only an owner manager can create a token, and the MVP surface has no revoke operation, so set an expiry when creating it rather than assuming access can be withdrawn later. Return a token only to the intended recipient and keep it out of public text, Records, and Playbook content. Archiving the Playbook is what stops existing tokens from resolving.
+Treat share tokens as credentials: anyone holding one can read that Playbook, and the token holder gets read access only — not the Playbook's Cases, and not the ability to start one. Only an owner manager can create a token, and the MVP surface has no revoke operation, so set an expiry when creating it rather than assuming access can be withdrawn later. Return a token only to the intended recipient and keep it out of public text, Records, and Playbook content. Archiving the Playbook is what stops existing tokens from resolving. A token resolves only the published Playbook, never its Draft — sharing an in-progress edit means adding the recipient to the ACL, not minting a token.
 
 ## Archive deliberately
 

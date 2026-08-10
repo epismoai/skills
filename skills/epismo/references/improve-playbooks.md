@@ -27,7 +27,7 @@ To apply:
 3. publish a new Version through an authorized human-reviewable surface;
 4. resolve the Suggestion as applied, naming that Version as the result.
 
-Applying requires a result Version that is newer than the base Version of the same Playbook, so publish first and resolve second. Never mark applied before the corresponding Version exists.
+Applying requires a result Version that is newer than the base Version of the same Playbook, so publish first and resolve second. Never mark applied before the corresponding Version exists. Folding several open Suggestions into one Version is reasonable — stage the merged content in a Draft (see [Author Playbooks](./author-playbooks.md)) and publish it once, then resolve each Suggestion against that same result Version. A Draft is not itself a Suggestion and never substitutes for one: it holds the owner's own in-progress edit, not a reviewable third-party proposal.
 
 ## Close the loop
 
