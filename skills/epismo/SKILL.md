@@ -10,6 +10,7 @@ Keep reusable guidance separate from real execution:
 - **Playbook** is a logical, access-controlled container with immutable Versions.
 - **Version** contains the Definition: title, description, category, input schema, and Steps.
 - **Step** is guidance, not execution state. It has no status, assignee, transition, or completion.
+- **Draft** is the mutable, unpublished content of a Playbook. Saving it never mints a Version; publishing it does, and discards the Draft.
 - **Case** is one real matter, either pinned to a Version or ad hoc.
 - **Task** materializes only work that needs explicit ownership or review.
 - **Record** is append-only shared output, decision, note, review, handoff, or activity.
@@ -54,7 +55,7 @@ Do not create a Case merely to read a Playbook. Do not turn every Step into a Ta
 - In MCP, read the `epismo://context/current_user` resource to resolve identity before a write, `epismo://context/users` before assigning a Case or Task, and `epismo://context/projects` before constructing an ACL. In the CLI, use `epismo whoami` and the workspace/project listing commands for the same purpose.
 - CLI is the full authoring and administration surface. Successful commands emit JSON to stdout; failures emit structured errors to stderr.
 - Keep one identity and workspace throughout a connected operation. With EPISMO_TOKEN, the token's workspace overrides the saved CLI default.
-- Every mutation takes a fresh UUID idempotency key. Reuse a key only when retrying the identical uncertain request; a reused key with different arguments is rejected.
+- Every mutation takes a fresh UUID idempotency key, except saving a Draft, which uses `baseRevision` instead — the revision last read, or `0` for a first Draft. Reuse an idempotency key only when retrying the identical uncertain request; a reused key with different arguments is rejected. Send a stale `baseRevision` and the save is rejected the same way — re-read the Draft and retry.
 - Identifiers are UUIDs, except Step IDs, which are four characters of `A-Z0-9`. Page sizes cap at 100.
 - Retry only transient failures. For Case and Task mutations, re-read after a lock conflict and reconsider the intent. Never replay stale intent by changing only the lock version.
 
@@ -65,6 +66,7 @@ An ACL is an explicit list of Account UUIDs, Project UUIDs, and — for Playbook
 Access separates read from write:
 
 - Playbook reads follow the Playbook ACL or a valid share token. Publishing, ACL changes, archival, aliases, and share tokens require rights over the owner Account.
+- Draft reads follow the Playbook ACL, not a share token — there is no token-based path to unpublished content. Saving, discarding, and publishing a Draft require rights over the owner Account, the same as publishing a Version directly.
 - Case, Task, and Record reads follow the current Case ACL. Task and Record have no ACL of their own.
 - Case writes require being the Case starter or its current assignee. ACL membership alone is read access, so plan ownership before delegating.
 

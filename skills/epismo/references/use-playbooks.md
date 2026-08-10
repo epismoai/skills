@@ -14,6 +14,8 @@ Category is a closed set used for filtering, not full-text search: `productivity
 
 References such as **pb:alias** and **pb:handle/alias** identify a logical Playbook and grant no access. A bare alias resolves against your personal namespace first, then the active workspace; the `handle/alias` form names the owner explicitly. The CLI takes UUIDs for Playbook path arguments; MCP accepts either a UUID or a reference through `epismo_playbook_get`, and exposes alias set/list/delete with the same resource/verb naming.
 
+Search, get, and version listing all surface the latest published Version — never a Draft. A Playbook mid-edit reads exactly as it did before the Draft was opened, so evaluating it here is safe even while the owner is iterating.
+
 ## Evaluate fit
 
 Check:
