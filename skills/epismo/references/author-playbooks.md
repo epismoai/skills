@@ -42,6 +42,7 @@ Prefer a pinned or conservative selector for shared and audited work. Resolution
 A Playbook has at most one Draft: mutable, unpublished content that saves cheaply and repeatedly without minting a Version or consuming Step IDs. Use it while the Definition is still moving — it applies to an existing Playbook only, never to the first Version; a brand-new Playbook goes straight to `playbook create`.
 
 - Save with **baseRevision** set to the revision you last read, or `0` for a first Draft. A stale `baseRevision` — someone else saved since you last read it — is rejected; re-read and retry, the same discipline as a Version conflict.
+- Before publishing, read and review the Draft, then pass that returned revision as **expectedDraftRevision** (CLI: `--expected-draft-revision`). The publish is rejected if anyone saved a newer Draft after that read; re-read, review the current content, and publish only when it is still the intended change.
 - Anyone with read access to the Playbook can read its Draft. There is no separate grant and no share-token path to it.
 - Saving does not validate or allocate Step IDs the way publishing does; that check happens once, at publish time.
 - Publishing the Draft mints a new immutable Version from its current content and discards the Draft in the same step. Discard it directly instead when the direction was wrong and should not become a Version.
@@ -51,7 +52,7 @@ A Playbook has at most one Draft: mutable, unpublished content that saves cheapl
 
 Creation atomically creates the Playbook and its first Version under an owner Account you manage, with an explicit non-empty ACL.
 
-Publishing requires the current **baseVersionId** and creates a new immutable Version; it never edits the base. Publishing a Draft instead takes no `baseVersionId` — it publishes from whatever Version the Draft was last saved against, and fails the same way if latest moved underneath it in the meantime. Either way, only an owner manager may publish, and an archived Playbook cannot receive new Versions.
+Publishing requires the current **baseVersionId** and creates a new immutable Version; it never edits the base. Publishing a Draft instead takes no `baseVersionId`, but does require the reviewed **expectedDraftRevision** — it publishes from whatever Version the Draft was last saved against, and fails if either that Draft revision or the latest Version moved underneath it in the meantime. Either way, only an owner manager may publish, and an archived Playbook cannot receive new Versions.
 
 After a conflict:
 
