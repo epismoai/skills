@@ -5,12 +5,12 @@ Use this guide for ACLs, aliases, share tokens, public access, and archival.
 ## Choose the mechanism
 
 - **ACL:** durable access for User Account IDs and Project IDs; Playbooks may also include `public`.
-- **Alias:** stable human-readable reference to a logical Playbook; it grants no access.
-- **Share token:** bearer read access to one Playbook without changing its ACL.
+- **Alias:** one Account namespace's human-readable reference to a Playbook; it grants no access.
+- **Share URL:** an opaque token URL intended for recipient access; the current web flow still applies the Playbook ACL.
 - **Star:** personal saving and a discovery signal, not access.
-- **Draft:** unpublished, mutable Playbook content, visible to whoever is already in the Playbook's ACL — nothing extra to grant, and a share token does not extend to it.
+- **Draft:** unpublished, mutable Playbook content restricted to owner managers; neither the reader ACL nor a share link grants access.
 
-Cases have independent ACLs and cannot be public. Tasks and Records carry no ACL of their own and are authorized through the current parent Case ACL. A cross-Case Record list checks those live Case ACLs before applying optional filters; an ACL filter only narrows results and never grants access.
+Cases have independent ACLs and cannot be public. Tasks and Records carry no ACL of their own and are authorized through the current parent Case ACL. Anyone covered by that live ACL may append Records to an open Case; managing the Case and creating Tasks remain limited to its starter and assignee. Records can be listed across readable Cases, and optional filters only narrow results; they never grant access.
 
 ## Expand access carefully
 
@@ -26,9 +26,11 @@ An ACL update replaces the whole list; it is not an incremental add. Read the cu
 
 ## Manage references
 
-Use aliases when repeated human-readable lookup matters. Write aliases only in an owner namespace you manage. Resolve the alias, then enforce the live Playbook ACL. Before deleting or repointing an alias, distinguish changing the name, the target, and the underlying Playbook.
+Use an alias when repeated human-readable lookup matters. Each personal or managed Workspace namespace can assign at most one alias to any readable Playbook. Setting a different alias for the same Playbook renames that namespace's reference; it does not move an alias already occupied by another Playbook. The Playbook owner's alias is official and may be indexed. A third-party alias is not indexed or shown as official; do not surface it outside its namespace even though a raw alias listing may return it. Resolution enforces the live Playbook ACL, so an alias never preserves access after removal.
 
-Treat share tokens as credentials: anyone holding one can read that Playbook, and the token holder gets read access only — not the Playbook's Cases, and not the ability to start one. Only an owner manager can create a token, and the MVP surface has no revoke operation, so set an expiry when creating it rather than assuming access can be withdrawn later. Create one with `epismo playbook share <playbook-id>`; it returns the share URL. Return that URL only to the intended recipient and keep it out of public text, Records, and Playbook content. Archiving the Playbook is what stops existing tokens from resolving. A token resolves only the published Playbook, never its Draft — sharing an in-progress edit means adding the recipient to the ACL, not minting a token.
+Treat a share URL as a credential even though the current web flow does not grant ACL-bypassing access. Any authenticated reader can create or retrieve the Playbook's single stable token; there is currently no expiry, rotation, or revoke operation. Do not create one speculatively, and keep it out of public text, Playbook content, Cases, Records, and logs.
+
+Before relying on a share URL, verify it as the intended recipient in the intended workspace or anonymous context. Today the web route resolves the token to a Playbook ID and then performs the normal Playbook read, so a private Playbook still requires ACL access. Archiving blocks the resulting Playbook read but does not delete the token mapping. A share URL never grants access to a Draft, Case, Task, or Record.
 
 ## Archive deliberately
 
