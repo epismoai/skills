@@ -6,19 +6,19 @@ Use this guide when real work needs shared state, ownership, review, or a durabl
 
 Start from an immutable Playbook Version when following reusable guidance; the Case fixes that Version ID and digest for its lifetime. Start an ad hoc Case with a title when no suitable Playbook exists.
 
-Input is validated against the pinned Version's schema before the Case exists. An ad hoc Case validates nothing.
+Input is validated against the pinned Version's schema before the Case exists. An ad hoc Case has no Playbook input-schema validation.
 
-A Case ACL is explicit, non-empty, must include you, and cannot contain `public`. A Case never inherits public or share-token access from its Playbook.
+A Case ACL cannot contain `public` and never inherits access from its Playbook. If omitted at creation, it defaults to the caller's Account. When supplied or replaced, it must continue to cover the current assignee, including through a Project.
 
 Do not create a Case when reading and local execution are enough.
 
 ## Know who may write
 
-Every Case mutation — creating a Task, appending a Record, assigning, retitling, replacing the ACL, closing, reopening — is limited to the Case starter and the current Case assignee. Everyone else in the ACL can read only. Assigning the Case is therefore how write responsibility moves, so decide ownership before delegating.
+Everyone covered by the current Case ACL may read the Case and append Records while it is open. Creating Tasks, assigning, retitling, replacing the ACL, closing, and reopening remain limited to the Case starter and current Case assignee. Reassignment changes day-to-day responsibility, but the starter retains management authority.
 
 Task rights are narrower than the Case:
 
-- Assign a Task: its creator, the Case starter, or the Case assignee.
+- Assign or edit a Task: its creator, the Case starter, or the Case assignee.
 - Close or reopen a **work** Task: its assignee or its creator.
 - Close or reopen a **review** Task: its assignee only.
 
@@ -27,7 +27,7 @@ Task rights are narrower than the Case:
 - Keep local intermediate work in the agent runtime.
 - Use the Case assignee for overall responsibility.
 - Create a **work** Task for a concrete delegated result.
-- Create a **review** Task when a person or agent must judge a specific Record. A review Task always needs an assignee, and only a review Task may name a subject Record.
+- Create a **review** Task when a person or agent must judge a specific Record. A review Task always needs an assignee, and only a review Task may name a subject Record. Verify that subject belongs to the same Case; the current service does not enforce that relationship.
 - Link a Task to a source Step only when that provenance helps. The Step ID must exist in the Case's pinned Version; ad hoc Tasks are valid.
 - Allow multiple open Tasks when work is genuinely parallel.
 
@@ -49,14 +49,13 @@ Constraints worth designing around:
 
 - Records can be appended only while the Case is open. Closing a Case or Task accepts its final Records in the same call — use that instead of racing a separate append.
 - Origin is `user` or `agent`. The server owns `system` origin and the `activity` kind, which it writes for lifecycle events.
-- A kind is 1–64 characters of your own vocabulary; content is text up to 1 MB; structured payloads go in data.
 - Credentials in data are rejected, including URLs carrying tokens or userinfo.
 
 Do not store chain-of-thought, credentials, every tool call, raw shell output, heartbeat, or transient retries.
 
 ## Browse the activity feed
 
-List Records without a Case filter to browse activity across every Case the caller can currently read. Narrow the feed only when useful:
+List Records across every Case the caller can currently read. Narrow the feed only when useful:
 
 - filter by Case, Task, creator, kind, or origin;
 - filter by ACL principal to select accessible Cases whose current ACL contains that principal;
@@ -64,7 +63,7 @@ List Records without a Case filter to browse activity across every Case the call
 
 Never treat an ACL filter as authorization. The service first applies the caller's live principals to each Case ACL, then applies requested filters; filters can only reduce the result set.
 
-Listing Tasks works the same way within a Case. Across Cases, the Task list is an assignee inbox and requires an assignee filter.
+Browse Tasks within a Case when coordinating that work. Use the cross-Case Task view as an assignee inbox, not as a substitute for reading the parent before a mutation.
 
 ## Close safely
 
@@ -74,7 +73,7 @@ Close a Task with an explicit outcome. Reopen only when the user intends work to
 
 Closing a Case is consequential:
 
-- `completed` requires zero open Tasks — close or reassign them first;
+- `completed` requires zero open Tasks — close every open Task first;
 - `cancelled` and `abandoned` close every remaining open Task as cancelled;
 - reopening a Case leaves its Tasks closed, so reopen the ones that should resume.
 

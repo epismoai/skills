@@ -4,17 +4,14 @@ Use this guide to discover, evaluate, and apply existing guidance.
 
 ## Discover narrowly
 
-1. Search readable Playbooks by intent. A free-text query, an optional category, and paging are the primary controls; a Lucene filter expression and field aggregations are available when a catalog view needs faceting.
-2. Compare compact results before fetching full Definitions. Each result carries the latest Version, its digest, and star counts.
-3. Get a specific Version for promising candidates.
-4. Pin the Version ID when reproducibility matters. A Case fixes the Version and digest it started with, so later publishes never change the instructions a Case was run under.
-5. Star a Playbook only when the user wants to save it or actual use shows value. Both surfaces support it: `epismo playbook star`/`unstar` in the CLI, `epismo_playbook_star`/`epismo_playbook_unstar` in MCP.
+1. Search readable Playbooks by intent and compare compact results before opening full guidance.
+2. Fetch the specific Version for promising candidates; search projections are not the full Definition.
+3. Pin the Version ID when reproducibility matters. A Case fixes the Version and digest it started with, so later publishes never change the instructions a Case was run under.
+4. Star a Playbook only when the user wants to save it or actual use shows value.
 
-Category is a closed set used for filtering, not full-text search: `productivity`, `programming`, `design`, `sales`, `marketing`, `operations`, `learning`.
+References such as **pb:alias** and **pb:handle/alias** identify a logical Playbook and grant no access. A bare alias resolves against the caller's personal namespace first, then the active workspace; the qualified form names a namespace explicitly. The Playbook owner's alias is portable and may be indexed. A third-party alias is not indexed or official; treat it as namespace-local even though a raw alias listing may expose it to other readers of the Playbook.
 
-References such as **pb:alias** and **pb:handle/alias** identify a logical Playbook and grant no access. A bare alias resolves against your personal namespace first, then the active workspace; the `handle/alias` form names the owner explicitly. The CLI takes UUIDs for Playbook path arguments; MCP accepts either a UUID or a reference through `epismo_playbook_get`, and exposes alias set/list/delete with the same resource/verb naming.
-
-Search, get, and version listing all surface the latest published Version — never a Draft. A Playbook mid-edit reads exactly as it did before the Draft was opened, so evaluating it here is safe even while the owner is iterating.
+Catalog search and Playbook reads expose the latest published Version, while Version history exposes prior immutable publications. None of these surfaces returns a Draft, so a Playbook mid-edit still reads as its last publication.
 
 ## Evaluate fit
 

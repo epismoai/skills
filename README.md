@@ -32,11 +32,23 @@ Use the surface available to the agent.
 
 **CLI**
 
+The CLI is a standalone native executable.
+
+macOS and Linux:
+
 ```bash
-npm install -g epismo
+curl -fsSL https://epismo.ai/install.sh | sh
 epismo login
 epismo whoami
 ```
+
+Windows PowerShell:
+
+```powershell
+irm https://epismo.ai/install.ps1 | iex
+```
+
+Homebrew (`brew install epismoai/tap/epismo`), npm (`npm install -g epismo`), and direct downloads from [GitHub Releases](https://github.com/epismoai/cli/releases) are also supported. The npm package installs the same native executable.
 
 **MCP**
 

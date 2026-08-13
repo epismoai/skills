@@ -49,26 +49,23 @@ Do not create a Case merely to read a Playbook. Do not turn every Step into a Ta
 
 ## Surface contract
 
-- Use the Epismo surface available in the environment. Treat live MCP schemas or **epismo <command> --help** as authoritative for names, fields, enums, and limits.
-- Treat Task and Record as top-level surfaces linked by Case IDs, not as commands nested under Case. In MCP use the `epismo_task_*` and `epismo_record_*` families; in the CLI use `epismo task ...` and `epismo record ...`.
-- MCP and CLI provide the same Playbook, Case, Task, Record, Suggestion, Star, and Alias operation families. MCP tool names mirror CLI resource/verb paths in snake_case (for example, `epismo_playbook_version_list` corresponds to `epismo playbook version list`). Share tokens are CLI-only. Alias resolution is available inside `epismo_playbook_get`, not as a separate MCP tool.
-- In MCP, read the `epismo://context/current_user` resource to resolve identity before a write, `epismo://context/users` before assigning a Case or Task, and `epismo://context/projects` before constructing an ACL. In the CLI, use `epismo whoami` and the workspace/project listing commands for the same purpose.
-- CLI is the full authoring and administration surface. Successful commands emit JSON to stdout; failures emit structured errors to stderr.
-- Keep one identity and workspace throughout a connected operation. With EPISMO_TOKEN, the token's workspace overrides the saved CLI default.
-- Every mutation takes a fresh UUID idempotency key. Saving a Draft also requires `baseRevision` — the revision last read, or `0` for a first Draft. Publishing a Draft also requires `expectedDraftRevision`, the revision that was read and reviewed; in the CLI this is `--expected-draft-revision`. Reuse an idempotency key only when retrying the identical uncertain request; a reused key with different arguments is rejected. A stale Draft revision rejects either save or publish, so re-read the Draft and reconsider or retry with the current revision.
-- Identifiers are UUIDs, except Step IDs, which are four characters of `A-Z0-9`. Page sizes cap at 100.
-- Retry only transient failures. For Case and Task mutations, re-read after a lock conflict and reconsider the intent. Never replay stale intent by changing only the lock version.
+- Use the available Epismo surface. Treat its live schema or help as authoritative for operation names, fields, enums, defaults, and limits; do not infer parity with another surface.
+- Resolve identity and the active workspace before a write, then keep that context stable through the connected operation. In MCP, use the context resources before choosing an owner, assignee, or Project ACL. With `EPISMO_TOKEN`, the token's workspace overrides the CLI's saved default.
+- Prefer parent-scoped creation and browsing for child resources. Treat cross-parent Task and Suggestion lists as personal inboxes, then re-read the parent and current ACL before mutating an item selected there.
+- Reuse an idempotency key only to retry the identical request after an uncertain result. Use a fresh key after changing intent or rebasing on newer state. Draft save is revision-guarded rather than idempotency-keyed: use the last-read revision, and re-read after a conflict.
+- For Case, Task, and Draft conflicts, re-read and reconsider the change. Never replay stale intent by changing only the lock or revision number.
 
 ## Authorization
 
-An ACL is an explicit list of Account UUIDs, Project UUIDs, and — for Playbooks only — `public`. There is no implicit default: build the list deliberately, including yourself, and an empty ACL is rejected.
+An ACL contains Account UUIDs, Project UUIDs, and — for Playbooks only — `public`. Omitting a create ACL defaults to the caller's Account; an empty Playbook create ACL does the same, while an empty Case ACL is rejected. ACL updates always reject an empty list and replace the complete ACL, so read the current state and build the replacement deliberately.
 
 Access separates read from write:
 
-- Playbook reads follow the Playbook ACL or a valid share token. Publishing, ACL changes, archival, aliases, and share tokens require rights over the owner Account.
-- Draft reads follow the Playbook ACL, not a share token — there is no token-based path to unpublished content. Saving, discarding, and publishing a Draft require rights over the owner Account, the same as publishing a Version directly.
+- Playbook reads follow the current Playbook ACL. Publishing, ACL changes, archival, and Version archival require rights over the Playbook's owner Account. Any authenticated reader may manage an alias only in a personal or managed Workspace namespace they control.
+- Draft reads and writes require rights over the Playbook's owner Account. A Playbook reader or share-link holder cannot read unpublished content.
 - Case, Task, and Record reads follow the current Case ACL. Task and Record have no ACL of their own.
-- Case writes require being the Case starter or its current assignee. ACL membership alone is read access, so plan ownership before delegating.
+- Any caller covered by the current Case ACL may append Records while the Case is open. Case-level mutations and Task creation require being the Case starter or its current assignee; existing Tasks have narrower, Task-specific write rules.
+- Share links need separate care: a readable Playbook currently yields one stable token with no expiry or revoke operation, and the web route does not bypass the Playbook ACL. Read [Share Playbooks](./references/share-playbooks.md) before creating or relying on one.
 
 The user's direct request authorizes ordinary private creates and updates within its scope. Require explicit intent before:
 
