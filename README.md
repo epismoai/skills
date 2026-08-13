@@ -38,8 +38,6 @@ macOS and Linux:
 
 ```bash
 curl -fsSL https://epismo.ai/install.sh | sh
-epismo login
-epismo whoami
 ```
 
 Windows PowerShell:
@@ -48,7 +46,19 @@ Windows PowerShell:
 irm https://epismo.ai/install.ps1 | iex
 ```
 
-Homebrew (`brew install epismoai/tap/epismo`), npm (`npm install -g epismo`), and direct downloads from [GitHub Releases](https://github.com/epismoai/cli/releases) are also supported. The npm package installs the same native executable.
+npm:
+
+```bash
+npm install -g epismo
+```
+
+The npm package installs the same native executable. Direct downloads are also available from [GitHub Releases](https://github.com/epismoai/cli/releases).
+
+After installation, see the available authentication and workspace commands:
+
+```bash
+epismo --help
+```
 
 **MCP**
 

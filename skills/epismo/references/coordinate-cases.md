@@ -53,15 +53,9 @@ Constraints worth designing around:
 
 Do not store chain-of-thought, credentials, every tool call, raw shell output, heartbeat, or transient retries.
 
-## Browse the activity feed
+## Browse a Case timeline
 
-List Records across every Case the caller can currently read. Narrow the feed only when useful:
-
-- filter by Case, Task, creator, kind, or origin;
-- filter by ACL principal to select accessible Cases whose current ACL contains that principal;
-- choose ascending or descending order and follow the returned cursor for stable pagination.
-
-Never treat an ACL filter as authorization. The service first applies the caller's live principals to each Case ACL, then applies requested filters; filters can only reduce the result set.
+List Records within their parent Case. Filters can only narrow that authorized timeline and never grant access. The public CLI and MCP surfaces do not expose the internal cross-Case Record query.
 
 Browse Tasks within a Case when coordinating that work. Use the cross-Case Task view as an assignee inbox, not as a substitute for reading the parent before a mutation.
 
