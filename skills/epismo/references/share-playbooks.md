@@ -4,7 +4,7 @@ Use this guide for ACLs, aliases, share tokens, public access, and archival.
 
 ## Choose the mechanism
 
-- **ACL:** durable access for User Account IDs and Project IDs; Playbooks may also include `public`.
+- **ACL:** durable access for User Account IDs and Team IDs; Playbooks may also include `public`.
 - **Alias:** one Account namespace's human-readable reference to a Playbook; it grants no access.
 - **Share URL:** an opaque token URL intended for recipient access; the current web flow still applies the Playbook ACL.
 - **Star:** personal saving and a discovery signal, not access.
@@ -19,7 +19,7 @@ Require explicit intent before public access or a wider audience. Before expandi
 - remove credentials, private identifiers, and unnecessary personal data;
 - inspect instructions and resource refs for internal-only material;
 - ensure referenced resources are accessible to the intended audience;
-- confirm owner, workspace, and project principals;
+- confirm owner, workspace, and team principals;
 - preserve unrelated ACL entries only when the operation and user's intent allow it.
 
 An ACL update replaces the whole list; it is not an incremental add. Read the current access before replacing it. A Playbook ACL change requires rights over the owner Account. A Case ACL change requires the Case starter or assignee, the current lock version, and an ACL that still covers every current Case and Task assignee — the service rejects an update that would strand one rather than silently unassigning them.

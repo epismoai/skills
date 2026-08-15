@@ -8,7 +8,7 @@ Start from an immutable Playbook Version when following reusable guidance; the C
 
 Input is validated against the pinned Version's schema before the Case exists. An ad hoc Case has no Playbook input-schema validation.
 
-A Case ACL cannot contain `public` and never inherits access from its Playbook. If omitted at creation, it defaults to the caller's Account. When supplied or replaced, it must continue to cover the current assignee, including through a Project.
+A Case ACL cannot contain `public` and never inherits access from its Playbook. If omitted at creation, it defaults to the caller's Account. When supplied or replaced, it must continue to cover the current assignee, including through a Team.
 
 Do not create a Case when reading and local execution are enough.
 
@@ -31,7 +31,7 @@ Task rights are narrower than the Case:
 - Link a Task to a source Step only when that provenance helps. The Step ID must exist in the Case's pinned Version; ad hoc Tasks are valid.
 - Allow multiple open Tasks when work is genuinely parallel.
 
-Assignment does not grant access. An assignee must be a User Account the Case ACL already covers, either directly or through a Project in the ACL. Projects grant access but cannot be assignees, and an assignment that would need new access fails instead of widening the ACL.
+Assignment does not grant access. An assignee must be a User Account the Case ACL already covers, either directly or through a Team in the ACL. Teams grant access but cannot be assignees, and an assignment that would need new access fails instead of widening the ACL.
 
 ## Append Records
 
