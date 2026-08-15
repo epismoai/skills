@@ -50,14 +50,14 @@ Do not create a Case merely to read a Playbook. Do not turn every Step into a Ta
 ## Surface contract
 
 - Use the available Epismo surface. Treat its live schema or help as authoritative for operation names, fields, enums, defaults, and limits; do not infer parity with another surface.
-- Resolve identity and the active workspace before a write, then keep that context stable through the connected operation. In MCP, use the context resources before choosing an owner, assignee, or Project ACL. With `EPISMO_TOKEN`, the token's workspace overrides the CLI's saved default.
+- Resolve identity and the active workspace before a write, then keep that context stable through the connected operation. In MCP, use the context resources before choosing an owner, assignee, or Team ACL. With `EPISMO_TOKEN`, the token's workspace overrides the CLI's saved default.
 - Prefer parent-scoped creation and browsing for child resources. Treat cross-parent Task and Suggestion lists as personal inboxes, then re-read the parent and current ACL before mutating an item selected there.
 - Reuse an idempotency key only to retry the identical request after an uncertain result. Use a fresh key after changing intent or rebasing on newer state. Draft save is revision-guarded rather than idempotency-keyed: use the last-read revision, and re-read after a conflict.
 - For Case, Task, and Draft conflicts, re-read and reconsider the change. Never replay stale intent by changing only the lock or revision number.
 
 ## Authorization
 
-An ACL contains Account UUIDs, Project UUIDs, and — for Playbooks only — `public`. Omitting a create ACL defaults to the caller's Account; an empty Playbook create ACL does the same, while an empty Case ACL is rejected. ACL updates always reject an empty list and replace the complete ACL, so read the current state and build the replacement deliberately.
+An ACL contains Account UUIDs, Team UUIDs, and — for Playbooks only — `public`. Omitting a create ACL defaults to the caller's Account; an empty Playbook create ACL does the same, while an empty Case ACL is rejected. ACL updates always reject an empty list and replace the complete ACL, so read the current state and build the replacement deliberately.
 
 Access separates read from write:
 
