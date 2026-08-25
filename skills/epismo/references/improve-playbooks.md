@@ -10,7 +10,7 @@ Use this guide when real use reveals a repeatable improvement.
 
 Create the Suggestion against the Playbook and the immutable base Version that produced the observation; the base must be a Version of that same Playbook. Include the problem, proposed change, and expected benefit, and name a target Step only when that Step ID exists in the base Version.
 
-A Suggestion snapshots the Playbook ACL when it is created. Reading it later requires access under both that snapshot and the Playbook's current ACL, so access removed from the Playbook also closes the Suggestion.
+A Suggestion snapshots Playbook access when it is created. Reading it later requires access under both that snapshot and the Playbook's current access, so access removed from the Playbook also closes the Suggestion.
 
 ## Work with ownership
 
