@@ -57,15 +57,15 @@ Do not create a Case merely to read a Playbook. Do not turn every Step into a Ta
 
 ## Authorization
 
-An ACL contains Account UUIDs, Team UUIDs, and — for Playbooks only — `public`. Omitting a create ACL defaults to the caller's Account; an empty Playbook create ACL does the same, while an empty Case ACL is rejected. ACL updates always reject an empty list and replace the complete ACL, so read the current state and build the replacement deliberately.
+Playbook access uses `visibility` (`private` or `public`) plus explicit `editors` (active User Account or Team UUIDs). `public` grants published read access only; editors can read and edit content. Owners are implicit, never appear in editors, and Workspace Owners/Admins manage Workspace-owned Playbooks. A private owner-only Playbook and a public Playbook with no editors both use an empty editor list. Case ACLs remain separate and reject an empty list.
 
 Access separates read from write:
 
-- Playbook reads follow the current Playbook ACL. Publishing, ACL changes, archival, and Version archival require rights over the Playbook's owner Account. Any authenticated reader may manage an alias only in a personal or managed Workspace namespace they control.
-- Draft reads and writes require rights over the Playbook's owner Account. A Playbook reader or share-link holder cannot read unpublished content.
+- Playbook reads follow current visibility and access. Public readers can only read published content; editors can publish and edit content. Access management, Playbook archival, and historical Version archival require an owner manager. Any authenticated reader may manage an alias only in a personal or managed Workspace namespace they control.
+- Draft reads and writes require Playbook edit access. A public reader or share-link holder cannot read unpublished content.
 - Case, Task, and Record reads follow the current Case ACL. Task and Record have no ACL of their own.
 - Any caller covered by the current Case ACL may append Records while the Case is open. Case-level mutations and Task creation require being the Case starter or its current assignee; existing Tasks have narrower, Task-specific write rules.
-- Share links need separate care: a readable Playbook currently yields one stable token with no expiry or revoke operation, and the web route does not bypass the Playbook ACL. Read [Share Playbooks](./references/share-playbooks.md) before creating or relying on one.
+- Share links need separate care: a readable Playbook currently yields one stable token with no expiry or revoke operation, and the web route does not bypass Playbook access. Read [Share Playbooks](./references/share-playbooks.md) before creating or relying on one.
 
 The user's direct request authorizes ordinary private creates and updates within its scope. Require explicit intent before:
 
