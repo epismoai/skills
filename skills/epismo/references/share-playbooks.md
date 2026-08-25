@@ -8,7 +8,7 @@ Use this guide for ACLs, aliases, share tokens, public access, and archival.
 - **Alias:** one Account namespace's human-readable reference to a Playbook; it grants no access.
 - **Share URL:** an opaque token URL intended for recipient access; the current web flow still applies Playbook access.
 - **Star:** personal saving and a discovery signal, not access.
-- **Draft:** unpublished, mutable Playbook content restricted to owner managers; neither the reader ACL nor a share link grants access.
+- **Draft:** unpublished, mutable Playbook content restricted to editors and owner managers; neither public readers nor a share link grants access.
 
 Cases have independent ACLs and cannot be public. Tasks and Records carry no ACL of their own and are authorized through the current parent Case ACL. Anyone covered by that live ACL may append Records to an open Case; managing the Case and creating Tasks remain limited to its starter and assignee. Records can be listed across readable Cases, and optional filters only narrow results; they never grant access.
 

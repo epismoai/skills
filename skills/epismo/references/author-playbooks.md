@@ -46,4 +46,4 @@ After a conflict:
 3. merge deliberately;
 4. publish with a new idempotency key.
 
-Verify the new Version ID, Definition, Step IDs, ACL, canonical digest, and latest pointer. Publishing is a reviewable change to shared guidance: show the diff before publishing on someone's behalf. Creating or publishing in an owner namespace you do not manage requires an authorized surface and role; otherwise create a Suggestion.
+Verify the new Version ID, Definition, Step IDs, access, canonical digest, and latest pointer. Publishing is a reviewable change to shared guidance: show the diff before publishing on someone's behalf. Creating or publishing in an owner namespace you do not manage requires an authorized surface and role; otherwise create a Suggestion.
