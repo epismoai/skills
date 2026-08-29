@@ -53,9 +53,18 @@ Constraints worth designing around:
 
 Do not store chain-of-thought, credentials, every tool call, raw shell output, heartbeat, or transient retries.
 
+## Connect and hand off Cases
+
+Link sequential or dependent Cases using directed handoffs (`epismo case handoff` or `epismo_case_handoff_create`):
+
+- A handoff creates a directed continuation edge (`fromCaseId` -> `toCaseId`) and cannot create cycles or self-links.
+- Creating a handoff requires management rights (Case starter or assignee) and ACL access on both Cases.
+- Use `epismo_case_handoff_candidate_list` (`direction=outgoing` for `toCaseId`, `direction=incoming` for `fromCaseId`) to query eligible Cases without encountering loops or duplicate links.
+- Inspect the connected Cases DAG using `epismo case handoff graph` or `epismo_case_handoff_graph`.
+
 ## Browse a Case timeline
 
-List Records within their parent Case. Filters can only narrow that authorized timeline and never grant access. The public CLI and MCP surfaces do not expose the internal cross-Case Record query.
+List Records anchored to a parent Case. Use `scope` (`self`, `ancestors`, `descendants`, `neighbors`, or `connected`) to include Records across connected handoff Cases while respecting individual Case ACLs during traversal. Additional filters (Task, author, kinds, origins) only narrow that authorized timeline and never grant access.
 
 Browse Tasks within a Case when coordinating that work. Use the cross-Case Task view as an assignee inbox, not as a substitute for reading the parent before a mutation.
 
