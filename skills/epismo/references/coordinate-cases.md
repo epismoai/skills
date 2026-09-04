@@ -4,7 +4,7 @@ Use this guide when real work needs shared state, ownership, review, or a durabl
 
 ## Start deliberately
 
-Start from an immutable Playbook Version when following reusable guidance; the Case fixes that Version ID and digest for its lifetime. Start an ad hoc Case with a title when no suitable Playbook exists.
+Start from an immutable Playbook Version when following reusable guidance; the Case fixes that Version ID for its lifetime. Start an ad hoc Case with a title when no suitable Playbook exists.
 
 Input is validated against the pinned Version's schema before the Case exists. An ad hoc Case has no Playbook input-schema validation.
 
@@ -19,15 +19,15 @@ Everyone covered by the current Case ACL may read the Case and append Records wh
 Task rights are narrower than the Case:
 
 - Assign or edit a Task: its creator, the Case starter, or the Case assignee.
-- Close or reopen a **work** Task: its assignee or its creator.
-- Close or reopen a **review** Task: its assignee only.
+- Close or reopen a **work** Task: anyone the Case ACL covers. Work status is shared state, not the assignee's private business.
+- Close or reopen a **review** Task: its assignee, or anyone the Case ACL covers while it has none. A review records an approval, so a named reviewer is the only one who can give it.
 
 ## Materialize only shared work
 
 - Keep local intermediate work in the agent runtime.
 - Use the Case assignee for overall responsibility.
 - Create a **work** Task for a concrete delegated result.
-- Create a **review** Task when a person or agent must judge a specific Record. A review Task always needs an assignee, and only a review Task may name a subject Record. Verify that subject belongs to the same Case; the current service does not enforce that relationship.
+- Create a **review** Task when a person or agent must judge a specific Record. Always name the reviewer, otherwise anyone the Case ACL covers can resolve it. Only a review Task may name a subject Record. Verify that subject belongs to the same Case; the current service does not enforce that relationship.
 - Link a Task to a source Step only when that provenance helps. The Step ID must exist in the Case's pinned Version; ad hoc Tasks are valid.
 - Allow multiple open Tasks when work is genuinely parallel.
 
