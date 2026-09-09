@@ -34,6 +34,6 @@ Before relying on a share URL, verify it as the intended recipient in the intend
 
 ## Archive deliberately
 
-Archive a Playbook only with explicit intent. It disappears from search, direct reads, and starred lists, and it accepts no further Versions, Cases, or share tokens.
+Archive a Playbook only with explicit intent. It disappears from search and direct reads, and it accepts no further Versions, Cases, or share tokens.
 
 Archival reaches further than discovery: its Versions stop resolving too. Existing Cases keep their pinned Version ID and stay readable as Cases, but the Definition behind them can no longer be fetched. Prefer narrowing access when guidance should merely stop spreading, and archive when the Playbook itself should end.

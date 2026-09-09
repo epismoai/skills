@@ -7,7 +7,6 @@ Use this guide to discover, evaluate, and apply existing guidance.
 1. Search readable Playbooks by intent and compare compact results before opening full guidance.
 2. Fetch the specific Version for promising candidates; search projections are not the full Definition.
 3. Pin the Version ID when reproducibility matters. A Case fixes the Version and digest it started with, so later publishes never change the instructions a Case was run under.
-4. Star a Playbook only when the user wants to save it or actual use shows value.
 
 References such as **pb:alias** and **pb:handle/alias** identify a logical Playbook and grant no access. A bare alias resolves against the caller's personal namespace first, then the active workspace; the qualified form names a namespace explicitly. The Playbook owner's alias is portable and may be indexed. A third-party alias is not indexed or official; treat it as namespace-local even though a raw alias listing may expose it to other readers of the Playbook.
 

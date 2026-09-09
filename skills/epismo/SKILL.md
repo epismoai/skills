@@ -1,6 +1,6 @@
 ---
 name: epismo
-description: Use Epismo to find, inspect, star, author, version, share, and improve reusable Playbooks; start and coordinate Cases, Tasks, Records, assignments, reviews, and handoffs; and manage durable work context through the available Epismo MCP or CLI surface. Trigger for workflow discovery or authoring, real-work coordination, AI delegation with shared state, Playbook suggestions, aliases, access changes, session handoff, or any request to read or write Epismo data.
+description: Use Epismo to find, inspect, author, version, share, and improve reusable Playbooks; start and coordinate Cases, Tasks, Records, assignments, reviews, and handoffs; and manage durable work context through the available Epismo MCP or CLI surface. Trigger for workflow discovery or authoring, real-work coordination, AI delegation with shared state, Playbook suggestions, aliases, access changes, session handoff, or any request to read or write Epismo data.
 ---
 
 # Epismo
@@ -20,7 +20,7 @@ Route by intent:
 
 | Intent                                                   | Read                                                   |
 | -------------------------------------------------------- | ------------------------------------------------------ |
-| Find, inspect, star, or apply existing guidance          | [Use Playbooks](./references/use-playbooks.md)         |
+| Find, inspect, or apply existing guidance                | [Use Playbooks](./references/use-playbooks.md)         |
 | Create or publish reusable guidance                      | [Author Playbooks](./references/author-playbooks.md)   |
 | Start work, assign it, record outcomes, review, or close | [Coordinate Cases](./references/coordinate-cases.md)   |
 | Feed learning back into a Playbook                       | [Improve Playbooks](./references/improve-playbooks.md) |
