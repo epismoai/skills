@@ -24,7 +24,7 @@ Route by intent:
 | Create or publish reusable guidance                      | [Author Playbooks](./references/author-playbooks.md)   |
 | Start work, assign it, record outcomes, review, or close | [Coordinate Cases](./references/coordinate-cases.md)   |
 | Feed learning back into a Playbook                       | [Improve Playbooks](./references/improve-playbooks.md) |
-| Change ACLs, aliases, share tokens, or public visibility | [Share Playbooks](./references/share-playbooks.md)     |
+| Change ACLs, aliases, share tokens, or public visibility | [Share access](./references/share-playbooks.md)        |
 
 Read only the relevant guide. Read more than one only when the request crosses stages.
 
@@ -57,14 +57,14 @@ Do not create a Case merely to read a Playbook. Do not turn every Step into a Ta
 
 ## Authorization
 
-Playbook access uses `visibility` (`private` or `public`) plus explicit `editors` (active User Account or Team UUIDs). `public` grants published read access only; editors can read and edit content. Owners are implicit, never appear in editors, and Workspace Owners/Admins manage Workspace-owned Playbooks. A private owner-only Playbook and a public Playbook with no editors both use an empty editor list. Case ACLs remain separate and reject an empty list.
+Playbooks use `visibility` (`private` or `public`) plus explicit `editors` (active User Account or Team UUIDs). `public` grants published read access only; editors can read and edit content. Owners are implicit, never appear in editors, and Workspace Owners/Admins manage Workspace-owned Playbooks. A private owner-only Playbook and a public Playbook with no editors both use an empty editor list. Cases use their own ACL: `public` immediately grants read-only access to the current title, Records, and readable handoffs, including later Records. Non-public ACL principals can continue the work; the current Case assignee has implicit work and management access and is omitted from the editor list.
 
 Access separates read from write:
 
 - Playbook reads follow current visibility and access. Public readers can only read published content; editors can publish and edit content. Access management, Playbook archival, and historical Version archival require an owner manager. Any authenticated reader may manage an alias only in a personal or managed Workspace namespace they control.
 - Draft reads and writes require Playbook edit access. A public reader or share-link holder cannot read unpublished content.
-- Case, Task, and Record reads follow the current Case ACL. Task and Record have no ACL of their own.
-- Any caller covered by the current Case ACL may append Records while the Case is open. Case-level mutations and Task creation require being the Case starter or its current assignee; existing Tasks have narrower, Task-specific write rules.
+- Case, Task, and Record reads follow the current Case ACL. A public-only reader receives the current title, Records, and readable handoffs, without Tasks, assignment, input, or collaborator identities. Task and Record have no ACL of their own.
+- Any caller covered by the current Case ACL may append Records while the Case is open. Case-level management (assignment, ACL or access, retitle, close, reopen) requires being the current Case assignee; `started_by` is history. ACL editors can create Tasks. Existing Tasks have narrower, Task-specific write rules.
 - Share links need separate care: a readable Playbook currently yields one stable token with no expiry or revoke operation, and the web route does not bypass Playbook access. Read [Share Playbooks](./references/share-playbooks.md) before creating or relying on one.
 
 The user's direct request authorizes ordinary private creates and updates within its scope. Require explicit intent before:
