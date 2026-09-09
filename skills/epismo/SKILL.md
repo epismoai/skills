@@ -13,7 +13,7 @@ Keep reusable guidance separate from real execution:
 - **Draft** is the mutable, unpublished content of a Playbook. Saving it never mints a Version; publishing it does, and discards the Draft.
 - **Case** is one real matter, either pinned to a Version or ad hoc.
 - **Task** materializes only work that needs explicit ownership or review.
-- **Record** is append-only shared output, decision, note, review, handoff, or activity.
+- **Record** is shared output, decision, note, review, handoff, or activity. Anyone on the Case ACL may append; only the creator may update or redact their own non-system Record.
 - **Suggestion** proposes a Playbook improvement against a base Version.
 
 Route by intent:
@@ -64,7 +64,7 @@ Access separates read from write:
 - Playbook reads follow current visibility and access. Public readers can only read published content; editors can publish and edit content. Access management, Playbook archival, and historical Version archival require an owner manager. Any authenticated reader may manage an alias only in a personal or managed Workspace namespace they control.
 - Draft reads and writes require Playbook edit access. A public reader or share-link holder cannot read unpublished content.
 - Case, Task, and Record reads follow the current Case ACL. A public-only reader receives the current title, Records, and readable handoffs, without Tasks, assignment, input, or collaborator identities. Task and Record have no ACL of their own.
-- Any caller covered by the current Case ACL may append Records while the Case is open. Case-level management (assignment, ACL or access, retitle, close, reopen) requires being the current Case assignee; `started_by` is history. ACL editors can create Tasks. Existing Tasks have narrower, Task-specific write rules.
+- Any caller covered by the current Case ACL may append Records while the Case is open. Only the Record's creator may update or redact it; system Records cannot be changed. Case-level management (assignment, ACL or access, retitle, close, reopen) requires being the current Case assignee; `started_by` is history. ACL editors can create Tasks. Existing Tasks have narrower, Task-specific write rules.
 - Share links need separate care: a readable Playbook currently yields one stable token with no expiry or revoke operation, and the web route does not bypass Playbook access. Read [Share Playbooks](./references/share-playbooks.md) before creating or relying on one.
 
 The user's direct request authorizes ordinary private creates and updates within its scope. Require explicit intent before:

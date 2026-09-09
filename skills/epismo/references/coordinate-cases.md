@@ -33,7 +33,7 @@ Task rights are narrower than the Case:
 
 Assignment does not grant access. An assignee must be a User Account the Case ACL already covers, either directly or through a Team in the ACL. Teams grant access but cannot be assignees, and an assignment that would need new access fails instead of widening the ACL.
 
-## Append Records
+## Write Records
 
 Append Records for:
 
@@ -43,13 +43,16 @@ Append Records for:
 - review evidence or verdicts;
 - non-transient failures worth sharing.
 
-Records are append-only and cannot be edited or deleted; correct one by appending another. Set a Record's Task relationship when it is that Task's output; otherwise link it only to the Case.
+Anyone covered by the current Case ACL may append Records while the Case is open. The creator may later update kind, content, or data on a Record they authored, or redact it. System Records and the `activity` kind cannot be changed by clients. A delete clears content and data and sets `deleted_at`; the id remains so references still resolve.
+
+Set a Record's Task relationship when it is that Task's output; otherwise link it only to the Case. That relationship cannot be changed after append.
 
 Constraints worth designing around:
 
 - Records can be appended only while the Case is open. Closing a Case or Task accepts its final Records in the same call — use that instead of racing a separate append.
 - Origin is `user` or `agent`. The server owns `system` origin and the `activity` kind, which it writes for lifecycle events.
 - Credentials in data are rejected, including URLs carrying tokens or userinfo.
+- Update and delete require being the creator, holding Case editor access, and a Record that is not already redacted. A second delete with a new idempotency key returns conflict.
 
 Do not store chain-of-thought, credentials, every tool call, raw shell output, heartbeat, or transient retries.
 
@@ -64,7 +67,7 @@ Link sequential or dependent Cases using directed handoffs (`epismo case handoff
 
 ## Browse a Case timeline
 
-`case get` bundles only the latest five Records, newest first. Follow `records_next_cursor` in CLI output (`recordsNextCursor` in API/MCP) with `case record list --cursor` and the returned Record scope to continue. Public-only readers use `scope: self`; work collaborators receive `scope: ancestors`.
+`case get` bundles only the latest five Records of that Case, newest first. Follow `records_next_cursor` in CLI output (`recordsNextCursor` in API/MCP) with `case record list --cursor` and `scope: self` to continue.
 
 List Records anchored to a parent Case. Use `scope` (`self`, `ancestors`, `descendants`, `neighbors`, or `connected`) to include Records across connected handoff Cases while respecting individual Case ACLs during traversal. Additional filters (Task, author, kinds, origins) only narrow that authorized timeline and never grant access.
 
