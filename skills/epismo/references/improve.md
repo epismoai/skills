@@ -4,6 +4,8 @@ Use this guide when real Case work reveals a repeatable Playbook improvement.
 
 ## Separate evidence from proposal
 
+Read the Case before proposing a change. `case get` returns only that Case's latest five Records; if it has handoffs, list related Records with `ancestors` or `connected` so the Suggestion is based on the thread.
+
 - Put what happened in the Case as a Record.
 - Put what should change next time in a Suggestion.
 - Keep one-off exceptions out of reusable guidance unless they reveal a general rule.

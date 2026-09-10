@@ -20,9 +20,9 @@ These guides follow user actions rather than object types. Route by the outcome,
 
 | Intent                                                   | Object           | Read                                       |
 | -------------------------------------------------------- | ---------------- | ------------------------------------------ |
-| Find, inspect, or apply existing guidance                   | Playbook        | [Use](./references/use.md)                |
+| Find, inspect, or apply existing Playbook guidance           | Playbook        | [Reuse](./references/reuse.md)            |
 | Create or publish reusable guidance                         | Playbook        | [Author](./references/author.md)          |
-| Start work, assign it, record outcomes, review, or close | Case             | [Coordinate](./references/coordinate.md)   |
+| Find, start, assign, record, review, or close real work | Case             | [Coordinate](./references/coordinate.md)   |
 | Feed learning from a Case back into a Playbook           | Playbook        | [Improve](./references/improve.md)        |
 | Change who can see or reach a Playbook or Case            | Playbook or Case | [Share](./references/share.md)           |
 
@@ -49,7 +49,7 @@ Do not create a Case merely to read a Playbook. Do not turn every Step into a Ta
 
 ## Surface contract
 
-- Use the available Epismo surface. Treat its live schema or help as authoritative for operation names, fields, enums, defaults, and limits; do not infer parity with another surface.
+- Use the available Epismo surface. Treat its live schema or help as authoritative for operation names, fields, enums, defaults, and limits; do not infer parity with another surface. This skill is for choosing an action and knowing its consequences, not for repeating those per-operation descriptions.
 - Resolve identity and the active workspace before a write, then keep that context stable through the connected operation. In MCP, use the context resources before choosing an owner, assignee, or Team editor. With `EPISMO_TOKEN`, the token's workspace overrides the CLI's saved default.
 - Prefer parent-scoped creation and browsing for child resources. Treat cross-parent Task and Suggestion lists as personal inboxes, then re-read the parent and current access before mutating an item selected there.
 - Reuse an idempotency key only to retry the identical request after an uncertain result. Use a fresh key after changing intent or rebasing on newer state. Draft save is revision-guarded rather than idempotency-keyed: use the last-read revision, and re-read after a conflict.

@@ -1,10 +1,10 @@
 # Author
 
-Use this guide to create a Playbook, iterate on a Draft, or publish a new immutable Version.
+Use this guide to create a Playbook, iterate on a Draft, or publish a new immutable Version. Do not author a Playbook merely to store one Case's facts; those belong on the Case as Records.
 
 ## Search first
 
-Search existing Playbooks before creating one. Improve a fitting Playbook when the outcome, audience, and lifecycle match. Create a new one when those boundaries differ materially.
+Search existing Playbooks before creating one. Improve a fitting Playbook when the outcome, audience, and lifecycle match. Create a new one when those boundaries differ materially. If the request is "turn this Case into guidance," extract the repeatable procedure and file it through [Improve](./improve.md) when a Playbook already exists.
 
 ## Write the Definition
 
