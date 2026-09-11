@@ -17,14 +17,14 @@ The agent runtime still owns planning, tool selection, credentials, retries, and
 skills/epismo/
   SKILL.md
   references/
-    use-playbooks.md
-    author-playbooks.md
-    coordinate-cases.md
-    improve-playbooks.md
-    share-playbooks.md
+    reuse.md
+    author.md
+    coordinate.md
+    improve.md
+    share.md
 ```
 
-The main [Epismo skill](./skills/epismo/SKILL.md) routes a request to the relevant action guide. CLI and MCP share the same Playbook, Case, Task, Record, Suggestion, Star, and Alias operation families; live MCP schemas and CLI help remain the source of truth for exact names, fields, enums, and limits.
+The main [Epismo skill](./skills/epismo/SKILL.md) routes a request to the relevant action guide (`reuse`, `author`, `coordinate`, `improve`, `share`). Playbook and Case are named in that routing table, not in the filenames. CLI and MCP share the same Playbook, Case, Task, Record, Suggestion, Star, and Alias operation families; live MCP schemas and CLI help remain the source of truth for exact names, fields, enums, and limits.
 
 ## Connect
 

@@ -1,10 +1,10 @@
-# Author Playbooks
+# Author
 
-Use this guide to create a Playbook, iterate on a Draft, or publish a new immutable Version.
+Use this guide to create a Playbook, iterate on a Draft, or publish a new immutable Version. Do not author a Playbook merely to store one Case's facts; those belong on the Case as Records.
 
 ## Search first
 
-Search existing Playbooks before creating one. Improve a fitting Playbook when the outcome, audience, and lifecycle match. Create a new one when those boundaries differ materially.
+Search existing Playbooks before creating one. Improve a fitting Playbook when the outcome, audience, and lifecycle match. Create a new one when those boundaries differ materially. If the request is "turn this Case into guidance," extract the repeatable procedure and file it through [Improve](./improve.md) when a Playbook already exists.
 
 ## Write the Definition
 
@@ -31,7 +31,7 @@ A Playbook has at most one Draft: mutable, unpublished content that saves cheapl
 - Editors and owner managers can read, save, discard, or publish a Draft. Public readers and share links have no path to unpublished content.
 - Saving validates the Definition and any retained Step IDs, but does not allocate IDs for new Steps. Allocation happens when publishing.
 - Publishing the Draft mints a new immutable Version from its current content and discards the Draft in the same step. Discard it directly instead when the direction was wrong and should not become a Version.
-- A Draft is not a Suggestion. It is the owner's own in-progress edit, not a third party's proposal against a fixed base Version — see [Improve Playbooks](./improve-playbooks.md) for that path.
+- A Draft is not a Suggestion. It is the owner's own in-progress edit, not a third party's proposal against a fixed base Version — see [Improve](./improve.md) for that path.
 
 ## Publish safely
 
