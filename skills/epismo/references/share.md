@@ -5,7 +5,7 @@ Use this guide for access, aliases, share tokens, public visibility, and archiva
 ## Choose the mechanism
 
 - **Playbook access:** `visibility` plus durable editor User Account and Team IDs. `public` permits published reads only; owners are implicit.
-- **Case access:** Case access never inherits from its Playbook. It may include `public`, which is read-only and exposes the current title, Records, and readable handoff neighborhood; it never exposes Tasks, assignment, input, or collaborator identities. Tasks and Records have no access list of their own and follow the current parent Case. Anyone with Case work access may append Records to an open Case; only the creator may update or redact their own non-system Record. Managing the Case remains limited to its current assignee, while editors can create Tasks.
+- **Case access:** Case access never inherits from its Playbook. It may include `public`, which is read-only and exposes the current title, Records, and readable handoff neighborhood; it never exposes Tasks, assignment, input, or collaborator identities. Tasks and Records have no access list of their own and follow the current parent Case. Anyone with Case work access may append Records to an open Case, update Tasks, assign, retitle, close, reopen, and connect handoffs; only the creator may update or redact their own non-system Record. Access changes and archiving stay with the current assignee.
 - **Alias:** one Account namespace's human-readable reference to a Playbook; it grants no access.
 - **Share URL:** an opaque token URL for a Playbook or a Case. The current web flow still applies the target's live access check; the token itself does not widen access.
 - **Star:** personal saving and a discovery signal, not access.
