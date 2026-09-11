@@ -5,7 +5,7 @@ description: Use Epismo to find, inspect, author, version, share, and improve re
 
 # Epismo
 
-Keep reusable guidance separate from real execution:
+Keep reusable guidance separate from real execution. A **Playbook** is versioned guidance; a **Case** is one real matter. Tasks, Records, and handoffs live on the Case. Drafts, Versions, Steps, and Suggestions live on the Playbook.
 
 - **Playbook** is a logical, access-controlled container with immutable Versions.
 - **Version** contains the Definition: title, description, category, input schema, and Steps.
@@ -13,18 +13,18 @@ Keep reusable guidance separate from real execution:
 - **Draft** is the mutable, unpublished content of a Playbook. Saving it never mints a Version; publishing it does, and discards the Draft.
 - **Case** is one real matter, either pinned to a Version or ad hoc.
 - **Task** materializes only work that needs explicit ownership or review.
-- **Record** is append-only shared output, decision, note, review, handoff, or activity.
+- **Record** is shared output, decision, note, review, handoff, or activity. Anyone with Case work access may append; only the creator may update or redact their own non-system Record.
 - **Suggestion** proposes a Playbook improvement against a base Version.
 
-Route by intent:
+These guides follow user actions rather than object types. Route by the outcome, then use the object the action needs:
 
-| Intent                                                   | Read                                                   |
-| -------------------------------------------------------- | ------------------------------------------------------ |
-| Find, inspect, or apply existing guidance                | [Use Playbooks](./references/use-playbooks.md)         |
-| Create or publish reusable guidance                      | [Author Playbooks](./references/author-playbooks.md)   |
-| Start work, assign it, record outcomes, review, or close | [Coordinate Cases](./references/coordinate-cases.md)   |
-| Feed learning back into a Playbook                       | [Improve Playbooks](./references/improve-playbooks.md) |
-| Change ACLs, aliases, share tokens, or public visibility | [Share access](./references/share-playbooks.md)        |
+| Intent                                                   | Object           | Read                                       |
+| -------------------------------------------------------- | ---------------- | ------------------------------------------ |
+| Find, inspect, or apply existing Playbook guidance           | Playbook        | [Reuse](./references/reuse.md)            |
+| Create or publish reusable guidance                         | Playbook        | [Author](./references/author.md)          |
+| Find, start, assign, record, review, or close real work | Case             | [Coordinate](./references/coordinate.md)   |
+| Feed learning from a Case back into a Playbook           | Playbook        | [Improve](./references/improve.md)        |
+| Change who can see or reach a Playbook or Case            | Playbook or Case | [Share](./references/share.md)           |
 
 Read only the relevant guide. Read more than one only when the request crosses stages.
 
@@ -32,7 +32,7 @@ Read only the relevant guide. Read more than one only when the request crosses s
 
 1. Resolve identity and workspace before a write.
 2. Search before creating; get current state before updating.
-3. Fetch only the relevant Playbook Version, Case, Tasks, or ACL-scoped Records.
+3. Fetch only the relevant Playbook Version, Case, Tasks, or Records the caller can read.
 4. Use the lightest model that preserves the state people actually need.
 5. Make the smallest authorized change.
 6. Verify returned IDs, access, lock versions, status, and outcome.
@@ -49,23 +49,23 @@ Do not create a Case merely to read a Playbook. Do not turn every Step into a Ta
 
 ## Surface contract
 
-- Use the available Epismo surface. Treat its live schema or help as authoritative for operation names, fields, enums, defaults, and limits; do not infer parity with another surface.
-- Resolve identity and the active workspace before a write, then keep that context stable through the connected operation. In MCP, use the context resources before choosing an owner, assignee, or Team ACL. With `EPISMO_TOKEN`, the token's workspace overrides the CLI's saved default.
-- Prefer parent-scoped creation and browsing for child resources. Treat cross-parent Task and Suggestion lists as personal inboxes, then re-read the parent and current ACL before mutating an item selected there.
+- Use the available Epismo surface. Treat its live schema or help as authoritative for operation names, fields, enums, defaults, and limits; do not infer parity with another surface. This skill is for choosing an action and knowing its consequences, not for repeating those per-operation descriptions.
+- Resolve identity and the active workspace before a write, then keep that context stable through the connected operation. In MCP, use the context resources before choosing an owner, assignee, or Team editor. With `EPISMO_TOKEN`, the token's workspace overrides the CLI's saved default.
+- Prefer parent-scoped creation and browsing for child resources. Treat cross-parent Task and Suggestion lists as personal inboxes, then re-read the parent and current access before mutating an item selected there.
 - Reuse an idempotency key only to retry the identical request after an uncertain result. Use a fresh key after changing intent or rebasing on newer state. Draft save is revision-guarded rather than idempotency-keyed: use the last-read revision, and re-read after a conflict.
 - For Case, Task, and Draft conflicts, re-read and reconsider the change. Never replay stale intent by changing only the lock or revision number.
 
 ## Authorization
 
-Playbooks use `visibility` (`private` or `public`) plus explicit `editors` (active User Account or Team UUIDs). `public` grants published read access only; it is not workspace-member visibility. Editors can read and edit content. Owners are implicit and never appear in editors. For a Workspace-owned Playbook, every member of that Workspace can read and edit it and is also omitted from editors; Workspace Owners/Admins manage access, public visibility, and archive. Any member may create a Playbook owned by a Workspace they belong to, or move a personally owned private Playbook into it; access and archive still require an owner manager. A private owner-only Playbook and a public Playbook with no editors both use an empty editor list. Cases use their own ACL: `public` immediately grants read-only access to the current title, Records, and readable handoffs, including later Records. Non-public ACL principals can continue the work; the current Case assignee has implicit work and management access and is omitted from the editor list.
+Playbooks use `visibility` (`private` or `public`) plus explicit `editors` (active User Account or Team UUIDs). `public` grants published read access only; it is not workspace-member visibility. Editors can read and edit content. Owners are implicit and never appear in editors. For a Workspace-owned Playbook, every member of that Workspace can read and edit it and is also omitted from editors; Workspace Owners/Admins manage access, public visibility, and archive. Any member may create a Playbook owned by a Workspace they belong to, or move a personally owned private Playbook into it; access and archive still require an owner manager. A private owner-only Playbook and a public Playbook with no editors both use an empty editor list. Cases use their own access: `public` immediately grants read-only access to the current title, Records, and readable handoffs, including later Records. Editors can continue the work; the current Case assignee has implicit work and management access and is omitted from the editor list.
 
 Access separates read from write:
 
 - Playbook reads follow current visibility and access. Public readers can only read published content; editors, and every member of a workspace-owned Playbook, can publish and edit content. Access management, Playbook archival, and historical Version archival require an owner manager. Any authenticated reader may manage an alias only in a personal or managed Workspace namespace they control.
 - Draft reads and writes require Playbook edit access. A public reader or share-link holder cannot read unpublished content.
-- Case, Task, and Record reads follow the current Case ACL. A public-only reader receives the current title, Records, and readable handoffs, without Tasks, assignment, input, or collaborator identities. Task and Record have no ACL of their own.
-- Any caller covered by the current Case ACL may append Records while the Case is open. Case-level management (assignment, ACL or access, retitle, close, reopen) requires being the current Case assignee; `started_by` is history. ACL editors can create Tasks. Existing Tasks have narrower, Task-specific write rules.
-- Share links need separate care: a readable Playbook currently yields one stable token with no expiry or revoke operation, and the web route does not bypass Playbook access. Read [Share Playbooks](./references/share-playbooks.md) before creating or relying on one.
+- Case, Task, and Record reads follow the current Case access. A public-only reader receives the current title, Records, and readable handoffs, without Tasks, assignment, input, or collaborator identities. Task and Record have no access list of their own.
+- Any caller with Case work access may append Records while the Case is open. Only the Record's creator may update or redact it; system Records cannot be changed. Case-level management (assignment, access, retitle, close, reopen) requires being the current Case assignee; `started_by` is history. Editors can create Tasks. Existing Tasks have narrower, Task-specific write rules.
+- Share links need separate care: a readable Playbook or Case currently yields one stable token with no expiry or revoke operation, and the web route does not bypass the target's access. Read [Share](./references/share.md) before creating or relying on one.
 
 The user's direct request authorizes ordinary private creates and updates within its scope. Require explicit intent before:
 
