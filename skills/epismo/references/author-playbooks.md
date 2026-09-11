@@ -28,16 +28,16 @@ A Playbook has at most one Draft: mutable, unpublished content that saves cheapl
 
 - Save against the revision you last read, or the new-Draft sentinel when none exists. If someone else saved first, re-read and merge deliberately.
 - Before publishing, read and review the Draft, then publish against that returned revision. If anyone saves after the review, re-read the newer content before deciding again.
-- Editors and owner managers can read, save, discard, or publish a Draft. Public readers and share links have no path to unpublished content.
+- Anyone with Playbook edit access can read, save, discard, or publish a Draft. That includes editors, owner managers, and members of a workspace-owned Playbook. Public readers and share links have no path to unpublished content.
 - Saving validates the Definition and any retained Step IDs, but does not allocate IDs for new Steps. Allocation happens when publishing.
 - Publishing the Draft mints a new immutable Version from its current content and discards the Draft in the same step. Discard it directly instead when the direction was wrong and should not become a Version.
-- A Draft is not a Suggestion. It is the owner's own in-progress edit, not a third party's proposal against a fixed base Version — see [Improve Playbooks](./improve-playbooks.md) for that path.
+- A Draft is not a Suggestion. It is an in-progress edit by someone with Playbook edit access, not a third party's proposal against a fixed base Version — see [Improve Playbooks](./improve-playbooks.md) for that path.
 
 ## Publish safely
 
-Creation atomically creates the Playbook and its first Version under an owner Account you manage. Use `visibility` and `editors` for access; omitting editors creates a private owner-only Playbook.
+Creation atomically creates the Playbook and its first Version. `ownerId` may be your personal Account, or a Workspace you belong to. Any member may create a Playbook owned by that Workspace; `visibility` and `editors` apply only when you manage the owner namespace, otherwise the Playbook is private with you as an editor. Access changes still require an owner manager.
 
-Direct publishing must be based on the current latest Version and creates a new immutable Version; it never edits the base. Draft publishing uses the reviewed Draft revision and the Version captured by its last save. It fails if either moved in the meantime. Editors and owner managers may publish; an archived Playbook cannot receive new Versions.
+Direct publishing must be based on the current latest Version and creates a new immutable Version; it never edits the base. Draft publishing uses the reviewed Draft revision and the Version captured by its last save. It fails if either moved in the meantime. Anyone with Playbook edit access may publish; an archived Playbook cannot receive new Versions.
 
 After a conflict:
 
@@ -46,4 +46,4 @@ After a conflict:
 3. merge deliberately;
 4. publish with a new idempotency key.
 
-Verify the new Version ID, Definition, Step IDs, access, canonical digest, and latest pointer. Publishing is a reviewable change to shared guidance: show the diff before publishing on someone's behalf. Creating or publishing in an owner namespace you do not manage requires an authorized surface and role; otherwise create a Suggestion.
+Verify the new Version ID, Definition, Step IDs, access, canonical digest, and latest pointer. Publishing is a reviewable change to shared guidance: show the diff before publishing on someone's behalf. Creating under another person's Account, in a Workspace you do not belong to, or publishing a Playbook you cannot edit requires an authorized surface and role; otherwise create a Suggestion.
