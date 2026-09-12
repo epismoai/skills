@@ -49,7 +49,7 @@ Append Records for:
 - `note`: commentary, a decision, or a handoff summary;
 - non-transient failures worth sharing.
 
-Do not write `review` or `activity`; those are server-authored. Ask Epismo AI to review with `case review` / `epismo_case_review`; the Record appears after the queued job finishes. `result` is accepted as `output`; `autoreview` is accepted as `review` when listing.
+Do not write `review` or `activity`; those are server-authored. Ask Epismo AI to review with `case review` / `epismo_case_review`; the Record appears after the queued job finishes.
 
 Anyone with Case work access may append Records while the Case is open. The creator may later update kind, content, or data on a Record they authored, or redact it. System Records and the `activity` and `review` kinds cannot be changed by clients. A delete clears content and data and sets `deleted_at`; the id remains so references still resolve.
 
