@@ -5,7 +5,7 @@ Use this guide for access, aliases, share tokens, public visibility, and archiva
 ## Choose the mechanism
 
 - **Playbook access:** `visibility` plus durable editor User Account and Team IDs. `public` permits published reads only; owners, and every member of a workspace-owned Playbook, are implicit.
-- **Case access:** Case access never inherits from its Playbook. It may include `public`, which is read-only and exposes the current title, Records, and readable handoff neighborhood; it never exposes Tasks, assignment, input, or collaborator identities. Tasks and Records have no access list of their own and follow the current parent Case. Anyone with Case work access may append Records to an open Case; only the creator may update or redact their own non-system Record. Managing the Case remains limited to its current assignee, while editors can create Tasks.
+- **Case access:** Case access never inherits from its Playbook. It may include `public`, which is read-only and exposes the current title, input, Records, and readable handoff neighborhood; it never exposes Tasks, assignment, or collaborator identities. Tasks and Records have no access list of their own and follow the current parent Case. Anyone with Case work access may append Records to an open Case; only the creator may update or redact their own non-system Record. Managing the Case remains limited to its current assignee, while editors can create Tasks, retitle, and change whether OUTPUT Records enqueue a platform review.
 - **Alias:** one Account namespace's human-readable reference to a Playbook; it grants no access.
 - **Share URL:** an opaque token URL for a Playbook or a Case. The current web flow still applies the target's live access check; the token itself does not widen access.
 - **Star:** personal saving and a discovery signal, not access.
@@ -29,7 +29,7 @@ Use an alias when repeated human-readable lookup matters. Each personal or manag
 
 Treat a share URL as a credential even though the current web flow does not bypass access. Any authenticated reader can create or retrieve the object's single stable token; there is currently no expiry, rotation, or revoke operation. Do not create one speculatively, and keep it out of public text, Playbook content, Cases, Records, and logs.
 
-Before relying on a share URL, verify it as the intended recipient in the intended workspace or anonymous context. The web route resolves the token to `/playbooks/{id}` or `/cases/{id}` and performs the normal access check. Use `playbook share` or `epismo_playbook_share` for a Playbook link, and `case share` or `epismo_case_share` for a Case link. A private target still requires access; a public Case exposes its current title, Records, and readable handoffs. Archiving blocks the target read but does not delete the token mapping. Share URLs do not expose Drafts, Tasks, or restricted Case fields.
+Before relying on a share URL, verify it as the intended recipient in the intended workspace or anonymous context. The web route resolves the token to `/playbooks/{id}` or `/cases/{id}` and performs the normal access check. Use `playbook share` or `epismo_playbook_share` for a Playbook link, and `case share` or `epismo_case_share` for a Case link. A private target still requires access; a public Case exposes its current title, input, Records, and readable handoffs. Archiving blocks the target read but does not delete the token mapping. Share URLs do not expose Drafts, Tasks, or restricted Case fields.
 
 ## Archive deliberately
 
