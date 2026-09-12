@@ -8,7 +8,7 @@ Search before starting. List open Cases the caller can work on, match the goal a
 
 Resume the existing Case when the goal, audience, and lifecycle already match. Switching agents or conversations is not a new effort and does not need a handoff; read and update the same Case.
 
-To continue a public Case, start a Case of your own and hand off from the public one; public read access is not work access.
+To continue a public Case, hand it off into a Case you can edit; public read access is not work access.
 
 Do not create a Case when reading and local execution are enough. Applying a Playbook without shared state is [Reuse](./reuse.md).
 
@@ -22,11 +22,11 @@ A Case's access never inherits from its Playbook. If omitted at creation, its ex
 
 ## Know who may write
 
-Everyone with Case work access may read the Case and append Records while it is open. Editors can also create Tasks. Assigning the Case, replacing its access, retitling it, closing, and reopening remain limited to the current Case assignee. `started_by` is history: after assignment moves on, the starter keeps access only if they remain as an editor.
+Everyone with Case work access may read the Case, append Records while it is open, create and update Tasks, assign the Case, retitle it, close it, reopen it, and connect handoffs. Replacing access and archiving stay with the current Case assignee. `started_by` is history: after assignment moves on, the starter keeps access only if they remain as an editor.
 
-Task rights are narrower than the Case:
+Task status rights stay narrower than the Case:
 
-- Assign or edit a Task: its creator or the Case assignee.
+- Assign or edit a Task: anyone with Case work access.
 - Close or reopen a **work** Task: anyone with Case work access. Work status is shared state, not the assignee's private business.
 - Close or reopen a **review** Task: its assignee, or anyone with Case work access while it has none. A review records an approval, so a named reviewer is the only one who can give it.
 
@@ -68,7 +68,7 @@ Do not store chain-of-thought, credentials, every tool call, raw shell output, h
 
 Link sequential or dependent Cases with a directed continuation (`fromCaseId` -> `toCaseId`). Do not add a handoff merely because a different agent is picking up the same effort.
 
-A handoff cannot create cycles or self-links. Creating one requires read access to the source, work access to the target, and management of at least one Case. A public Case can be continued into a Case of your own; public read access cannot attach work onto the public Case as a target. Ask the live surface for eligible candidates rather than guessing pairs; already-connected and loop-forming Cases are excluded there.
+A handoff cannot create cycles or self-links. Creating one requires read access to the source and work access to the target. A public Case can be continued into a Case you can edit; public read access cannot attach work onto the public Case as a target. Ask the live surface for eligible candidates rather than guessing pairs; listing candidates requires work access on the anchored Case, and already-connected and loop-forming Cases are excluded there.
 
 ## Browse a Case timeline
 
