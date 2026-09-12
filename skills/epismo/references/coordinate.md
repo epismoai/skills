@@ -22,7 +22,7 @@ A Case's access never inherits from its Playbook. If omitted at creation, its ex
 
 ## Know who may write
 
-Everyone with Case work access may read the Case and append Records while it is open. Editors can also create Tasks, retitle an open Case, and turn OUTPUT reviews on or off. Assigning the Case, closing, and reopening also use work access. Replacing its access and asking Epismo to review it remain limited to the current Case assignee. `started_by` is history: after assignment moves on, the starter keeps access only if they remain as an editor.
+Everyone with Case work access may read the Case and append Records while it is open. Editors can also create Tasks, retitle an open Case, turn OUTPUT reviews on or off, and request an Epismo AI review. Assigning the Case, closing, and reopening also use work access. Replacing its access and archiving remain limited to the current Case assignee. `started_by` is history: after assignment moves on, the starter keeps access only if they remain as an editor.
 
 Task rights are narrower than the Case:
 
@@ -35,7 +35,7 @@ Task rights are narrower than the Case:
 - Keep local intermediate work in the agent runtime.
 - Use the Case assignee for overall responsibility.
 - Create a **work** Task for a concrete delegated result.
-- Create an **approval** Task when a person or agent must judge a specific Record. Always name the reviewer, otherwise anyone with Case work access can resolve it. Only an approval Task may name a subject Record. Verify that subject belongs to the same Case; the current service does not enforce that relationship. This is distinct from a platform **review**: `case review` / `epismo_case_review` queues a judgment of the Case's shared evidence and returns immediately. Current assignee only. When it finishes, the server appends a REVIEW Record; poll `case record list` / `epismo_case_record_list` with `kinds=review`, wait for `case_reviewed`, or replay the same idempotency key. Enabling Case `autoReview` (at start or update) also enqueues that platform review when an OUTPUT Record is appended. Auto and manual reviews charge the Case billing account captured at start.
+- Create an **approval** Task when a person or agent must judge a specific Record. Always name the reviewer, otherwise anyone with Case work access can resolve it. Only an approval Task may name a subject Record. Verify that subject belongs to the same Case; the current service does not enforce that relationship. This is distinct from an Epismo AI **review**: any Case editor can use `case review` / `epismo_case_review` to queue a judgment of the Case's shared evidence, and the call returns immediately. When it finishes, the server appends a REVIEW Record; poll `case record list` / `epismo_case_record_list` with `kinds=review`, or replay the same idempotency key. Enabling Case `autoReview` (at start or update) also enqueues that Epismo AI review when an OUTPUT Record is appended. Auto and manual reviews charge the Case billing account captured at start.
 - Link a Task to a source Step only when that provenance helps. The Step ID must exist in the Case's pinned Version; ad hoc Tasks are valid.
 - Allow multiple open Tasks when work is genuinely parallel.
 
@@ -45,11 +45,11 @@ Assignment does not grant access. An assignee must be a User Account the Case al
 
 Append Records for:
 
-- `output`: durable deliverables; appending one can trigger a platform review;
+- `output`: durable deliverables; appending one can trigger an Epismo AI review;
 - `note`: commentary, a decision, or a handoff summary;
 - non-transient failures worth sharing.
 
-Do not write `review` or `activity`; those are server-authored. Ask for a platform verdict with `case review` / `epismo_case_review`; the Record appears after the queued job finishes. `result` is accepted as `output`; `autoreview` is accepted as `review` when listing.
+Do not write `review` or `activity`; those are server-authored. Ask Epismo AI to review with `case review` / `epismo_case_review`; the Record appears after the queued job finishes. `result` is accepted as `output`; `autoreview` is accepted as `review` when listing.
 
 Anyone with Case work access may append Records while the Case is open. The creator may later update kind, content, or data on a Record they authored, or redact it. System Records and the `activity` and `review` kinds cannot be changed by clients. A delete clears content and data and sets `deleted_at`; the id remains so references still resolve.
 
