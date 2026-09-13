@@ -35,7 +35,7 @@ Task status rights stay narrower than the Case:
 - Keep local intermediate work in the agent runtime.
 - Use the Case assignee for overall responsibility.
 - Create a **work** Task for a concrete delegated result.
-- Create an **approval** Task when a person or agent must judge a specific Record. Always name the reviewer, otherwise anyone with Case work access can resolve it. Only an approval Task may name a subject Record. Verify that subject belongs to the same Case; the current service does not enforce that relationship. This is distinct from an Epismo AI **review**: any Case editor can use `case review` / `epismo_case_review` to queue a judgment of the Case's shared evidence, and the call returns immediately. When it finishes, the server appends a REVIEW Record; poll `case record list` / `epismo_case_record_list` with `kinds=review`, or replay the same idempotency key. Enabling Case `autoReview` (at start or update) also enqueues that Epismo AI review when an OUTPUT Record is appended. Auto and manual reviews charge the Case billing account captured at start.
+- Create an **approval** Task when a person or agent must judge a specific Record. Always name the reviewer, otherwise anyone with Case work access can resolve it. Only an approval Task may name a subject Record. Verify that subject belongs to the same Case; the current service does not enforce that relationship. An approval Task is not a REVIEW Record. To record this agent's own verdict on the Case's shared evidence, append `kind=review` with `origin=agent`. To ask billed Epismo AI to judge that evidence, use `case review` / `epismo_case_review`; the call returns immediately, then the server appends a REVIEW Record with `origin=system`. Poll `case record list` / `epismo_case_record_list` with `kinds=review` and `origins=system`, or replay the same idempotency key. Enabling Case `autoReview` (at start or update) also enqueues that Epismo AI review when an OUTPUT Record is appended. Auto and manual Epismo AI reviews charge the Case billing account captured at start.
 - Link a Task to a source Step only when that provenance helps. The Step ID must exist in the Case's pinned Version; ad hoc Tasks are valid.
 - Allow multiple open Tasks when work is genuinely parallel.
 
@@ -47,19 +47,23 @@ Append Records for:
 
 - `output`: durable deliverables; appending one can trigger an Epismo AI review;
 - `note`: commentary, a decision, or a handoff summary;
+- `review`: this agent's or a person's verdict on the Case's shared evidence; `data.verdict` must be `pass`, `changes_requested`, or `insufficient`;
 - non-transient failures worth sharing.
 
-Do not write `review` or `activity`; those are server-authored. Ask Epismo AI to review with `case review` / `epismo_case_review`; the Record appears after the queued job finishes.
+When this agent appends any of those, set `origin=agent` (`case record append` / `epismo_case_record_append`, including Records passed while closing a Case or Task). Origin `user` is for a person typing. Omitting origin defaults to `user`, so an agent-authored Record would look human-written. Never set `origin=system`.
 
-Anyone with Case work access may append Records while the Case is open. The creator may later update kind, content, or data on a Record they authored, or redact it. System Records and the `activity` and `review` kinds cannot be changed by clients. A delete clears content and data and sets `deleted_at`; the id remains so references still resolve.
+Do not write `activity`; that kind is server-authored. Ask billed Epismo AI to review with `case review` / `epismo_case_review`; the Record appears after the queued job finishes with `origin=system`. To record this agent's own verdict, append `kind=review` with `origin=agent` and `data.verdict`. That is a Record write, not `case review`, and it is not the Epismo AI job.
+
+Anyone with Case work access may append Records while the Case is open. The creator may later update kind, content, or data on a Record they authored, or redact it. System Records and `activity` cannot be changed by clients. A delete clears content and data and sets `deleted_at`; the id remains so references still resolve.
 
 Set a Record's Task relationship when it is that Task's output; otherwise link it only to the Case. That relationship cannot be changed after append.
 
 Constraints worth designing around:
 
 - Records can be appended only while the Case is open. Closing a Case or Task accepts its final Records in the same call — use that instead of racing a separate append.
-- Origin is `user` or `agent`. The server owns `system` origin and the `activity` and `review` kinds.
-- Clients write `note` or `output` only.
+- Origin is `user` or `agent`. The server owns `system` origin and the `activity` kind.
+- Clients write `note`, `output`, or `review`. A review requires `data.verdict` of `pass`, `changes_requested`, or `insufficient`.
+- An agent writing a Record must set `origin=agent`.
 - Credentials in data are rejected, including URLs carrying tokens or userinfo.
 - Update and delete require being the creator, holding Case editor access, and a Record that is not already redacted. A second delete with a new idempotency key returns conflict.
 
