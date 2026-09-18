@@ -6,8 +6,8 @@ One portable skill that teaches AI agents how to discover reusable Playbooks and
 
 Epismo keeps two layers separate:
 
-- **Playbook** — reusable, versioned guidance. Its Steps describe a recommended way of working.
-- **Case** — one real matter worth sharing or resuming. Tasks and Records exist only when coordination needs them.
+- **Playbook** — reusable, versioned guidance. Its steps describe a recommended way of working.
+- **Case** — one real matter worth sharing or resuming. Tasks and records exist only when coordination needs them.
 
 The agent runtime still owns planning, tool selection, credentials, retries, and local intermediate state. Epismo stores only durable guidance and shared work state.
 
@@ -24,7 +24,7 @@ skills/epismo/
     share.md
 ```
 
-The main [Epismo skill](./skills/epismo/SKILL.md) routes a request to the relevant action guide (`reuse`, `author`, `coordinate`, `improve`, `share`). Playbook and Case are named in that routing table, not in the filenames. CLI and MCP share the same Playbook, Case, Task, Record, Suggestion, Star, and Alias operation families; live MCP schemas and CLI help remain the source of truth for exact names, fields, enums, and limits.
+The main [Epismo skill](./skills/epismo/SKILL.md) routes a request to the relevant action guide (`reuse`, `author`, `coordinate`, `improve`, `share`). Playbook and Case are named in that routing table, not in the filenames. CLI and MCP share the same Playbook, Case, task, record, suggestion, Star, and Alias operation families; live MCP schemas and CLI help remain the source of truth for exact names, fields, enums, and limits.
 
 ## Connect
 
