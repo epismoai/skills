@@ -1,6 +1,6 @@
 # Epismo Skill
 
-One portable skill that teaches AI agents how to discover reusable Playbooks and coordinate real work in Epismo.
+One portable skill that teaches AI agents how to discover reusable playbooks and coordinate real work in Epismo.
 
 ## Operating model
 
@@ -24,7 +24,7 @@ skills/epismo/
     share.md
 ```
 
-The main [Epismo skill](./skills/epismo/SKILL.md) routes a request to the relevant action guide (`reuse`, `author`, `coordinate`, `improve`, `share`). Playbook and Case are named in that routing table, not in the filenames. CLI and MCP share the same Playbook, Case, task, record, suggestion, Star, and Alias operation families; live MCP schemas and CLI help remain the source of truth for exact names, fields, enums, and limits.
+The main [Epismo skill](./skills/epismo/SKILL.md) routes a request to the relevant action guide (`reuse`, `author`, `coordinate`, `improve`, `share`). The routing table names playbook and case, not the filenames. CLI and MCP share the same playbook, case, task, record, suggestion, star, and alias operation families; live MCP schemas and CLI help remain the source of truth for exact names, fields, enums, and limits.
 
 ## Connect
 
