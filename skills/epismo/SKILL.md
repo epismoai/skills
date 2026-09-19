@@ -1,30 +1,30 @@
 ---
 name: epismo
-description: Use Epismo to find, inspect, author, version, share, and improve reusable playbooks; start and coordinate cases, tasks, records, assignments, reviews, and handoffs; and manage durable work context through the available Epismo MCP or CLI surface. Trigger for workflow discovery or authoring, real-work coordination, AI delegation with shared state, playbook suggestions, aliases, access changes, session handoff, or any request to read or write Epismo data.
+description: Use Epismo to start and coordinate cases, tasks, records, assignments, reviews, and handoffs; find, inspect, author, version, share, and improve reusable playbooks; and manage durable work context through the available Epismo MCP or CLI surface. Trigger for real-work coordination, workflow discovery or authoring, AI delegation with shared state, playbook suggestions, aliases, access changes, session handoff, or any request to read or write Epismo data.
 ---
 
 # Epismo
 
-Keep reusable guidance separate from real execution. A playbook is versioned guidance; a case is one real matter. Tasks, records, and handoffs live on the case. Drafts, versions, steps, and suggestions live on the playbook.
+Keep reusable guidance separate from real execution. A case is one real matter; a playbook is versioned guidance. Tasks, records, and handoffs live on the case. Drafts, versions, steps, and suggestions live on the playbook.
 
+- **Case** is one real matter, either pinned to a version or ad hoc.
+- **Task** materializes only work that needs explicit ownership or approval.
+- **Record** is shared context of a closed kind: `note`, `output`, `review`, or `activity`. Clients write `note`, `output`, or `review` (`data.verdict` must be `pass`, `changes_requested`, or `insufficient`); the server writes `activity` and Epismo AI reviews (`origin=system`). When this agent appends a record, set `origin=agent` — omitting it defaults to `user`. Anyone with case work access may append; only the creator may update or redact their own non-system record.
 - **Playbook** is a logical, access-controlled container with immutable versions.
 - **Version** contains the definition: title, description, category, input schema, and steps.
 - **Step** is guidance, not execution state. It has no status, assignee, transition, or completion.
 - **Draft** is the mutable, unpublished content of a playbook. Saving it never mints a version; publishing it does, and discards the draft.
-- **Case** is one real matter, either pinned to a version or ad hoc.
-- **Task** materializes only work that needs explicit ownership or approval.
-- **Record** is shared context of a closed kind: `note`, `output`, `review`, or `activity`. Clients write `note`, `output`, or `review` (`data.verdict` must be `pass`, `changes_requested`, or `insufficient`); the server writes `activity` and Epismo AI reviews (`origin=system`). When this agent appends a record, set `origin=agent` — omitting it defaults to `user`. Anyone with case work access may append; only the creator may update or redact their own non-system record.
 - **Suggestion** proposes a playbook improvement against a base version.
 
 These guides follow user actions rather than object types. Route by the outcome, then use the object the action needs:
 
-| Intent                                                   | Object           | Read                                       |
-| -------------------------------------------------------- | ---------------- | ------------------------------------------ |
-| Find, inspect, or apply existing playbook guidance           | playbook        | [Reuse](./references/reuse.md)            |
-| Create or publish reusable guidance                         | playbook        | [Author](./references/author.md)          |
-| Find, start, assign, record, review, or close real work | case             | [Coordinate](./references/coordinate.md)   |
-| Feed learning from a case back into a playbook           | playbook        | [Improve](./references/improve.md)        |
-| Change who can see or reach a playbook or case            | playbook or case | [Share](./references/share.md)           |
+| Intent                                                  | Object           | Read                                     |
+| ------------------------------------------------------- | ---------------- | ---------------------------------------- |
+| Find, start, assign, record, review, or close real work | case             | [Coordinate](./references/coordinate.md) |
+| Find, inspect, or apply existing playbook guidance      | playbook         | [Reuse](./references/reuse.md)           |
+| Create or publish reusable guidance                     | playbook         | [Author](./references/author.md)         |
+| Feed learning from a case back into a playbook          | playbook         | [Improve](./references/improve.md)       |
+| Change who can see or reach a case or playbook          | case or playbook | [Share](./references/share.md)           |
 
 Read only the relevant guide. Read more than one only when the request crosses stages.
 
@@ -32,7 +32,7 @@ Read only the relevant guide. Read more than one only when the request crosses s
 
 1. Resolve identity and workspace before a write.
 2. Search before creating; get current state before updating.
-3. Fetch only the relevant playbook version, case, tasks, or records the caller can read.
+3. Fetch only the relevant case, tasks, records, or playbook version the caller can read.
 4. Use the lightest model that preserves the state people actually need.
 5. Make the smallest authorized change.
 6. Verify returned IDs, access, lock versions, status, and outcome.
@@ -57,23 +57,23 @@ Do not create a case merely to read a playbook. Do not turn every step into a ta
 
 ## Authorization
 
-Playbooks use `visibility` (`private` or `public`) plus explicit `editors` (active user account or team UUIDs). `public` grants published read access only; it is not workspace-member visibility. Editors can read and edit content. Owners are implicit and never appear in editors. For a workspace-owned playbook, every member of that workspace can read and edit it and is also omitted from editors; workspace owners/admins manage access, public visibility, and archive. Any member may create a playbook owned by a workspace they belong to, or move a personally owned private playbook into it; access and archive still require an owner manager. A private owner-only playbook and a public playbook with no editors both use an empty editor list. Cases use their own access: `public` immediately grants read-only access to the current title, input, records, and readable handoffs, including later records. Editors can continue the work; the current case assignee has implicit work and management access and is omitted from the editor list.
+Cases use their own access: `public` immediately grants read-only access to the current title, input, records, and readable handoffs, including later records. Editors can continue the work; the current case assignee has implicit work and management access and is omitted from the editor list. Playbooks use `visibility` (`private` or `public`) plus explicit `editors` (active user account or team UUIDs). `public` grants published read access only; it is not workspace-member visibility. Editors can read and edit content. Owners are implicit and never appear in editors. For a workspace-owned playbook, every member of that workspace can read and edit it and is also omitted from editors; workspace owners/admins manage access, public visibility, and archive. Any member may create a playbook owned by a workspace they belong to, or move a personally owned private playbook into it; access and archive still require an owner manager. A private owner-only playbook and a public playbook with no editors both use an empty editor list.
 
 Access separates read from write:
 
-- Reads of a playbook follow current visibility and access. Public readers can only read published content; editors, and every member of a workspace-owned playbook, can publish and edit content. Access management, playbook archival, and historical version archival require an owner manager. Any authenticated reader may manage an alias only in a personal or managed workspace namespace they control.
-- Reading and writing a draft require playbook edit access. A public reader or share-link holder cannot read unpublished content.
 - Reads of a case, task, or record follow the current case access. A public-only reader receives the current title, input, records, and readable handoffs, without tasks, assignment, or collaborator identities. Task and record have no access list of their own.
 - Any caller with case work access may append records while the case is open, and may assign, retitle, close, reopen, and connect handoffs. Clients write `note`, `output`, or `review`; a review requires `data.verdict` of `pass`, `changes_requested`, or `insufficient`. When this agent writes any of those, set `origin=agent`. `activity` is server-only. Only the record's creator may update or redact it; system records cannot be changed. To record this agent's own verdict, append `kind=review` (`case record append` / `epismo_case_record_append`). That is distinct from requesting billed Epismo AI (`case review` / `epismo_case_review`), which queues and returns immediately, then appends a REVIEW record with `origin=system`. Optional `prompt` / `--prompt` adds caller guidance after the fixed review rules. For a one-shot situational brief, use `case overview` / `epismo_case_overview`; it runs synchronously and returns the text in the response. Replay the same idempotency key to receive the prior brief without regenerating. Auto and manual Epismo AI reviews, and overviews, charge the case billing account captured at start. Work collaborators may also turn OUTPUT reviews on or off. Access changes and archiving stay with the current case assignee; `started_by` is history. Editors can create and update tasks. Approval task resolution stays with the named reviewer.
-- Share links need separate care: a readable playbook or case currently yields one stable token with no expiry or revoke operation, and the web route does not bypass the target's access. Read [Share](./references/share.md) before creating or relying on one.
+- Reads of a playbook follow current visibility and access. Public readers can only read published content; editors, and every member of a workspace-owned playbook, can publish and edit content. Access management, playbook archival, and historical version archival require an owner manager. Any authenticated reader may manage an alias only in a personal or managed workspace namespace they control.
+- Reading and writing a draft require playbook edit access. A public reader or share-link holder cannot read unpublished content.
+- Share links need separate care: a readable case or playbook currently yields one stable token with no expiry or revoke operation, and the web route does not bypass the target's access. Read [Share](./references/share.md) before creating or relying on one.
 
 The user's direct request authorizes ordinary private creates and updates within its scope. Require explicit intent before:
 
+- closing, cancelling, or abandoning work when the user did not request that outcome;
 - making a playbook public;
 - expanding access beyond the named audience;
 - archiving a playbook;
 - revoking or repointing a reference used by others;
-- closing, cancelling, or abandoning work when the user did not request that outcome;
 - making a broad or destructive reorganization.
 
-A direct request for the exact action counts as explicit intent. Never write secrets, access tokens, private keys, or unnecessary personal data into a playbook, case input, task, or record; the service rejects the credential patterns it can detect, and that check is a backstop, not a substitute for judgment.
+A direct request for the exact action counts as explicit intent. Never write secrets, access tokens, private keys, or unnecessary personal data into a case input, playbook, task, or record; the service rejects the credential patterns it can detect, and that check is a backstop, not a substitute for judgment.
