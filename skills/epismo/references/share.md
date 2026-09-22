@@ -21,7 +21,7 @@ Require explicit intent before public access or a wider audience. Before expandi
 - confirm owner, workspace, and team principals;
 - preserve unrelated editors only when the operation and user's intent allow it.
 
-`case access set` and `playbook access set` replace the complete editor list; they are not an incremental add. Read current access before replacing it, and retain editor IDs that the caller cannot resolve. A case access change requires the current case assignee, the current lock version, and work access that still covers every task assignee. The current case assignee has implicit access and is omitted from the editor list; the service rejects an update that would strand a task assignee rather than silently unassigning them. Only an owner manager can change playbook access.
+Access updates replace the complete editor list; they are not an incremental add. Read current access before replacing it, and retain editor IDs that the caller cannot resolve. A case access change requires the current case assignee, the current lock version, and work access that still covers every task assignee. The current case assignee has implicit access and is omitted from the editor list; the service rejects an update that would strand a task assignee rather than silently unassigning them. Only an owner manager can change playbook access.
 
 ## Manage references
 
@@ -29,7 +29,7 @@ Use an alias when repeated human-readable lookup matters. Each personal or manag
 
 Treat a share URL as a credential even though the current web flow does not bypass access. Any authenticated reader can create or retrieve the object's single stable token; there is currently no expiry, rotation, or revoke operation. Do not create one speculatively, and keep it out of public text, cases, playbook content, records, and logs.
 
-Before relying on a share URL, verify it as the intended recipient in the intended workspace or anonymous context. The web route resolves the token to `/cases/{id}` or `/playbooks/{id}` and performs the normal access check. Use `case share` or `epismo_case_share` for a case link, and `playbook share` or `epismo_playbook_share` for a playbook link. A private target still requires access; a public case exposes its current title, input, records, and readable handoffs. Archiving blocks the target read but does not delete the token mapping. Share URLs do not expose drafts, tasks, or restricted case fields.
+Before relying on a share URL, verify it as the intended recipient in the intended workspace or anonymous context. The web route resolves the token to a case or playbook and performs the normal access check. A private target still requires access; a public case exposes its current title, input, records, and readable handoffs. Archiving blocks the target read but does not delete the token mapping. Share URLs do not expose drafts, tasks, or restricted case fields.
 
 ## Archive deliberately
 
