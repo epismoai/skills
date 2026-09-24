@@ -54,9 +54,8 @@ covers the decision.
 ## Treat lifecycle and access changes as consequential
 
 Re-read before closing, reopening, changing access, or publishing a case.
-Completion requires its work to be genuinely finished; cancellation and
-abandonment change the remaining task state. Reopening a case does not reopen
-its tasks.
+Completion requires its work to be genuinely finished; cancellation changes
+the remaining task state. Reopening a case does not reopen its tasks.
 
 Public visibility exposes a live projection of the case's title, input,
 records, and readable handoffs, including future records. It never exposes
