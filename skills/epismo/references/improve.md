@@ -4,7 +4,7 @@ Use this guide when real work on a case reveals a repeatable playbook improvemen
 
 ## Separate evidence from proposal
 
-Read the case before proposing a change. `case get` returns only that case's latest five records; if it has handoffs, list related records with `ancestors` or `connected` so the suggestion is based on the thread.
+Read the case before proposing a change. If it has handoffs, list related records with `ancestors` or `connected` so the suggestion is based on the thread.
 
 - Put what happened in the case as a record.
 - Put what should change next time in a suggestion.
