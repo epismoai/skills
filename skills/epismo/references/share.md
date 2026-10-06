@@ -17,6 +17,13 @@ Before expanding access:
 Access setters replace the collaborator list. Read the current list first and
 retain unrelated collaborators unless the user intended to remove them.
 
+## Review derived content before sharing
+
+Copying external evidence into a case record or reusable guidance creates a
+separate disclosure. Review that text for its destination audience, even when
+the original source has restricted access. Removing a source later does not
+withdraw information already copied into another object.
+
 ## Manage references
 
 Use an alias when repeated human-readable lookup matters. Share a qualified

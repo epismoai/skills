@@ -9,6 +9,14 @@ When a similar case exists, compare its audience and lifecycle with the new
 work before reusing it. Start from a playbook version when that guidance needs
 to be part of the record; use an ad hoc case when none fits.
 
+## Separate external evidence from case conclusions
+
+Use linked external material to support the work. Put the resulting decision,
+its basis, and the agreed outcome in case records; do not turn every captured
+conversation into a timeline record. When a conclusion must remain useful
+without its source, preserve the necessary evidence and provenance within
+that record, subject to the intended audience.
+
 ## Make responsibility explicit only when it helps
 
 Use the case assignee for whole-matter responsibility. Create a work task for
