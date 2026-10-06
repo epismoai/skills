@@ -17,6 +17,20 @@ Before expanding access:
 Access setters replace the collaborator list. Read the current list first and
 retain unrelated collaborators unless the user intended to remove them.
 
+## Check the audience of linked evidence
+
+Linked Slack captures are readable by all case work collaborators, including
+people who cannot read the original Slack conversation. Check that audience
+before linking a thread or adding collaborators. Linking requires the acting
+user's live Slack connection in the selected workspace; a thread URL alone is
+not permission to import its content.
+
+Public-only readers cannot see external sources, and public AI reviews and
+Brief generation exclude those captures. Text already copied into a record,
+review, or Brief follows that object's visibility and survives unlinking or
+capture removal. Inspect those derived texts before publishing; unlinking a
+source does not undo disclosure through a record.
+
 ## Manage references
 
 Use an alias when repeated human-readable lookup matters. Share a qualified
