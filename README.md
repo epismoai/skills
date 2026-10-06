@@ -24,7 +24,7 @@ skills/epismo/
     share.md
 ```
 
-The main [Epismo skill](./skills/epismo/SKILL.md) routes a request to the relevant action guide (`coordinate`, `reuse`, `author`, `improve`, `share`). The routing table names case and playbook, not the filenames. CLI and MCP share the same case, playbook, task, record, source, suggestion, star, and alias operation families; live MCP schemas and CLI help remain the source of truth for exact names, fields, enums, and limits.
+The main [Epismo skill](./skills/epismo/SKILL.md) routes a request to the relevant action guide (`coordinate`, `reuse`, `author`, `improve`, `share`). The routing table names case and playbook, not the filenames. CLI and MCP share the same case, playbook, task, record, suggestion, star, and alias operation families; live MCP schemas and CLI help remain the source of truth for exact names, fields, enums, and limits.
 
 ## Connect
 

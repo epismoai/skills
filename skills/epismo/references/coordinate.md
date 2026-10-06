@@ -9,23 +9,13 @@ When a similar case exists, compare its audience and lifecycle with the new
 work before reusing it. Start from a playbook version when that guidance needs
 to be part of the record; use an ad hoc case when none fits.
 
-## Check external evidence before relying on it
+## Separate external evidence from case conclusions
 
-Case sources hold saved Slack thread captures separately from timeline records.
-Reading a case does not fetch Slack. Check the source status, last check time,
-and capture time before treating its content as current; request a refresh
-when the work needs newer evidence. Linking and unlinking cost 2 credits each;
-linking includes the first complete capture, even if updates queue before it
-starts. Each subsequent completed manual or automatic capture costs 1 credit
-per open, non-archived case sharing the source, plus each closed case whose
-explicit refresh request it fulfills. Charges use each case’s billing account.
-Queuing, failures, pagination, and retries are free; requests coalesced into
-one capture incur one charge per participating case, even if content is unchanged.
-
-Use a saved revision when identifying evidence, and retrieve its full capture
-if the case response omitted it. Do not infer missing or partial content.
-Unlinking or loss of Slack authorization can remove historical captures, so a
-revision reference is not a guarantee that the content remains retrievable.
+Use linked external material to support the work. Put the resulting decision,
+its basis, and the agreed outcome in case records; do not turn every captured
+conversation into a timeline record. When a conclusion must remain useful
+without its source, preserve the necessary evidence and provenance within
+that record, subject to the intended audience.
 
 ## Make responsibility explicit only when it helps
 
