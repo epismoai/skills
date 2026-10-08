@@ -34,8 +34,7 @@ of racing a separate append. Reopening a case does not reopen its tasks.
 
 ## Treat lifecycle and access changes as consequential
 
-Before making a case public, review Tasks, Records, title, input, Brief, readable
-handoffs, and public author/assignee references. Later Tasks and Records become
-public without another access change. Linked sources and private grants stay
-excluded; explicit viewers can read private Cases and sources but cannot edit.
-Expanding the audience clears the saved Brief.
+Before making a case public, consider future contributions as well as its current
+contents. Agree on what belongs in the public record with people still doing the
+work. Review conclusions and copied evidence for the intended audience whenever
+sharing changes.

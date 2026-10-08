@@ -14,21 +14,17 @@ Before expanding access:
 - ensure referenced resources are accessible to the intended audience;
 - confirm owner, workspace, and team principals;
 
-Access setters replace the whole `access` object: `visibility` (`private` or
-`public`) and `grants` (user/team UUIDs mapped to `viewer` or `editor`). Retain
-unrelated grants when changing only visibility. An empty map clears explicit
-sharing independently of publication; never use `public` as a grant key.
-Normal reads omit private grant maps; have a manager retrieve the complete
-settings before replacing them. Viewers cannot edit content or sharing;
-Playbook drafts require editing. Keep every task assignee's edit access.
+Preserve unrelated collaborators when changing the audience. Match access to
+the recipient's responsibility: reading guidance, contributing work, or managing
+the collaboration. Ensure assigned work remains accessible to whoever must
+complete it.
 
 ## Review shared-team boundaries
 
-A team can connect multiple workspaces. Confirm both the recipient's participation
-workspace and the resource's home remain connected before relying on its grant.
-Invitations are email-bound; recipients choose their workspace, and acceptance
-does not add every member. Disconnect removes that workspace's participants and
-team access; direct user grants remain.
+Use a shared team when people from separate workspaces need an ongoing
+collaboration boundary. Keep unrelated clients or engagements separate. Before
+adding participants, review the material already shared with that team; when a
+collaboration ends, review access across its resources and participants.
 
 ## Review derived content before sharing
 
