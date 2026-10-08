@@ -14,8 +14,17 @@ Before expanding access:
 - ensure referenced resources are accessible to the intended audience;
 - confirm owner, workspace, and team principals;
 
-Access setters replace the collaborator list. Read the current list first and
-retain unrelated collaborators unless the user intended to remove them.
+Preserve unrelated collaborators when changing the audience. Match access to
+the recipient's responsibility: reading guidance, contributing work, or managing
+the collaboration. Ensure assigned work remains accessible to whoever must
+complete it.
+
+## Review shared-team boundaries
+
+Use a shared team when people from separate workspaces need an ongoing
+collaboration boundary. Keep unrelated clients or engagements separate. Before
+adding participants, review the material already shared with that team; when a
+collaboration ends, review access across its resources and participants.
 
 ## Review derived content before sharing
 

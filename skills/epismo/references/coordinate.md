@@ -34,5 +34,7 @@ of racing a separate append. Reopening a case does not reopen its tasks.
 
 ## Treat lifecycle and access changes as consequential
 
-Before making a case public, consider future records as well as its current
-contents; later records become public without a separate access change.
+Before making a case public, consider future contributions as well as its current
+contents. Agree on what belongs in the public record with people still doing the
+work. Review conclusions and copied evidence for the intended audience whenever
+sharing changes.
