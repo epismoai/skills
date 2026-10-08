@@ -24,6 +24,7 @@ Expected outputs are hints for evaluating fit, not completion criteria.
 ## Choose the lightest reuse
 
 - **Local reuse:** follow the playbook without creating Epismo execution state.
+- **Independent copy:** copy a readable immutable published version when its guidance should evolve separately. Choose ownership and sharing; copies do not inherit access, drafts, Cases, or history, and edits never synchronize. Keep the source/version provenance and check current access before comparing with the original.
 - **Start a case:** when the result, handoff, or collaboration should persist, start a case from that version. See [Coordinate](./coordinate.md) to start, resume, or continue a case.
 
 When reuse exposes a reusable defect, follow [Improve](./improve.md).
