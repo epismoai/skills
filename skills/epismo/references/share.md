@@ -73,4 +73,4 @@ requires ownership and cannot be undone.
 
 Sharing updates must retain at least one explicit User or Team editor; ownership and publication do not count. Creation adds the creator as an editor. Before removing a Workspace member who is the last editor of any owned item, add another editor, including on completed and archived items.
 
-Web Workspace discovery is limited to accessible items owned by the active Workspace. Deselecting every Team leaves direct User sharing. Personal context can show direct shares across owning accounts. These are discovery filters, not changes to direct-link authorization.
+Web Workspace discovery uses direct User sharing and selected Teams, including connected-Team shares from other owning accounts. Deselecting every Team leaves direct User sharing. The sidebar only narrows discovery; it does not change direct-link access, editing capabilities, or mutation permissions. CLI and MCP use normal access-based visibility and expose no sidebar Team-selection filter.
