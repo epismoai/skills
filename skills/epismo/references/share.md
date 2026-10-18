@@ -5,6 +5,23 @@ Use this guide for consequences of sharing and reference choices.
 Case access is independent of its source playbook. Check both objects when
 sharing a case that uses a playbook.
 
+Keep ownership, responsibility, and sharing separate. The owning account is
+also the billing home; a Case assignee or Playbook maintainer receives no
+access just from that responsibility. Check current editing access before
+assigning work. Workspace member removal clears the User's direct grants on
+items owned by that Workspace, including completed and archived items. Initial
+handover preserves grants; finalization catches late grants. Personal and
+other-Workspace shares remain unchanged. Non-members may be explicitly shared
+with again after removal. Team and Workspace management authority use live membership
+and the participation Workspace's SSO checks. Required SSO applies to members;
+non-member direct shares use normal Epismo authentication. Lists use explicit access and supported publication;
+ownership alone does not put an item in a list.
+
+Use assignment for responsibility and ownership transfer for the owning and
+billing account. Transferring a Case clears its saved Brief, including DNA and
+priority, while preserving sharing and assignment. Preserve any durable
+conclusions in the Case's Records before relying on a regenerated Brief.
+
 ## Expand access carefully
 
 Before expanding access:
@@ -48,5 +65,12 @@ method when either control is needed.
 ## Archive deliberately
 
 Prefer narrowing access when guidance should merely stop spreading. Archive
-when the playbook itself should end: pinned versions in existing cases then
-stop resolving even though those cases remain readable.
+when the playbook should leave normal use: pinned versions in existing cases
+then stop resolving even though those cases remain readable. Editors can
+restore it with its versions and sharing intact. An archived Case likewise
+retains its work until restored or permanently deleted; permanent deletion
+requires ownership and cannot be undone.
+
+Sharing updates must retain at least one explicit User or Team editor; ownership and publication do not count. Creation adds the creator as an editor. Before removing a Workspace member who is the last editor of any owned item, add another editor, including on completed and archived items.
+
+Web Workspace discovery is limited to accessible items owned by the active Workspace. Deselecting every Team leaves direct User sharing. Personal context can show direct shares across owning accounts. These are discovery filters, not changes to direct-link authorization.
