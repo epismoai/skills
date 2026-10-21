@@ -15,10 +15,10 @@ Explain the problem, proposed change, and expected benefit against the version
 that produced the observation. Target a step only when the change is specific
 to that step.
 
-A suggestion follows its current parent Playbook's access. Its author is
+A suggestion follows its current parent playbook's access. Its author is
 provenance, not a separate owner, and its immutable base version is evidence
 for the improvement rather than a saved permission boundary. Recheck current
-parent access before reading or editing a proposal. Current Playbook editors
+parent access before reading or editing a proposal. Current playbook editors
 can adopt or decline proposals, including after ownership changes.
 
 ## Work with ownership
