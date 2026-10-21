@@ -13,13 +13,13 @@ agent's execution graph, tool choices, retries, credentials, or scratch work.
 Keep work local when the result need not be shared, resumed, reviewed, or
 audited. Otherwise:
 
-| Need | Use | Read |
-| --- | --- | --- |
-| A shared matter, ownership, evidence, or outcome | Case | [Coordinate](./references/coordinate.md) |
-| Reusable guidance to follow without shared execution state | Playbook | [Reuse](./references/reuse.md) |
-| New or revised reusable guidance | Playbook draft/version | [Author](./references/author.md) |
-| A repeatable lesson discovered during a case | Suggestion | [Improve](./references/improve.md) |
-| Visibility, collaborators, aliases, or a share link | Access mechanism | [Share](./references/share.md) |
+| Need                                                       | Use                    | Read                                     |
+| ---------------------------------------------------------- | ---------------------- | ---------------------------------------- |
+| A shared matter, ownership, evidence, or outcome           | Case                   | [Coordinate](./references/coordinate.md) |
+| Reusable guidance to follow without shared execution state | Playbook               | [Reuse](./references/reuse.md)           |
+| New or revised reusable guidance                           | Playbook draft/version | [Author](./references/author.md)         |
+| A repeatable lesson discovered during a case               | Suggestion             | [Improve](./references/improve.md)       |
+| Visibility, collaborators, aliases, or a share link        | Access mechanism       | [Share](./references/share.md)           |
 
 Do not create a case merely to read a playbook, and do not turn every playbook
 step into a task.
