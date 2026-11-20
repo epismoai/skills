@@ -5,22 +5,20 @@ Use this guide for consequences of sharing and reference choices.
 Case access is independent of its source playbook. Check both objects when
 sharing a case that uses a playbook.
 
-Keep ownership, responsibility, and sharing separate. The owning account is
-also the billing home; a case assignee or playbook maintainer receives no
-access just from that responsibility. Check current editing access before
-assigning work. Workspace member removal clears the user's direct grants on
-items owned by that workspace, including completed and archived items. Initial
-handover preserves grants; finalization catches late grants. Personal and
-other-workspace shares remain unchanged. Non-members may be explicitly shared
-with again after removal. Team and workspace management authority use live membership
-and the participation workspace's SSO checks. Required SSO applies to members;
-non-member direct shares use normal Epismo authentication. Lists use explicit access and supported publication;
-ownership alone does not put an item in a list.
+Keep the owning Space, administrative account, and responsibility separate.
+A Case assignee or Playbook maintainer needs existing editor access. The
+owning Space supplies editor access. In a workspace, use membership UUIDs to
+grant access for the current membership and `personal:EMAIL` or
+`personal:USER_UUID` for personal guest access. A workspace membership grant
+expires when that membership ends.
 
-Use assignment for responsibility and ownership transfer for the owning and
-billing account. Transferring a case clears its derived review reports,
-while preserving sharing and assignment. Preserve any durable conclusions in the
-case's records before relying on re-evaluated review.
+Use `--team-id` to create a Case or Playbook in a Team Space, or `--private`
+for the current workspace membership's private Space. Use `case access set`
+or `playbook access set` with `--scope-id` to move an item within the same
+workspace. Pass the full additional grant map and preserve any existing
+grants you still want. The previous Space keeps an editor grant only if
+explicitly added. Moving a Case clears its derived reports. Preserve durable
+conclusions in Case records.
 
 ## Expand access carefully
 
@@ -71,6 +69,6 @@ restore it with its versions and sharing intact. An archived case likewise
 retains its work until restored or permanently deleted; permanent deletion
 requires ownership and cannot be undone.
 
-Sharing updates must retain at least one explicit user or team editor; ownership and publication do not count. Creation retains creator access and at least one explicit editor; a case may omit a redundant personal grant when ownership or sharing already supplies editing access. Before removing a workspace member who is the last editor of any owned item, add another editor, including on completed and archived items.
+Additional grants can be empty because the owning Space supplies editor access. Before removing a workspace member, review work held in their private Space and hand over open responsibilities.
 
 Web workspace discovery uses direct user sharing and selected teams, including connected-team shares from other owning accounts. Deselecting every team leaves direct user sharing. The sidebar only narrows discovery; it does not change direct-link access, editing capabilities, or mutation permissions. CLI and MCP use normal access-based visibility and expose no sidebar team-selection filter.
