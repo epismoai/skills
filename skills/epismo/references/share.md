@@ -51,7 +51,9 @@ withdraw information already copied into another object.
 
 ## Manage references
 
-Use an alias when repeated human-readable lookup matters. Share a qualified
+Use an alias when repeated human-readable lookup matters. Playbook commands and
+tools accept `pb:<alias>` and `pb:<handle>/<alias>` references directly (just as
+Case lifecycle and access operations accept Case codes). Share a qualified
 reference using the current owner's handle. Before reusing an old reference,
 check it again: ownership transfer, handle changes, and alias reassignment can
 change where it leads without changing the text someone saved.
