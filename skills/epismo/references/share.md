@@ -12,13 +12,14 @@ grant access for the current membership and `personal:EMAIL` or
 `personal:USER_UUID` for personal guest access. A workspace membership grant
 expires when that membership ends.
 
-Use `--team-id` to create a Case or Playbook in a Team Space, or `--private`
-for the current workspace membership's private Space. Use `case access set`
-or `playbook access set` with `--scope-id` to move an item within the same
-workspace. Pass the full additional grant map and preserve any existing
-grants you still want. The previous Space keeps an editor grant only if
-explicitly added. Moving a Case clears its derived reports. Preserve durable
-conclusions in Case records.
+Use `--owner team:<name-or-id>` to create a Case or Playbook owned by a Team,
+or `--owner me` for your current workspace membership. Creation and copying
+require an explicit owner in a workspace, including a saved default workspace.
+Outside a workspace, omitting the owner selects your personal account. Use
+`case transfer` or `playbook transfer` with `--owner` to change ownership within
+the same workspace while preserving additional shares. The previous owner loses
+its inherited editor grant. Moving a Case clears its derived reports. Preserve
+durable conclusions in Case records.
 
 ## Expand access carefully
 
@@ -50,7 +51,9 @@ withdraw information already copied into another object.
 
 ## Manage references
 
-Use an alias when repeated human-readable lookup matters. Share a qualified
+Use an alias when repeated human-readable lookup matters. Playbook commands and
+tools accept `pb:<alias>` and `pb:<handle>/<alias>` references directly (just as
+Case lifecycle and access operations accept Case codes). Share a qualified
 reference using the current owner's handle. Before reusing an old reference,
 check it again: ownership transfer, handle changes, and alias reassignment can
 change where it leads without changing the text someone saved.
