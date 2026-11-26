@@ -18,7 +18,7 @@ require an explicit owner in a workspace, including a saved default workspace.
 Outside a workspace, omitting the owner selects your personal account. Use
 `case transfer` or `playbook transfer` with `--owner` to change ownership within
 the same workspace while preserving additional shares. The previous owner loses
-its inherited editor grant. Moving a Case clears its derived reports. Preserve
+its inherited editor grant. Moving a Case clears its derived reviews. Preserve
 durable conclusions in Case records.
 
 ## Expand access carefully
